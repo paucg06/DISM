@@ -1,0 +1,41 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      Formulario
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Tab Formulario</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-toggle>Default Toggle</ion-toggle><br /><br />
+  <ion-toggle [checked]="true">Checked Toggle</ion-toggle><br /><br />
+  <ion-toggle [disabled]="true">Disabled Toggle</ion-toggle><br /><br />
+  <ion-toggle [checked]="true" [disabled]="true">Disabled Checked Toggle</ion-toggle>
+
+  <ion-list>
+    <ion-item>
+      <ion-toggle>Receive Push Notifications</ion-toggle>
+    </ion-item>
+    <ion-item>
+      <ion-toggle>Receive Emails</ion-toggle>
+    </ion-item>
+    <ion-item>
+      <ion-toggle>Receive Text Messages</ion-toggle>
+    </ion-item>
+  </ion-list>
+  <ion-toggle aria-label="Primary toggle" color="primary" [checked]="true"></ion-toggle>
+  <ion-toggle aria-label="Secondary toggle" color="secondary" [checked]="true"></ion-toggle>
+  <ion-toggle aria-label="Tertiary toggle" color="tertiary" [checked]="true"></ion-toggle>
+  <ion-toggle aria-label="Success toggle" color="success" [checked]="true"></ion-toggle>
+  <ion-toggle aria-label="Warning toggle" color="warning" [checked]="true"></ion-toggle>
+  <ion-toggle aria-label="Danger toggle" color="danger" [checked]="true"></ion-toggle>
+  <ion-toggle aria-label="Light toggle" color="light" [checked]="true"></ion-toggle>
+  <ion-toggle aria-label="Medium toggle" color="medium" [checked]="true"></ion-toggle>
+  <ion-toggle aria-label="Dark toggle" color="dark" [checked]="true"></ion-toggle>
+</ion-content>
