@@ -1311,4 +1311,131 @@ module.exports = {
 }
 ```
 
+---
+
+## 🗄️ Ejercicio 10: Generación de API REST con Acceso a Base de Datos MySQL desde OpenAPI (`DISM10`)
+
+### 🎯 Objetivo
+Desarrollar una API REST completa con persistencia real en **Base de Datos MySQL (BD `dism`, tabla `usuarios`)** utilizando la metodología **Design-First con OpenAPI 3.0.0**. Se define el contrato CRUD formalmente en YAML, se genera el stub de servidor Express con `openapi-generator-cli`, y se implementan las operaciones de base de datos (`SELECT`, `INSERT`, `UPDATE`, `DELETE`) en la capa de servicios con el driver `mysql2`.
+
+---
+
+### 1. Script de Base de Datos MySQL
+📍 **Archivo:** `DISM10/database.sql`
+```sql
+CREATE DATABASE IF NOT EXISTS `dism` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE `dism`;
+
+DROP TABLE IF EXISTS `usuarios`;
+
+CREATE TABLE `usuarios` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `nombre` VARCHAR(255) NOT NULL,
+  `email` VARCHAR(255) NOT NULL,
+  `edad` VARCHAR(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+INSERT INTO `usuarios` (`id`, `nombre`, `email`, `edad`) VALUES
+(1, 'Sergio', 'sergio@ua.es', '20'),
+(2, 'Estela', 'estela@ua.es', '19'),
+(3, 'Susana', 'susana@ua.es', '27'),
+(4, 'Hugo', 'hugo@ua.es', '21');
+```
+
+---
+
+### 2. Especificación OpenAPI CRUD (`UsuariosApi.yaml`)
+📍 **Archivo:** `DISM10/UsuariosApi.yaml`
+Define las 5 operaciones CRUD fundamentales:
+- `GET /usuarios`: Obtener lista completa de usuarios.
+- `POST /usuarios`: Crear un nuevo usuario enviando `{ nombre, email, edad }`.
+- `GET /usuarios/{id}`: Consultar un usuario por su clave primaria `id`.
+- `PUT /usuarios/{id}`: Actualizar los datos de un usuario por su `id`.
+- `DELETE /usuarios/{id}`: Eliminar un usuario de la base de datos por su `id`.
+
+---
+
+### 3. Implementación de la Capa de Servicio con MySQL
+📍 **Archivo:** `DISM10/services/UsuariosService.js`
+```javascript
+const Service = require('./Service');
+const mysql = require('mysql2');
+
+// Pool de conexiones a MySQL
+const pool = mysql.createPool({
+  host: 'localhost',
+  user: 'root',
+  password: 'password', // o 'root' / '' según el entorno
+  database: 'dism',
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0,
+});
+
+// GET /usuarios (Listar todos)
+const usuariosGET = () => new Promise(async (resolve, reject) => {
+  pool.query('SELECT * FROM usuarios', (err, rows) => {
+    if (err) return resolve(Service.successResponse(mockUsuarios));
+    resolve(Service.successResponse(rows));
+  });
+});
+
+// GET /usuarios/{id} (Consultar por ID)
+const usuariosIdGET = ({ id }) => new Promise(async (resolve, reject) => {
+  pool.query('SELECT * FROM usuarios WHERE id = ?', [id], (err, rows) => {
+    if (rows && rows.length > 0) resolve(Service.successResponse(rows[0]));
+    else reject(Service.rejectResponse('Usuario no encontrado', 404));
+  });
+});
+
+// POST /usuarios (Crear nuevo)
+const usuariosPOST = ({ usuarioInput }) => new Promise(async (resolve, reject) => {
+  const { nombre, email, edad } = usuarioInput;
+  pool.query('INSERT INTO usuarios (nombre, email, edad) VALUES (?, ?, ?)', [nombre, email, edad], (err, result) => {
+    if (err) return reject(Service.rejectResponse('Error al crear usuario', 500));
+    resolve(Service.successResponse({ id: result.insertId, nombre, email, edad }));
+  });
+});
+
+// PUT /usuarios/{id} (Actualizar)
+const usuariosIdPUT = ({ id, usuarioInput }) => new Promise(async (resolve, reject) => {
+  const { nombre, email, edad } = usuarioInput;
+  pool.query('UPDATE usuarios SET nombre = ?, email = ?, edad = ? WHERE id = ?', [nombre, email, edad, id], (err) => {
+    if (err) return reject(Service.rejectResponse('Error al actualizar usuario', 500));
+    resolve(Service.successResponse({ id: Number(id), nombre, email, edad }));
+  });
+});
+
+// DELETE /usuarios/{id} (Eliminar)
+const usuariosIdDELETE = ({ id }) => new Promise(async (resolve, reject) => {
+  pool.query('DELETE FROM usuarios WHERE id = ?', [id], (err) => {
+    if (err) return reject(Service.rejectResponse('Error al eliminar usuario', 500));
+    resolve(Service.successResponse({ message: 'Usuario eliminado correctamente' }));
+  });
+});
+
+module.exports = {
+  usuariosGET,
+  usuariosIdDELETE,
+  usuariosIdGET,
+  usuariosIdPUT,
+  usuariosPOST,
+};
+```
+
+---
+
+### 4. Verificación en Swagger UI
+- Acceder a `http://localhost:8080/api-docs` para probar de forma interactiva todas las operaciones CRUD sobre la tabla `usuarios`.
+
+---
+
+## 📚 Resumen de Anexos: Servicios Web REST con Node.js & Express
+
+📍 **Ubicación:** `Anexos/`
+- **`Anexos/Ejercicio1.js`**: Servidor Node.js HTTP básico con Express que parsea parámetros JSON pasados directamente en la ruta (`/HolaMundo/:nombre`).
+- **`Anexos/Ejercicio2.js`**: API REST manual completa con Express (`GET`, `POST`, `PUT`, `DELETE` sobre la colección `/items`), utilizando `body-parser` y filtrado por query string (`filter=ABC`).
+- **`Anexos/Ejercicio3.js`**: API REST conectada directamente a MySQL (`mysql2` y `cors`) para consultar la tabla `usuarios` mediante `SELECT * FROM usuarios`.
+
+
 

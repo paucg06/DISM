@@ -1,0 +1,182 @@
+openapi: 3.0.0
+info:
+  description: API REST con persistencia en Base de Datos MySQL generada mediante
+    OpenAPI
+  title: API REST CRUD Usuarios DISM
+  version: 1.0.0
+servers:
+- description: Servidor Local Express
+  url: http://localhost:8080
+paths:
+  /usuarios:
+    get:
+      description: Retorna la lista completa de usuarios desde la base de datos MySQL.
+      operationId: usuariosGET
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Usuario"
+                type: array
+          description: Listado de usuarios obtenido correctamente
+        "500":
+          description: Error al obtener usuarios de la base de datos
+      summary: Consultar todos los usuarios
+      tags:
+      - Usuarios
+      x-eov-operation-handler: controllers/UsuariosController
+    post:
+      description: Inserta un nuevo usuario en la base de datos MySQL.
+      operationId: usuariosPOST
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UsuarioInput"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Usuario"
+          description: Usuario creado satisfactoriamente
+        "500":
+          description: Error al crear el usuario en la BD
+      summary: Crear un nuevo usuario
+      tags:
+      - Usuarios
+      x-eov-operation-handler: controllers/UsuariosController
+  /usuarios/{id}:
+    delete:
+      operationId: usuariosIdDELETE
+      parameters:
+      - description: Identificador del usuario a borrar
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_usuarios__id__delete_200_response"
+          description: Usuario eliminado con éxito
+        "500":
+          description: Error al eliminar usuario
+      summary: Eliminar usuario por ID
+      tags:
+      - Usuarios
+      x-eov-operation-handler: controllers/UsuariosController
+    get:
+      operationId: usuariosIdGET
+      parameters:
+      - description: Identificador numérico del usuario
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Usuario"
+          description: Usuario encontrado
+        "404":
+          description: Usuario no encontrado
+        "500":
+          description: Error en base de datos
+      summary: Consultar usuario por ID
+      tags:
+      - Usuarios
+      x-eov-operation-handler: controllers/UsuariosController
+    put:
+      operationId: usuariosIdPUT
+      parameters:
+      - description: Identificador del usuario a modificar
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UsuarioInput"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Usuario"
+          description: Usuario actualizado con éxito
+        "500":
+          description: Error al actualizar usuario
+      summary: Actualizar usuario por ID
+      tags:
+      - Usuarios
+      x-eov-operation-handler: controllers/UsuariosController
+components:
+  schemas:
+    Usuario:
+      example:
+        id: 1
+        nombre: Sergio
+        email: sergio@ua.es
+        edad: "20"
+      properties:
+        id:
+          example: 1
+          type: integer
+        nombre:
+          example: Sergio
+          type: string
+        email:
+          example: sergio@ua.es
+          type: string
+        edad:
+          example: "20"
+          type: string
+      type: object
+    UsuarioInput:
+      example:
+        nombre: Sergio
+        email: sergio@ua.es
+        edad: "20"
+      properties:
+        nombre:
+          example: Sergio
+          type: string
+        email:
+          example: sergio@ua.es
+          type: string
+        edad:
+          example: "20"
+          type: string
+      required:
+      - edad
+      - email
+      - nombre
+      type: object
+    _usuarios__id__delete_200_response:
+      example:
+        message: Usuario eliminado correctamente
+      properties:
+        message:
+          example: Usuario eliminado correctamente
+          type: string
+      type: object

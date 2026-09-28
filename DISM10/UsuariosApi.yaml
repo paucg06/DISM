@@ -1,0 +1,152 @@
+openapi: 3.0.0
+info:
+  title: API REST CRUD Usuarios DISM
+  description: API REST con persistencia en Base de Datos MySQL generada mediante OpenAPI
+  version: 1.0.0
+servers:
+  - description: Servidor Local Express
+    url: http://localhost:8080
+paths:
+  /usuarios:
+    get:
+      tags:
+        - Usuarios
+      summary: Consultar todos los usuarios
+      description: Retorna la lista completa de usuarios desde la base de datos MySQL.
+      responses:
+        '200':
+          description: Listado de usuarios obtenido correctamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Usuario'
+        '500':
+          description: Error al obtener usuarios de la base de datos
+    post:
+      tags:
+        - Usuarios
+      summary: Crear un nuevo usuario
+      description: Inserta un nuevo usuario en la base de datos MySQL.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UsuarioInput'
+      responses:
+        '200':
+          description: Usuario creado satisfactoriamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Usuario'
+        '500':
+          description: Error al crear el usuario en la BD
+  /usuarios/{id}:
+    get:
+      tags:
+        - Usuarios
+      summary: Consultar usuario por ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Identificador numérico del usuario
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Usuario encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Usuario'
+        '404':
+          description: Usuario no encontrado
+        '500':
+          description: Error en base de datos
+    put:
+      tags:
+        - Usuarios
+      summary: Actualizar usuario por ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Identificador del usuario a modificar
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UsuarioInput'
+      responses:
+        '200':
+          description: Usuario actualizado con éxito
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Usuario'
+        '500':
+          description: Error al actualizar usuario
+    delete:
+      tags:
+        - Usuarios
+      summary: Eliminar usuario por ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Identificador del usuario a borrar
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Usuario eliminado con éxito
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Usuario eliminado correctamente
+        '500':
+          description: Error al eliminar usuario
+components:
+  schemas:
+    Usuario:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        nombre:
+          type: string
+          example: Sergio
+        email:
+          type: string
+          example: sergio@ua.es
+        edad:
+          type: string
+          example: '20'
+    UsuarioInput:
+      type: object
+      required:
+        - nombre
+        - email
+        - edad
+      properties:
+        nombre:
+          type: string
+          example: Sergio
+        email:
+          type: string
+          example: sergio@ua.es
+        edad:
+          type: string
+          example: '20'
