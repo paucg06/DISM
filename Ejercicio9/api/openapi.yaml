@@ -1,0 +1,64 @@
+openapi: 3.0.0
+info:
+  contact:
+    email: info@dtic.org
+  description: Esto es un Hola Mundo
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  title: Hola Mundo Dtic
+  version: 1.0.0
+servers:
+- description: Servidor Local
+  url: http://localhost:8080
+- description: Servidor ApiRest DTIC
+  url: http://dtic.org/HolaMundo/1.0.0
+paths:
+  /holamundo:
+    get:
+      description: GET Hola Mundo
+      operationId: holamundoGET
+      parameters:
+      - description: nombre Entrada Hola Mundo
+        explode: true
+        in: query
+        name: nombreEntradaHolaMundo
+        required: true
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_holamundo_get_200_response"
+          description: Respuesta Hola Mundo Correcto
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_holamundo_get_400_response"
+          description: Hola Mundo Error
+      tags:
+      - HolaMundoServicio
+      x-eov-operation-handler: controllers/HolaMundoServicioController
+components:
+  schemas:
+    _holamundo_get_200_response:
+      example:
+        nombre: nombre
+        contador: 0
+      properties:
+        nombre:
+          type: string
+        contador:
+          type: integer
+      type: object
+    _holamundo_get_400_response:
+      example:
+        message: message
+      properties:
+        message:
+          type: string
+      type: object

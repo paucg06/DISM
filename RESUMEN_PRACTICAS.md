@@ -1223,3 +1223,92 @@ paths:
 1. **OpenAPI Editor (Extensión VS Code):** Permite escribir y validar en tiempo real la sintaxis, sangría e integridad del archivo YAML de OpenAPI.
 2. **Swagger UI (Extensión VS Code):** Genera una interfaz web interactiva que interpreta el YAML y permite ejecutar pruebas (*Try it out*) enviando parámetros de consulta y verificando la estructura de las respuestas HTTP.
 
+---
+
+## ⚡ Ejercicio 9: Generación de Stub Node.js/Express mediante Swagger (`Ejercicio9`)
+
+### 🎯 Objetivo
+Generar automáticamente la infraestructura completa de un servidor backend en **Node.js con Express** a partir del contrato `HolaMundo.yaml` diseñado en el Ejercicio 8 usando la herramienta CLI `@openapitools/openapi-generator-cli`. Modificar la lógica de negocio en la capa de servicios para que devuelva el mensaje requerido (`"Hola Mundo DISM 2025-2026"` y `contador: 999`) y comprobar su ejecución a través de **Swagger UI** en `http://localhost:8080/api-docs`.
+
+---
+
+### 1. Generación del Proyecto con OpenAPI Generator CLI
+```bash
+# Instalación global del generador OpenAPI
+npm i -g @openapitools/openapi-generator-cli
+
+# Generación del servidor express stub
+openapi-generator-cli generate -i ./HolaMundo.yaml -g nodejs-express-server -o ./Ejercicio9
+
+# Instalación de dependencias y arranque
+cd Ejercicio9
+npm install
+npm start
+```
+
+---
+
+### 2. Estructura de la Arquitectura Generada
+
+| Directorio / Archivo | Función Arquitectónica |
+| :--- | :--- |
+| `api/openapi.yaml` | Copia de la especificación OpenAPI utilizada por el validador y Swagger UI. |
+| `controllers/` | Controladores Express que reciben la petición HTTP y delegan la ejecución al servicio correspondiente. |
+| `services/` | Capa donde reside la **lógica de negocio**. |
+| `expressServer.js` | Configuración del servidor Express, middlewares de CORS, parser de JSON, validador `express-openapi-validator` y Swagger UI en `/api-docs`. |
+| `index.js` | Punto de entrada que levanta el servidor HTTP en el puerto configurado (8080). |
+| `config.js` | Parámetros de configuración de puertos, rutas y directorios. |
+
+---
+
+### 3. Modificación de la Lógica de Negocio (Servicio)
+📍 **Archivo:** `Ejercicio9/services/HolaMundoServicioService.js`
+```javascript
+/* eslint-disable no-unused-vars */
+const Service = require('./Service');
+
+/**
+* GET Hola Mundo
+*
+* nombreEntradaHolaMundo String nombre Entrada Hola Mundo
+* returns _holamundo_get_200_response
+* */
+const holamundoGET = ({ nombreEntradaHolaMundo }) => new Promise(
+  async (resolve, reject) => {
+    try {
+      // Retornamos el objeto JSON con contador y nombre según la especificación
+      resolve(Service.successResponse({
+        contador: 999,
+        nombre: 'Hola Mundo DISM 2025-2026',
+      }));
+    } catch (e) {
+      reject(Service.rejectResponse(
+        e.message || 'Invalid input',
+        e.status || 405,
+      ));
+    }
+  },
+);
+
+module.exports = {
+  holamundoGET,
+};
+```
+
+---
+
+### 4. Verificación y Pruebas
+
+#### Prueba interactiva con Swagger UI
+- **URL:** `http://localhost:8080/api-docs`
+- **Operación:** Desplegar `GET /holamundo`, pulsar en **Try it out**, introducir el parámetro `nombreEntradaHolaMundo: DISM` y pulsar **Execute**.
+
+#### Respuesta obtenida (HTTP 200 OK)
+```json
+{
+  "contador": 999,
+  "nombre": "Hola Mundo DISM 2025-2026"
+}
+```
+
+
