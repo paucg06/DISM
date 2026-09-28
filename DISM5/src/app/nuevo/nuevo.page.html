@@ -1,0 +1,25 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Nuevo</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-item>
+    <ion-label>Nombre:</ion-label>
+    <ion-input [(ngModel)]="UsuarioData.nombre" placeholder="Nombre"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>Edad:</ion-label>
+    <ion-input [(ngModel)]="UsuarioData.edad" placeholder="Edad"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>Email:</ion-label>
+    <ion-input [(ngModel)]="UsuarioData.email" placeholder="Email"></ion-input>
+  </ion-item>
+
+  <ion-button (click)="newUsuario()" color="success" expand="block">Añadir</ion-button>
+  <ion-button [routerLink]="['/home']" color="warning" expand="block">Cancelar</ion-button>
+</ion-content>

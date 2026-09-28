@@ -1,0 +1,34 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      Ionic Geolocalización - Georreferenciación
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="ion-padding">
+    <ion-button (click)="locate()" expand="block">
+      Obtener Geolocalización-Georreferenciación
+    </ion-button>
+    <ion-list>
+      <ion-list-header>
+        <ion-label>Coordenadas de Localización</ion-label>
+      </ion-list-header>
+      <ion-item>
+        <ion-label>Latitud</ion-label>
+        <ion-badge color="danger" slot="end">{{ latitud }}</ion-badge>
+      </ion-item>
+      <ion-item>
+        <ion-label>Longitud</ion-label>
+        <ion-badge color="danger" slot="end">{{ longitud }}</ion-badge>
+      </ion-item>
+      <ion-item>
+        <ion-label>Dirección</ion-label>
+        <ion-badge color="warning" slot="end">
+          {{ direccionGeorreferenciada }}
+        </ion-badge>
+      </ion-item>
+    </ion-list>
+  </div>
+</ion-content>

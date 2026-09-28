@@ -1,0 +1,48 @@
+openapi: 3.0.0
+servers:
+  - description: Servidor ApiRest DTIC
+    url: http://dtic.org/HolaMundo/1.0.0
+info:
+  description: Esto es un Hola Mundo
+  version: "1.0.0"
+  title: Hola Mundo Dtic
+  contact:
+    email: info@dtic.org
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+
+paths:
+  /holamundo:
+    get:
+      tags:
+        - HolaMundoServicio
+      description: GET Hola Mundo
+      parameters:
+        - in: query
+          name: nombreEntradaHolaMundo
+          description: nombre Entrada Hola Mundo
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Respuesta Hola Mundo Correcto
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  nombre:
+                    type: string
+                  contador:
+                    type: integer
+        '400':
+          description: Hola Mundo Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
