@@ -1,0 +1,411 @@
+==============================================================================
+TEMA 4. INTERNET OF THINGS
+==============================================================================
+
+==============================================================================
+IoT: DISEÑO DE APIs
+==============================================================================
+
+[BLOQUE 1] Diseño de APIs en servicios REST
+- Muchas veces por las necesidades (urgentes) se exponen componentes internos de nuestras aplicaciones en servicios REST públicos.
+- La inercia suele llevar a ir creando este tipo de APIs sin un diseño previo.
+- Eso conlleva problemas por la falta de planificación.
+- E inconsistencia entre los objetos y métodos, sin hablar de agujeros de seguridad.
+- La tendencia cambia (SOA):
+- Cada vez toma más importancia el diseño previo de APIs utilizando herramientas que tengan en cuenta:
+  - La usabilidad.
+  - Las necesidades de los consumidores/aplicaciones que vayan utilizar los servicios,
+  - Permitir realizar mocks testeables.
+  - Posibilitar el versionado.
+  - Y, por supuesto, crear de forma conjunta al desarrollo de la documentación.
+
+[BLOQUE 2] Gestión de APIs en servicios REST: herramientas
+- API Blueprint, RAML y Swagger representan tres excelentes herramientas para diseñar APIs.
+- https://apiblueprint.org/
+- http://swagger.io/
+- http://raml.org/
+- Podemos diseñar sobre el papel antes de su implementación la definición de la API en formato JSON o usando markdown para describir la interfaz, estructura y el modelo de datos.
+-  (2026): OpenAPI (evolución de Swagger) es hoy el estándar de facto del sector, respaldado por la Linux Foundation. RAML y API Blueprint han quedado como opciones legadas, con uso residual en algunos entornos empresariales. Para APIs de eventos/streaming se usa AsyncAPI.
+
+[BLOQUE 3] RAML
+- RAML es la definición de RESTful API Modeling Language, el cual permite describir servicios REST de forma completa.
+- Destaca la capacidad de reutilización de componentes y patrones para aplicar en las definiciones como “best practices”.
+- Está construido a partir de estándares como YAML y JSON.
+- Cada API está definida con la versión de RAML que está usando junto a una serie de características en su descripción:
+  - Título
+  - Versión
+  - base URI.
+- RAML permite definir patrones minimizando la repetición en las definiciones, usando:
+  - Traits
+  - resourceTypes
+  - SecuritySchemes
+  - Podemos definir las respuestas y ejemplos escritos en la definición como documentación.
+
+[BLOQUE 4] Swagger
+- Swagger es un conjunto de herramientas de software de código abierto para diseñar, construir, documentar, y utilizar servicios web RESTful.
+- Las herramientas Swagger como Swagger Editor y SwaggerHub proporcionan un editor YAML con un panel de visualización para que los desarrolladores trabajen y vean cómo se verá y se comportará la API para el consumidor final.
+
+[BLOQUE 5] OpenAPI: qué es
+- ¿Cómo debo diseñar mi API?
+- ¿Cómo voy a exponerla a distintos desarrolladores?
+- Todos los productos necesitan una documentación y las APIs no son la excepción.
+- OpenAPI, es un estándar para crear esa documentación para nuestra API.
+- OpenAPI se creó para “Crear un formato de descripción abierto para los servicios API que sea neutral, portátil y abierto, para acelerar la visión de un mundo verdaderamente conectado.”
+
+[BLOQUE 6] Swagger vs OpenAPI
+- OpenAPI = Especificación
+- https://www.openapis.org/
+- El desarrollo de la especificación es fomentado por la Iniciativa OpenAPI (Microsoft, Google, IBM y CapitalOne…)
+- https://swagger.io/specification/
+- Swagger = Herramientas para implementar la especificación
+- https://swagger.io/
+- El conjunto de herramientas Swagger incluye una combinación de herramientas comerciales, gratuitas y de código abierto, que se pueden utilizar en diferentes etapas del ciclo de vida de la API.
+
+[BLOQUE 7] Herramientas Swagger
+- Swagger Herramientas
+- Swagger Editor : Swagger Editor le permite editar especificaciones de OpenAPI en YAML dentro de su navegador y obtener una vista previa de la documentación en tiempo real.
+- Swagger UI : Swagger UI es una colección de activos HTML, Javascript y CSS que generan dinámicamente una hermosa documentación a partir de una API compatible con OAS.
+- Swagger Codegen : permite la generación de bibliotecas cliente API (generación de SDK), stubs de servidor y documentación de forma automática dada una especificación OpenAPI.
+- Swagger Parser : biblioteca independiente para analizar definiciones de OpenAPI desde Java.
+- Swagger Core : bibliotecas relacionadas con Java para crear, consumir y trabajar con definiciones de OpenAPI.
+- Swagger Inspector (gratis) : herramienta de prueba de API que le permite validar sus API y generar definiciones de OpenAPI a partir de una API existente.
+- SwaggerHub (gratuito y comercial) : diseño y documentación de API, creado para equipos que trabajan con OpenAPI.
+
+[BLOQUE 8] Swagger 2.0 vs OpenAPI 3.0
+
+[BLOQUE 9] Tutorial OpenAPI 3.0: especificación simple y caso de ejemplo
+- Las definiciones de OpenAPI se pueden escribir en JSON o YAML.
+- YAML es más fácil de leer y escribir.
+- Una especificación simple de OpenAPI 3.0:
+```yaml
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Sample API
+  description: A sample API to illustrate OpenAPI concepts
+paths:
+  /list:
+    get:
+      description: Returns a list of stuff
+      responses:
+        '200':
+          description: Successful response
+```
+- OpenApi 3.0 Tutorial
+- Diseñaremos una API para un sello discográfico.
+- Partiremos de que el sello discográfico tiene una base de datos de artistas con la siguiente información:
+  - Nombre del artista.
+  - Género de artista.
+  - Número de álbumes publicados bajo la etiqueta.
+  - Nombre de usuario del artista.
+  - La API permitirá a los consumidores obtener la lista de artistas almacenada en la base de datos y agregar un nuevo artista a la base de datos.
+- Una API definida por la especificación OpenAPI se divide en 3 categorías:
+  - Meta información
+- Elementos de ruta (endpoints):
+  - Parámetros
+  - Órganos de solicitud
+  - Respuestas
+- Componentes reutilizables:
+  - Esquemas (modelos de datos)
+  - Parámetros
+  - Respuestas
+  - Otros componentes
+
+[BLOQUE 10] Tutorial OpenAPI 3.0: meta información
+- (Fragmento de definición OpenAPI en YAML; sangrado reconstruido)
+```yaml
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Simple Artist API
+  description: A simple API to illustrate OpenAPI concepts
+servers:
+  - url: https://example.io/v1
+# Basic authentication
+components:
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
+security:
+  - BasicAuth: []
+
+paths: {}
+```
+
+[BLOQUE 11] Tutorial OpenAPI 3.0: paths
+- (Fragmento de definición OpenAPI en YAML; sangrado reconstruido)
+```yaml
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Simple API
+  description: A simple API to illustrate OpenAPI concepts
+servers:
+  - url: https://example.io/v1
+components:
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
+security:
+  - BasicAuth: []
+# ----- Added lines -----
+paths:
+  /artists:
+    get:
+      description: Returns a list of artists
+# ---- /Added lines -----
+```
+- Se define /artists como endpoint y el método GET.
+- Un cliente usará: GET https://example.io/v1/artists para obtener una lista de artistas.
+
+[BLOQUE 12] Tutorial OpenAPI 3.0: responses
+- (Fragmento de definición OpenAPI en YAML; sangrado reconstruido)
+```yaml
+…
+paths:
+  /artists:
+    get:
+      description: Returns a list of artists
+      # ----- Added lines -----
+      responses:
+        '200':
+          description: Successfully returned a list of artists
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  required:
+                    - username
+                  properties:
+                    artist_name:
+                      type: string
+                    artist_genre:
+                      type: string
+                    albums_recorded:
+                      type: integer
+                    username:
+                      type: string
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+      # ---- /Added lines -----
+```
+- ⚠ En el original las dos columnas de código estaban mezcladas; el sangrado se ha reconstruido.
+
+[BLOQUE 13] Tutorial OpenAPI 3.0: parameters
+- (Fragmento de definición OpenAPI en YAML; sangrado reconstruido)
+```yaml
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Simple API
+  description: A simple API to illustrate OpenAPI concepts
+…
+servers:
+  - url: https://example.io/v1
+components:
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
+security:
+  - BasicAuth: []
+
+paths:
+  /artists:
+    get:
+      description: Returns a list of artists
+      # ----- Added lines -----
+      parameters:
+        - name: limit
+          in: query
+          description: Limits the number of items on a page
+          schema:
+            type: integer
+        - name: offset
+          in: query
+          description: Specifies the page number of the artists to be displayed
+          schema:
+            type: integer
+      # ---- /Added lines -----
+```
+- Query Params: GET https://example.io/v1/artists?limit=20&offset=3
+- ⚠ En el original el bloque «parameters» aparecía antes de «paths» en el texto extraído; aquí se coloca bajo get (reconstrucción).
+- (Fragmento de definición OpenAPI en YAML; sangrado reconstruido)
+```yaml
+…
+paths:
+  /artists:
+  # ----- Added lines -----
+  /artists/{username}:
+    get:
+      description: Obtain information about an artist from his or her unique username
+      parameters:
+        - name: username
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully returned an artist
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  artist_name:
+                    type: string
+                  artist_genre:
+                    type: string
+                  albums_recorded:
+                    type: integer
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+  # ---- /Added lines -----
+```
+- ⚠ En el original las dos columnas de código estaban mezcladas; el sangrado se ha reconstruido.
+
+[BLOQUE 14] Tutorial OpenAPI 3.0: componentes reutilizables
+- La Especificación define varios tipos de componentes reutilizables:
+  - Schemas (modelos de datos)
+  - Parameters
+  - Request bodies
+  - Responses
+  - Response headers
+  - Examples
+  - Links
+  - Callbacks
+
+[BLOQUE 15] Tutorial OpenAPI 3.0: schemas
+- (Fragmento de definición OpenAPI en YAML; sangrado reconstruido)
+```yaml
+…
+/artists:
+  get:
+    …
+    responses:
+      '200':
+        description: Successfully returned a list of artists
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                # ----- Added line -----
+                $ref: '#/components/schemas/Artist'
+                # ---- /Added line -----
+    …
+  post:
+    description: Lets a user post a new artist
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            # ----- Added line -----
+            $ref: '#/components/schemas/Artist'
+            # ---- /Added line -----
+```
+- (Fragmento de definición OpenAPI en YAML; sangrado reconstruido)
+```yaml
+…
+components:
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
+  # ----- Added lines -----
+  schemas:
+    Artist:
+      type: object
+      required:
+        - username
+      properties:
+        artist_name:
+          type: string
+        artist_genre:
+          type: string
+        albums_recorded:
+          type: integer
+        username:
+          type: string
+  # ---- /Added lines -----
+```
+
+[BLOQUE 16] Tutorial OpenAPI 3.0: parámetros y respuestas reutilizables
+- OpenApi 3.0 Tutorial (Parametros y Respuestas)
+- La sección components también tiene subsecciones para almacenar parámetros y respuestas reutilizables.
+- Definimos los parámetros de consulta reutilizables:
+  - Offset y limit y luego hacemos referencia a ellos desde el endpoint /artists.
+  - 400Error respuesta reutilizable , a la que luego hacemos referencia desde todos los endpoints.
+- (Fragmento de definición OpenAPI en YAML; sangrado reconstruido)
+```yaml
+…
+# ----- Added lines -----
+parameters:
+  PageLimit:
+    name: limit
+    in: query
+    description: Limits the number of items on a page
+    schema:
+      type: integer
+  PageOffset:
+    name: offset
+    in: query
+    description: Specifies the page number of the artists to be displayed
+    schema:
+      type: integer
+responses:
+  400Error:
+    description: Invalid request
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+# ---- /Added lines -----
+…
+# Uso desde el endpoint /artists:
+parameters:
+  # ----- Added lines -----
+  - $ref: '#/components/parameters/PageLimit'
+  - $ref: '#/components/parameters/PageOffset'
+  # ---- /Added lines -----
+…
+responses:
+  '200':
+    …
+      items:
+        # ----- Added line -----
+        $ref: '#/components/schemas/Artist'
+  '400':
+    # ----- Added line -----
+    $ref: '#/components/responses/400Error'
+```
+- ⚠ En el original las columnas de código estaban mezcladas; el sangrado y el orden se han reconstruido.
+
+[BLOQUE 17] Enlaces de referencia
+- OpenApi 3.0 Tutorial
+- https://app.swaggerhub.com/help/tutorials/index
+- https://swagger.io/specification/
+- https://forge.etsi.org/swagger/editor/

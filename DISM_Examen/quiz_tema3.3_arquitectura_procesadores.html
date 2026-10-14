@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz · Tema 3.3 Arquitectura de procesadores</title>
+<style>
+  :root{
+    --bg:#0f1115;
+    --card:#171a21;
+    --card-border:#262b36;
+    --accent:#5b8def;
+    --accent-2:#7c5cff;
+    --good:#33c07d;
+    --bad:#e2524d;
+    --text:#e9ecf1;
+    --muted:#93a0b4;
+    --radius:16px;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Segoe UI',system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
+    background:radial-gradient(1200px 800px at 10% -10%, #1b2030 0%, var(--bg) 55%);
+    color:var(--text);
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    padding:32px 16px 60px;
+  }
+  .app{width:100%;max-width:780px;}
+  header{
+    text-align:center;
+    margin-bottom:24px;
+  }
+  header h1{
+    font-size:1.45rem;
+    margin:0 0 6px;
+    background:linear-gradient(90deg,var(--accent),var(--accent-2));
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+  }
+  header p{margin:0;color:var(--muted);font-size:0.92rem;}
+
+  .progress-wrap{
+    background:var(--card-border);
+    border-radius:999px;
+    height:8px;
+    margin:18px 0 28px;
+    overflow:hidden;
+  }
+  .progress-bar{
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg,var(--accent),var(--accent-2));
+    transition:width .35s ease;
+  }
+
+  .card{
+    background:var(--card);
+    border:1px solid var(--card-border);
+    border-radius:var(--radius);
+    padding:26px 24px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.35);
+  }
+
+  .qmeta{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    color:var(--muted);
+    font-size:0.85rem;
+    margin-bottom:10px;
+  }
+  .qmeta .score-live{
+    font-weight:600;
+    color:var(--accent);
+  }
+
+  .question-text{
+    font-size:1.12rem;
+    line-height:1.5;
+    margin:0 0 20px;
+    font-weight:600;
+    white-space:pre-line;
+  }
+
+  .options{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+  .option{
+    text-align:left;
+    background:#1e2330;
+    border:1px solid var(--card-border);
+    color:var(--text);
+    padding:13px 16px;
+    border-radius:12px;
+    cursor:pointer;
+    font-size:0.98rem;
+    line-height:1.4;
+    transition:border-color .15s ease, background .15s ease, transform .1s ease;
+  }
+  .option:hover:not(.disabled){
+    border-color:var(--accent);
+    background:#232a3a;
+  }
+  .option.selected-correct{
+    background:rgba(51,192,125,0.15);
+    border-color:var(--good);
+  }
+  .option.selected-wrong{
+    background:rgba(226,82,77,0.15);
+    border-color:var(--bad);
+  }
+  .option.reveal-correct{
+    border-color:var(--good);
+  }
+  .option.disabled{
+    cursor:default;
+  }
+
+  .feedback{
+    margin-top:16px;
+    font-size:0.9rem;
+    color:var(--muted);
+    min-height:1.2em;
+  }
+  .feedback.good{color:var(--good);}
+  .feedback.bad{color:var(--bad);}
+
+  .nav{
+    display:flex;
+    justify-content:flex-end;
+    margin-top:22px;
+  }
+  button.primary{
+    background:linear-gradient(90deg,var(--accent),var(--accent-2));
+    color:#fff;
+    border:none;
+    padding:11px 22px;
+    border-radius:10px;
+    font-size:0.95rem;
+    font-weight:600;
+    cursor:pointer;
+    opacity:0.4;
+    pointer-events:none;
+    transition:opacity .15s ease;
+  }
+  button.primary.active{
+    opacity:1;
+    pointer-events:auto;
+  }
+  button.primary:hover.active{
+    filter:brightness(1.08);
+  }
+
+  /* Results screen */
+  .results{
+    text-align:center;
+  }
+  .results h2{
+    font-size:1.3rem;
+    margin-bottom:4px;
+  }
+  .grade{
+    font-size:3.6rem;
+    font-weight:800;
+    margin:14px 0 6px;
+    background:linear-gradient(90deg,var(--accent),var(--accent-2));
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+  }
+  .grade-sub{color:var(--muted);margin-bottom:22px;font-size:0.95rem;}
+  .stats-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+    margin:20px 0 28px;
+  }
+  .stat{
+    background:#1e2330;
+    border:1px solid var(--card-border);
+    border-radius:12px;
+    padding:14px 8px;
+  }
+  .stat .num{font-size:1.4rem;font-weight:700;}
+  .stat.ok .num{color:var(--good);}
+  .stat.bad .num{color:var(--bad);}
+  .stat.skip .num{color:var(--muted);}
+  .stat .label{font-size:0.75rem;color:var(--muted);margin-top:2px;}
+
+  .actions{
+    display:flex;
+    gap:10px;
+    justify-content:center;
+    flex-wrap:wrap;
+  }
+  button.secondary{
+    background:transparent;
+    border:1px solid var(--card-border);
+    color:var(--text);
+    padding:11px 20px;
+    border-radius:10px;
+    cursor:pointer;
+    font-size:0.9rem;
+  }
+  button.secondary:hover{border-color:var(--accent);}
+
+  .review{
+    text-align:left;
+    margin-top:30px;
+    border-top:1px solid var(--card-border);
+    padding-top:20px;
+  }
+  .review h3{font-size:1rem;margin-bottom:14px;color:var(--muted);}
+  .review-item{
+    background:#1e2330;
+    border:1px solid var(--card-border);
+    border-radius:10px;
+    padding:12px 14px;
+    margin-bottom:10px;
+    font-size:0.88rem;
+  }
+  .review-item .rq{font-weight:600;margin-bottom:6px;white-space:pre-line;}
+  .review-item .ra-good{color:var(--good);}
+  .review-item .ra-bad{color:var(--bad);}
+
+  footer{
+    text-align:center;
+    color:var(--muted);
+    font-size:0.75rem;
+    margin-top:26px;
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <h1>Tema 3.3 · Arquitectura de procesadores</h1>
+    <p>RISC/CISC, SoC, ARM, alternativas y GPUs móviles</p>
+  </header>
+
+  <div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
+
+  <div class="card" id="quizCard"></div>
+
+  <footer>Cada fallo resta 1/3 de una pregunta correcta · Nota final sobre 10</footer>
+</div>
+
+<script>
+const QUESTIONS = [
+  {q:"¿Por qué los procesadores RISC son los utilizados en los dispositivos móviles desde hace décadas?",
+   options:["Porque tienen un conjunto de instrucciones más amplio que los CISC",
+            "Porque, al tener una cantidad limitada de operaciones, consumen menos en menos espacio",
+            "Porque son propiedad de Intel y AMD",
+            "Porque no necesitan ningún tipo de licencia"], correct:1},
+  {q:"¿Qué es un System on a Chip (SoC)?",
+   options:["Un procesador que solo integra la GPU, sin CPU",
+            "La integración de una serie de CPUs y la GPU en un único lugar",
+            "Un tipo de memoria RAM de alta velocidad",
+            "Un protocolo de comunicación entre dispositivos móviles"], correct:1},
+  {q:"¿Cuál es la principal desventaja de un SoC frente a componentes separados como en un PC?",
+   options:["Un mayor consumo energético",
+            "Se pierde potencia y la posibilidad de mejorar componentes por separado",
+            "Un tamaño mucho mayor",
+            "Un coste de fabricación más elevado"], correct:1},
+  {q:"¿Qué significan las siglas ARM en su origen?",
+   options:["Advanced RISC Machine","Acorn RISC Machine","Apple Reduced Machine","Automated Register Machine"], correct:1},
+  {q:"¿Qué porcentaje aproximado de smartphones utiliza procesadores de arquitectura ARM según el tema?",
+   options:["50%","75%","99.9%","60%"], correct:2},
+  {q:"¿A partir de qué versión existen procesadores ARM de 64 bits?",
+   options:["Versión 4","Versión 6","Versión 7","Versión 8"], correct:3},
+  {q:"¿En qué se basa principalmente el modelo de negocio de ARM?",
+   options:["Fabricar y vender directamente sus propios chips",
+            "Crear y licenciar su tecnología en forma de propiedad intelectual",
+            "Vender exclusivamente software para móviles",
+            "Fabricar GPUs para estaciones de trabajo"], correct:1},
+  {q:"¿Qué tipo de licencia de ARM permite a un licenciatario alterar el núcleo ARM como desee, siendo la más costosa?",
+   options:["Licencia estándar","Licencia de conjuntos de instrucciones","Licencia de núcleo","Licencia de implementación"], correct:2},
+  {q:"¿Qué empresa es un ejemplo de licenciataria con licencia de núcleo, usada para sus chips M?",
+   options:["Qualcomm","Samsung","Apple","Nvidia"], correct:2},
+  {q:"¿Qué tipo de licencia de ARM permite a los licenciatarios diseñar sus propios chips implementando un conjunto de instrucciones concreto?",
+   options:["Licencia estándar","Licencia de conjuntos de instrucciones","Licencia de núcleo","No existe ese tipo de licencia"], correct:1},
+  {q:"En comparación con ARM, ¿por qué los procesadores x86 (Intel y AMD) alcanzan potencias mucho mayores?",
+   options:["Porque usan menos transistores que ARM",
+            "Porque su diseño simple hace más fácil y barato obtener más potencia, a costa de mayor consumo y espacio",
+            "Porque están basados en arquitectura RISC igual que ARM",
+            "Porque no necesitan ningún tipo de refrigeración"], correct:1},
+  {q:"¿Qué tendencia se menciona respecto al liderazgo de Intel en equipos de escritorio?",
+   options:["Se prevé que se mantenga inalterable gracias a x86",
+            "Se teoriza que los procesadores ARM (como los M1-M4 de Apple) podrían quitarle el liderazgo",
+            "Intel ha abandonado por completo el mercado de PCs",
+            "AMD ha comprado la licencia exclusiva de ARM"], correct:1},
+  {q:"¿Hacia qué mercados está explorando AMD Inc. fuera de los móviles según el tema?",
+   options:["Relojes inteligentes y wearables",
+            "Servidores y electrodomésticos",
+            "Consolas portátiles exclusivamente",
+            "Impresoras 3D"], correct:1},
+  {q:"¿A partir de qué versión de ARM se introdujeron los diferentes perfiles de línea de núcleos (Cortex-A, Cortex-R, Cortex-M)?",
+   options:["ARM7 (v4)","ARM9E (v5)","ARM11 (v6)","ARMv7"], correct:3},
+  {q:"¿Qué caracteriza al perfil Cortex-A frente a los demás perfiles ARM?",
+   options:["Es el perfil de mayor eficiencia energética y menor potencia",
+            "Es el perfil de altas prestaciones para dispositivos con SO, pero con la menor eficiencia energética",
+            "Está pensado exclusivamente para electrodomésticos e IoT",
+            "Ofrece tolerancia a fallos para procesamiento en tiempo real"], correct:1},
+  {q:"¿En qué consiste la arquitectura big.LITTLE?",
+   options:["Combinar dos GPUs distintas en el mismo chip",
+            "Mezclar procesadores Cortex-A con otros menos potentes para ahorrar energía",
+            "Usar exclusivamente núcleos Cortex-M de bajo consumo",
+            "Duplicar el número de transistores del procesador"], correct:1},
+  {q:"¿Qué función cumple el Global Task Scheduling dentro de la arquitectura big.LITTLE?",
+   options:["Gestiona la temperatura del procesador mediante refrigeración activa",
+            "Es una capa de software que manda las operaciones sencillas a los procesadores menos potentes y viceversa",
+            "Sustituye por completo al sistema operativo del dispositivo",
+            "Controla el brillo de la pantalla según la carga de trabajo"], correct:1},
+  {q:"¿Qué permite la tecnología DynamIQ?",
+   options:["Colocar hasta 8 núcleos de diferentes tipos en el mismo clúster",
+            "Eliminar la necesidad de GPU en el dispositivo",
+            "Ejecutar dos sistemas operativos a la vez",
+            "Reducir a la mitad el número de transistores necesarios"], correct:0},
+  {q:"¿Qué caracteriza principalmente al perfil Cortex-R?",
+   options:["Máxima eficiencia energética con el coste más bajo posible",
+            "Altas prestaciones con bajo consumo para procesamiento en tiempo real, con tolerancia a fallos",
+            "Ser el perfil más potente pero también el más ineficiente",
+            "Estar orientado exclusivamente a smartphones de gama alta"], correct:1},
+  {q:"¿Cuál es el uso principal de los procesadores Cortex-R según el tema?",
+   options:["Smartphones de gama alta",
+            "Routers, dispositivos de conexión WiFi, almacenamiento y televisores",
+            "Consolas portátiles de última generación",
+            "Servidores de centros de datos"], correct:1},
+  {q:"¿Qué caracteriza al perfil Cortex-M frente a Cortex-A y Cortex-R?",
+   options:["Es el perfil más potente pero también el más caro",
+            "Es el perfil con mayor eficiencia y menor coste, aunque el menos potente",
+            "Solo se usa en servidores de alto rendimiento",
+            "No puede combinarse con arquitectura big.LITTLE"], correct:1},
+  {q:"¿En qué tipo de dispositivos se utiliza principalmente el perfil Cortex-M?",
+   options:["Ordenadores de sobremesa de alta gama",
+            "Electrodomésticos, Internet of Things, instrumentos médicos y Smart Cities",
+            "Estaciones base de telefonía móvil",
+            "Tarjetas gráficas dedicadas"], correct:1},
+  {q:"¿Cuál es el estado actual de Intel Atom, la arquitectura x86-x64 de Intel para móviles?",
+   options:["Domina el mercado de smartphones de gama alta",
+            "No ha triunfado y se usa en casos similares a Cortex-R, como routers",
+            "Ha sustituido por completo a ARM en tablets",
+            "Solo se usa en consolas portátiles"], correct:1},
+  {q:"¿Qué es RISC-V?",
+   options:["Una marca comercial de GPUs para móviles",
+            "Una arquitectura de procesadores Open Source desarrollada en la Universidad de Berkeley",
+            "Una versión mejorada y propietaria de ARM",
+            "Un protocolo de conectividad inalámbrica"], correct:1},
+  {q:"¿Cuál es la principal ventaja de RISC-V frente a ARM según el tema?",
+   options:["Ofrece mucha más potencia bruta que cualquier ARM",
+            "Su ISA es Open Source, sin necesidad de licencia ni coste de uso",
+            "Está disponible desde hace más décadas que ARM",
+            "Es propiedad exclusiva de Intel"], correct:1},
+  {q:"¿Cómo se utiliza actualmente RISC-V en combinación con ARM?",
+   options:["Sustituyendo por completo a los núcleos ARM en smartphones de gama alta",
+            "Acompañando a un procesador ARM principal en arquitecturas big.LITTLE para abaratar costes",
+            "Únicamente en tarjetas gráficas de sobremesa",
+            "No se combina nunca con ARM por incompatibilidad"], correct:1},
+  {q:"¿Por qué una GPU ofrece mejores prestaciones que una CPU para el procesamiento gráfico?",
+   options:["Porque tiene un conjunto de instrucciones más amplio que la CPU",
+            "Porque masifica el paralelismo para realizar todos los cálculos geométricos posibles",
+            "Porque consume menos energía que cualquier CPU",
+            "Porque no necesita refrigeración"], correct:1},
+  {q:"¿Cuáles son los tres tipos de shaders que se ejecutan en una GPU?",
+   options:["Vértices, geometría y píxeles",
+            "Texturas, sonido y movimiento",
+            "Color, brillo y contraste",
+            "Vértices, sonido y píxeles"], correct:0},
+  {q:"¿Cuál de los siguientes NO es un lenguaje utilizado para programar shaders según el tema?",
+   options:["GLSL de OpenGL","HLSL de Direct3D","Cg de Nvidia","CUDA de Intel"], correct:3},
+  {q:"¿Por qué las GPUs de alto rendimiento son difíciles de integrar en dispositivos móviles?",
+   options:["Porque no son compatibles con arquitecturas RISC",
+            "Porque tienen un consumo elevado, generan calor y necesitan mucho espacio",
+            "Porque no pueden ejecutar shaders de píxeles",
+            "Porque solo funcionan con procesadores x86"], correct:1},
+  {q:"¿En qué SoC de alto rendimiento se integran las GPU Qualcomm Adreno?",
+   options:["Exynos","Snapdragon","Kirin","Tegra"], correct:1},
+  {q:"¿Qué ocurrió con PowerVR cuando NVIDIA e Intel la desbancaron en el mercado de estaciones de trabajo?",
+   options:["Desapareció por completo del mercado",
+            "Se centró en el mercado de dispositivos móviles",
+            "Pasó a fabricar exclusivamente CPUs ARM",
+            "Se fusionó con ARM Inc."], correct:1},
+  {q:"¿Qué empresa produce la GPU ARM Mali?",
+   options:["Qualcomm","Nvidia","ARM Inc.","Imagination Technologies"], correct:2},
+  {q:"¿Qué es Tegra según el tema?",
+   options:["Un tipo de shader exclusivo de Nvidia",
+            "Un SoC de NVIDIA que contiene GPUs propias junto a núcleos Cortex-A de ARM",
+            "Una licencia de instrucciones de ARM",
+            "Un protocolo de conectividad para GPUs"], correct:1},
+  {q:"Según los ejemplos de dispositivos reales del tema, ¿qué GPU utiliza el Apple A11 Bionic (iPhone 8 / iPhone X)?",
+   options:["Adreno","Mali","PowerVR","Tegra"], correct:1},
+  {q:"Según los ejemplos del tema, ¿qué GPU utiliza el Snapdragon 855 del Xiaomi mi9?",
+   options:["Mali","Adreno","PowerVR","Tegra"], correct:1},
+  {q:"Según el tema, ¿cómo se estructuran los núcleos del Samsung Exynos 9820 (Galaxy S10)?",
+   options:["8 núcleos idénticos de un solo tipo",
+            "2 núcleos principales propios, 2 secundarios Cortex-A7 y 4 terciarios Cortex-A5",
+            "4 núcleos Cortex-A y 4 núcleos Cortex-M",
+            "6 núcleos: 2 de alto rendimiento y 4 de bajo consumo"], correct:1}
+];
+
+// Fisher-Yates shuffle
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+
+// Build runtime quiz with shuffled options per question
+const quiz = QUESTIONS.map(item=>{
+  const correctText = item.options[item.correct];
+  const shuffled = shuffle(item.options);
+  return {
+    q:item.q,
+    options:shuffled,
+    correctText:correctText
+  };
+});
+
+let current = 0;
+let answered = [];
+let selectedOption = null;
+
+const card = document.getElementById('quizCard');
+const progressBar = document.getElementById('progressBar');
+
+function renderQuestion(){
+  const item = quiz[current];
+  progressBar.style.width = ((current)/quiz.length*100) + "%";
+
+  const correctSoFar = answered.filter(a=>a.isCorrect).length;
+  const wrongSoFar = answered.filter(a=>!a.isCorrect).length;
+  const liveScore = (correctSoFar - wrongSoFar/3).toFixed(2);
+
+  card.innerHTML = `
+    <div class="qmeta">
+      <span>Pregunta ${current+1} / ${quiz.length}</span>
+      <span class="score-live">Puntos: ${liveScore}</span>
+    </div>
+    <p class="question-text">${item.q}</p>
+    <div class="options" id="optionsWrap"></div>
+    <div class="feedback" id="feedback"></div>
+    <div class="nav"><button class="primary" id="nextBtn">Siguiente</button></div>
+  `;
+
+  const optionsWrap = document.getElementById('optionsWrap');
+  item.options.forEach(optText=>{
+    const btn = document.createElement('button');
+    btn.className = 'option';
+    btn.textContent = optText;
+    btn.addEventListener('click', ()=>selectOption(optText, btn));
+    optionsWrap.appendChild(btn);
+  });
+
+  document.getElementById('nextBtn').addEventListener('click', nextQuestion);
+  selectedOption = null;
+}
+
+function selectOption(optText, btnEl){
+  if(selectedOption !== null) return;
+  const item = quiz[current];
+  const isCorrect = optText === item.correctText;
+  selectedOption = optText;
+
+  const allBtns = document.querySelectorAll('#optionsWrap .option');
+  allBtns.forEach(b=>{
+    b.classList.add('disabled');
+    if(b.textContent === item.correctText){
+      b.classList.add('reveal-correct');
+    }
+    if(b === btnEl && !isCorrect){
+      b.classList.add('selected-wrong');
+    }
+    if(b === btnEl && isCorrect){
+      b.classList.add('selected-correct');
+    }
+  });
+
+  const feedback = document.getElementById('feedback');
+  if(isCorrect){
+    feedback.textContent = "✓ Correcto";
+    feedback.className = "feedback good";
+  } else {
+    feedback.textContent = "✗ Incorrecto — la respuesta correcta está resaltada en verde";
+    feedback.className = "feedback bad";
+  }
+
+  answered[current] = {
+    question:item.q,
+    chosen:optText,
+    correctText:item.correctText,
+    isCorrect:isCorrect
+  };
+
+  document.getElementById('nextBtn').classList.add('active');
+}
+
+function nextQuestion(){
+  if(selectedOption === null) return;
+  current++;
+  if(current < quiz.length){
+    renderQuestion();
+  } else {
+    renderResults();
+  }
+}
+
+function renderResults(){
+  progressBar.style.width = "100%";
+  const correctCount = answered.filter(a=>a && a.isCorrect).length;
+  const wrongCount = answered.filter(a=>a && !a.isCorrect).length;
+  const skipped = quiz.length - answered.length;
+
+  const rawScore = correctCount - (wrongCount/3);
+  const nota = Math.max(0, (rawScore/quiz.length)*10);
+  const notaStr = nota.toFixed(2);
+
+  let gradeMsg = "";
+  if(nota >= 9) gradeMsg = "¡Excelente dominio del tema!";
+  else if(nota >= 7) gradeMsg = "Muy buen resultado.";
+  else if(nota >= 5) gradeMsg = "Aprobado, pero repasa los fallos.";
+  else gradeMsg = "Conviene repasar el tema de nuevo.";
+
+  const reviewHTML = answered.map((a,i)=>{
+    if(!a) return "";
+    return `
+      <div class="review-item">
+        <div class="rq">${i+1}. ${a.question}</div>
+        <div class="${a.isCorrect ? 'ra-good' : 'ra-bad'}">Tu respuesta: ${a.chosen}</div>
+        ${!a.isCorrect ? `<div class="ra-good">Correcta: ${a.correctText}</div>` : ""}
+      </div>
+    `;
+  }).join("");
+
+  card.innerHTML = `
+    <div class="results">
+      <h2>Resultado final</h2>
+      <div class="grade">${notaStr}</div>
+      <div class="grade-sub">${gradeMsg}</div>
+      <div class="stats-grid">
+        <div class="stat ok"><div class="num">${correctCount}</div><div class="label">Correctas</div></div>
+        <div class="stat bad"><div class="num">${wrongCount}</div><div class="label">Falladas</div></div>
+        <div class="stat skip"><div class="num">${skipped}</div><div class="label">Sin responder</div></div>
+      </div>
+      <div class="actions">
+        <button class="secondary" onclick="location.reload()">Repetir test</button>
+      </div>
+      <div class="review">
+        <h3>Repaso de preguntas</h3>
+        ${reviewHTML}
+      </div>
+    </div>
+  `;
+}
+
+renderQuestion();
+</script>
+</body>
+</html>

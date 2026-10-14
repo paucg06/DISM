@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz - Tema 4. Internet of Things</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background: #f4f4f2;
+    color: #1f1f1d;
+    margin: 0;
+    padding: 24px 16px 80px;
+  }
+  .container {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  h1 {
+    font-size: 22px;
+    font-weight: 600;
+    margin: 0 0 4px;
+  }
+  .subtitle {
+    font-size: 14px;
+    color: #666;
+    margin: 0 0 24px;
+  }
+  .question {
+    background: #fff;
+    border: 1px solid #e2e2df;
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin-bottom: 14px;
+  }
+  .question p.qtext {
+    font-size: 15px;
+    font-weight: 600;
+    margin: 0 0 12px;
+  }
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .opt-btn {
+    text-align: left;
+    padding: 9px 12px;
+    border-radius: 8px;
+    border: 1px solid #d9d9d5;
+    background: #fafaf9;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .opt-btn:hover:not(:disabled) {
+    background: #f0f0ee;
+  }
+  .opt-btn.selected {
+    background: #e6f1fb;
+    border-color: #85b7eb;
+  }
+  .opt-btn.correct {
+    background: #eaf3de;
+    border-color: #97c459;
+  }
+  .opt-btn.incorrect {
+    background: #fcebeb;
+    border-color: #f09595;
+  }
+  .opt-btn:disabled {
+    cursor: default;
+  }
+  #footer {
+    position: sticky;
+    bottom: 0;
+    padding-top: 16px;
+  }
+  #submit-btn, #retry-btn {
+    width: 100%;
+    padding: 13px;
+    font-weight: 600;
+    font-size: 15px;
+    border-radius: 8px;
+    border: 1px solid #1f1f1d;
+    background: #1f1f1d;
+    color: #fff;
+    cursor: pointer;
+  }
+  #submit-btn:hover, #retry-btn:hover {
+    background: #3a3a37;
+  }
+  .results {
+    background: #fff;
+    border: 1px solid #e2e2df;
+    border-radius: 10px;
+    padding: 16px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .results .stat p.label {
+    font-size: 12px;
+    color: #666;
+    margin: 0 0 4px;
+  }
+  .results .stat p.value {
+    font-size: 22px;
+    font-weight: 600;
+    margin: 0;
+  }
+  .value.green { color: #3b6d11; }
+  .value.red { color: #a32d2d; }
+  @media (max-width: 480px) {
+    .results { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Quiz — Tema 4. Internet of Things</h1>
+  <p class="subtitle">30 preguntas · opción múltiple · nota sobre 10 con penalización de 1/3 por fallo</p>
+  <div id="quiz-root"></div>
+</div>
+
+<script>
+const questions = [
+{q:"¿Dónde se desarrolló inicialmente el concepto de Internet of Things?",o:["En Stanford","En el MIT","En Bell Labs","En el CERN"],a:1},
+{q:"¿Cuál de los siguientes NO es un obstáculo mencionado para la expansión del IoT?",o:["La transición de IPv4 a IPv6","El desarrollo de fuentes de energía","Establecer estándares comunes entre dispositivos","La falta de interés comercial"],a:3},
+{q:"¿Qué tipo de sistema operativo usa cada dispositivo IoT?",o:["Uno embebido específico de bajo consumo","Un sistema operativo de propósito general","Uno basado en la nube exclusivamente","No requieren sistema operativo"],a:0},
+{q:"¿Cuál es el recorrido típico de la información en la arquitectura IoT?",o:["Nube → Redes → Dispositivos","Redes → Dispositivos → Nube","Dispositivos → Redes → Nube","Dispositivos → Nube → Redes"],a:2},
+{q:"¿A partir de qué volumen de datos se suele considerar Big Data?",o:["Gigabytes","Terabytes","Petabytes o exabytes","Kilobytes"],a:2},
+{q:"¿Cuántos bytes equivale aproximadamente un Petabyte?",o:["10^9","10^12","10^15","10^18"],a:2},
+{q:"Según el documento, ¿de dónde proviene actualmente la mayor parte del Big Data?",o:["De sensores industriales","De las redes sociales","De satélites meteorológicos","De registros médicos"],a:1},
+{q:"¿Cuántos bytes generan aproximadamente las posiciones geográficas según el texto?",o:["2.5 millones","2.5 mil millones","2.5 trillones","2.5 quintillones"],a:3},
+{q:"¿Qué tipo de dato de Big Data corresponde a huellas digitales o reconocimiento facial?",o:["Machine to Machine","Biométricos","Big Transaction Data","Generados por humanos"],a:1},
+{q:"¿Qué tipo de dato de Big Data corresponde a RFID o GPS?",o:["Machine to Machine","Web y Redes Sociales","Biométricos","Generados por humanos"],a:0},
+{q:"¿En qué se basa el paradigma Message Oriented Middleware (MOM)?",o:["Llamadas RPC síncronas","El paso de mensajes asíncronos","Consultas SQL directas","Transferencia de ficheros FTP"],a:1},
+{q:"¿Cuáles son los dos tipos de comunicación en MOM?",o:["Cliente-servidor y P2P","Punto a punto y Publicación-Suscripción","Síncrono y asíncrono","Broker y bus"],a:1},
+{q:"¿Qué empresa creó originalmente MQTT?",o:["Google","Microsoft","IBM","Amazon"],a:2},
+{q:"¿En qué se basa la arquitectura de MQTT?",o:["Punto a punto directo","Publicación-suscripción en estrella con un broker","Bus de servicios distribuido","Llamadas RPC entre sensores"],a:1},
+{q:"¿Cuál es el tamaño de la cabecera obligatoria de un mensaje MQTT?",o:["1 byte fijo","2-5 bytes","10-20 bytes","256 bytes"],a:1},
+{q:"¿Qué tamaño de payload se usa habitualmente en MQTT aunque teóricamente admita más?",o:["256 Mb siempre","2-4 Kb","1 Gb","512 bytes"],a:1},
+{q:"En MQTT, ¿qué nivel de QoS garantiza la entrega una única vez sin duplicidades?",o:["QoS 0","QoS 1","QoS 2","No existe ese nivel"],a:2},
+{q:"¿Qué nivel de QoS de MQTT envía el mensaje sin tener en cuenta los errores?",o:["QoS 0","QoS 1","QoS 2","QoS 3"],a:0},
+{q:"¿Qué ocurre en QoS 1 de MQTT si se producen errores?",o:["El mensaje se pierde definitivamente","El mensaje se recibe con duplicidades","Se cancela la suscripción","Se cambia automáticamente a QoS 2"],a:1},
+{q:"Según el texto, ¿por qué muchos dispositivos IoT no pueden aplicar medidas de seguridad como SSL/TLS?",o:["Por restricciones legales","Por sus capacidades muy reducidas","Porque no lo permite MQTT","Porque encarece demasiado el hardware"],a:1},
+{q:"¿Qué busca principalmente el paradigma SOAP?",o:["Transferir ficheros grandes","Exponer la lógica de negocio de un sistema","Sustituir a REST en la web","Gestionar bases de datos distribuidas"],a:1},
+{q:"¿Para qué tecnología se creó originalmente SOAP, según el documento?",o:["Para internet de forma nativa","Para tecnologías RPC de entornos aislados","Para bases de datos NoSQL","Para redes sociales"],a:1},
+{q:"¿Cuál es el mayor beneficio de SOAP mencionado en el texto?",o:["Su ligereza","Su clara definición, asincronía y seguridad","Su uso exclusivo en móviles","Su bajo consumo de recursos"],a:1},
+{q:"¿En qué tipo de servicios se utiliza principalmente SOAP según el documento?",o:["Servicios de streaming","Servicios gubernamentales","Redes sociales","Aplicaciones móviles de consumo"],a:1},
+{q:"¿En qué protocolo de transporte se basa REST?",o:["FTP","SMTP","HTTP","SOAP"],a:2},
+{q:"¿Cuál es el objetivo principal de REST según el texto?",o:["Exponer recursos de un sistema a otro","Definir contratos WSDL","Cifrar comunicaciones M2M","Sustituir la arquitectura SOA"],a:0},
+{q:"Según la comparativa del documento, ¿qué protocolo de seguridad usa típicamente REST?",o:["WS Security","HTTPS","SSH","IPsec"],a:1},
+{q:"Según la comparativa, ¿qué tipo de definición de servicio usa SOAP?",o:["Raml u OpenApi","Contrato WSDL con tipado fuerte","JSON Schema","No requiere definición formal"],a:1},
+{q:"¿Cuál es una desventaja de REST mencionada en la tabla del documento?",o:["Necesita puertos dedicados","Descripción semántica informal","No tiene mecanismo de nombrado","Requiere estado en las operaciones"],a:1},
+{q:"¿Cuál es una ventaja de SOAP mencionada en la tabla del documento?",o:["Nombrado mediante URIs","Bajo consumo","Mejor privacidad al esconder operaciones complejas","Fácil de entender"],a:2},
+{q:"¿Qué relación tienen SOA y SOAP según el documento?",o:["SOA es una versión simplificada de SOAP","Aunque suenan parecido, no tienen tanta relación","Son sinónimos intercambiables","SOAP es el protocolo obligatorio de SOA"],a:1},
+{q:"¿Qué pretende sustituir SOA según el texto, por no ser reutilizables?",o:["Las tecnologías EAI","Los servicios REST","El protocolo MQTT","Las bases de datos relacionales"],a:0},
+{q:"¿Cuál de estos NO es un principio de SOA mencionado en el documento?",o:["Reusabilidad","Interoperabilidad","Sistemas desacoplados","Cifrado obligatorio end-to-end"],a:3},
+{q:"En el diagrama de componentes SOA, ¿qué acción realiza el proveedor de servicios respecto al registro de servicios?",o:["Busca","Publica","Interactúa directamente con el cliente","Elimina servicios"],a:1},
+{q:"¿Qué mejora principal aporta un Enterprise Service Bus (ESB) frente a las conexiones punto a punto?",o:["Reduce el número de conexiones necesarias entre sistemas","Elimina la necesidad de mensajes","Sustituye completamente a REST","Aumenta el número de conexiones M*N"],a:0},
+{q:"¿Quién desarrolló la tendencia de Microservices según el documento?",o:["Tim Berners-Lee","Martin Fowler","Roy Fielding","Linus Torvalds"],a:1},
+{q:"¿Qué se necesita para que funcione correctamente una arquitectura de microservicios?",o:["Un servidor SOAP central","Un servicio de localización de servicios (broker)","Una base de datos única compartida","Un único lenguaje de programación"],a:1},
+{q:"Según el texto, ¿cuándo es poco recomendable usar microservicios?",o:["Cuando el sistema es muy grande, como streaming","Cuando el nivel de complejidad del sistema es bajo, como un web portfolio","Cuando la empresa es grande como Amazon","Cuando se necesita alta tolerancia a fallos"],a:1},
+{q:"¿Qué tecnología para conectar servicios y dispositivos fue creada por Google?",o:["GraphQL","gRPC","SOAP","ESB"],a:1},
+{q:"¿Qué es GraphQL según el documento?",o:["Un protocolo de transporte de bajo nivel","Un lenguaje de consulta para APIs que permite peticiones más precisas","Un sustituto directo de MQTT","Un tipo de base de datos NoSQL"],a:1}
+];
+
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+
+const N = 30;
+const picked = shuffle(questions).slice(0, N).map(q => {
+  const idx = [0,1,2,3];
+  const shuffledIdx = shuffle(idx);
+  const opts = shuffledIdx.map(i => q.o[i]);
+  const correct = shuffledIdx.indexOf(q.a);
+  return {q: q.q, o: opts, a: correct};
+});
+
+const answers = new Array(N).fill(null);
+let submitted = false;
+
+const root = document.getElementById('quiz-root');
+
+function render(){
+  let html = '';
+  picked.forEach((item, qi) => {
+    html += '<div class="question">';
+    html += '<p class="qtext">'+(qi+1)+'. '+item.q+'</p>';
+    html += '<div class="options">';
+    item.o.forEach((opt, oi) => {
+      let cls = 'opt-btn';
+      if(submitted){
+        if(oi === item.a) cls += ' correct';
+        else if(answers[qi]===oi) cls += ' incorrect';
+      } else if(answers[qi]===oi){
+        cls += ' selected';
+      }
+      html += '<button data-qi="'+qi+'" data-oi="'+oi+'" class="'+cls+'" '+(submitted?'disabled':'')+'>'+opt+'</button>';
+    });
+    html += '</div></div>';
+  });
+
+  html += '<div id="footer"></div>';
+  root.innerHTML = html;
+
+  root.querySelectorAll('.opt-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if(submitted) return;
+      const qi = parseInt(btn.dataset.qi);
+      const oi = parseInt(btn.dataset.oi);
+      answers[qi] = oi;
+      render();
+    });
+  });
+
+  const footer = document.getElementById('footer');
+  if(!submitted){
+    const answeredCount = answers.filter(a=>a!==null).length;
+    footer.innerHTML = '<button id="submit-btn">Corregir test ('+answeredCount+'/'+N+' respondidas)</button>';
+    document.getElementById('submit-btn').addEventListener('click', () => {
+      submitted = true;
+      render();
+      window.scrollTo({top: document.body.scrollHeight, behavior: 'smooth'});
+    });
+  } else {
+    let correct = 0, wrong = 0, blank = 0;
+    picked.forEach((item, qi) => {
+      if(answers[qi]===null) blank++;
+      else if(answers[qi]===item.a) correct++;
+      else wrong++;
+    });
+    const raw = correct - wrong/3;
+    const grade = Math.max(0, (raw / N) * 10);
+    footer.innerHTML =
+      '<div class="results">'+
+      '<div class="stat"><p class="label">Correctas</p><p class="value green">'+correct+'</p></div>'+
+      '<div class="stat"><p class="label">Falladas</p><p class="value red">'+wrong+'</p></div>'+
+      '<div class="stat"><p class="label">En blanco</p><p class="value">'+blank+'</p></div>'+
+      '<div class="stat"><p class="label">Nota /10</p><p class="value">'+grade.toFixed(2)+'</p></div>'+
+      '</div>'+
+      '<button id="retry-btn">Repetir test (nuevo orden)</button>';
+    document.getElementById('retry-btn').addEventListener('click', () => {
+      location.reload();
+    });
+  }
+}
+
+render();
+</script>
+</body>
+</html>

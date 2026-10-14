@@ -1,0 +1,32 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="success">
+    <ion-title>AppUsuarios - Fichaje Móvil</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div style="max-width: 450px; margin: 40px auto; text-align: center;">
+    <ion-icon name="finger-print-outline" style="font-size: 70px; color: var(--ion-color-success);"></ion-icon>
+    <h2>Portal del Empleado</h2>
+    <p style="color: gray;">Registro de Entrada, Salida y Horas</p>
+
+    <ion-card style="margin-top: 25px; text-align: left;">
+      <ion-card-content>
+        <ion-item lines="full">
+          <ion-label position="stacked">Usuario Empleado</ion-label>
+          <ion-input [(ngModel)]="usuario" placeholder="sergio"></ion-input>
+        </ion-item>
+
+        <ion-item lines="full" style="margin-top: 15px;">
+          <ion-label position="stacked">Contraseña</ion-label>
+          <ion-input [(ngModel)]="clave" type="password" placeholder="1234"></ion-input>
+        </ion-item>
+
+        <ion-button expand="block" color="success" (click)="onLogin()" [disabled]="cargando" style="margin-top: 25px;">
+          <ion-spinner *ngIf="cargando" slot="start"></ion-spinner>
+          Iniciar Sesión
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

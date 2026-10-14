@@ -1,0 +1,82 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="success">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Consulta de Fichajes</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <!-- Filtro de fechas -->
+  <ion-card style="margin-bottom: 20px;">
+    <ion-card-header>
+      <ion-card-subtitle>Filtrar por Rango de Fechas</ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-grid>
+        <ion-row>
+          <ion-col size="12" size-md="6">
+            <ion-item lines="full">
+              <ion-label position="stacked">Desde</ion-label>
+              <ion-input [(ngModel)]="filtroFechaInicio" type="date"></ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col size="12" size-md="6">
+            <ion-item lines="full">
+              <ion-label position="stacked">Hasta</ion-label>
+              <ion-input [(ngModel)]="filtroFechaFin" type="date"></ion-input>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+      <div style="display: flex; gap: 10px; margin-top: 10px;">
+        <ion-button expand="block" color="success" (click)="consultar()" style="flex: 1;">
+          <ion-icon slot="start" name="search-outline"></ion-icon>
+          Consultar
+        </ion-button>
+        <ion-button expand="block" color="medium" fill="outline" (click)="limpiarFiltros()">
+          Ver Todos
+        </ion-button>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Listado de fichajes -->
+  <div *ngIf="cargando" style="text-align: center; padding: 30px;">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Cargando tus fichajes...</p>
+  </div>
+
+  <ion-list *ngIf="!cargando">
+    <ion-card *ngFor="let f of fichajes" style="margin-bottom: 15px;">
+      <ion-card-header>
+        <ion-card-title style="font-size: 17px; display: flex; justify-content: space-between; align-items: center;">
+          <span>💼 {{ f.NombreTrabajo }}</span>
+          <ion-badge [color]="f.FechaHoraSalida ? 'success' : 'warning'">
+            {{ f.FechaHoraSalida ? (f.HorasTrabajadas + ' h') : 'Abierto' }}
+          </ion-badge>
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <p>🟢 <b>Entrada:</b> {{ f.FechaHoraEntrada }}</p>
+        <p *ngIf="f.FechaHoraSalida">🔴 <b>Salida:</b> {{ f.FechaHoraSalida }}</p>
+        <p *ngIf="f.HorasTrabajadas">⏱️ <b>Horas Computadas:</b> {{ f.HorasTrabajadas }} hora(s)</p>
+        
+        <!-- Georreferenciación Inversa con OpenStreetMap Nominatim -->
+        <div style="margin-top: 12px; padding: 10px; background: #f4f5f8; border-radius: 6px;">
+          <p style="font-size: 13px; margin: 0;">
+            📍 <b>Dirección (Nominatim):</b><br>
+            <span *ngIf="f.direccionPostal">{{ f.direccionPostal }}</span>
+            <span *ngIf="!f.direccionPostal" style="color: gray;">Obteniendo dirección postal...</span>
+          </p>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <div *ngIf="fichajes.length === 0" style="text-align: center; padding: 40px; color: gray;">
+      <ion-icon name="document-text-outline" style="font-size: 50px;"></ion-icon>
+      <p>No se encontraron registros de fichaje para las fechas seleccionadas.</p>
+    </div>
+  </ion-list>
+</ion-content>

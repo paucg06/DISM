@@ -1,0 +1,481 @@
+==============================================================================
+TEMA 1. DESARROLLO DE APLICACIONES MULTIPLATAFORMA
+==============================================================================
+
+[BLOQUE 1] Desarrollo de aplicaciones móviles
+- Consiste en el conjunto de procesos y procedimientos involucrados en la escritura de software para pequeños dispositivos inalámbricos, tales como smartphones o tablets.
+- Desarrollo similar al desarrollo de aplicaciones web.
+- Diferencia fundamental: las aplicaciones (apps) móviles a menudo se escriben específicamente para aprovechar las características únicas que ofrece un dispositivo móvil en particular.
+- Ejemplos:
+- Uso de acelerómetro en un juego.
+- Uso de GPS para posicionar.
+- Para asegurar que las aplicaciones muestren un rendimiento óptimo en un dispositivo determinado se desarrolla la aplicación de forma nativa en ese dispositivo.
+
+[BLOQUE 2] Gasto global en App Store y Google Play (datos reales)
+- Gráfico: gasto de consumidores · USD miles de millones · App Store + Google Play combinados · 2021-2025
+- Valores que aparecen en el gráfico (en el orden en que se extrajeron): $166,8B · +25% · $150,1B · $133,0B · $134,8B · $129,1B. Eje: 2021 2022 2023 2024 2025.
+- Fuente: Sensor Tower, vía Business of Apps App Data Report 2026 (businessofapps.com/data/app-revenues), actualizado feb. 2026.
+
+[BLOQUE 3] Gasto mundial en apps: juegos vs. no juegos
+- Gráfico: ingresos por compras dentro de la app (IAP) · USD miles de millones · iOS + Google Play · T1 2024 vs. T1 2025
+- Valores que aparecen en el gráfico (en el orden en que se extrajeron): $40,0B · $36,0B · $21,1B · $20,1B · $19,1B · $16,1B. Eje: T1 2024, T1 2025.
+- Fuente: Sensor Tower, Q1 2025 Digital Market Index (sensortower.com/blog/q1-2025-digital-market-index), mayo 2025.
+
+[BLOQUE 4] Plataformas móviles y decisión de desarrollo
+- Aspecto clave en la toma de decisiones a la hora de construir aplicaciones para tecnología móvil:
+- Desarrollar una aplicación para cada plataforma.
+- Desarrollar una sola aplicación mediante un framework multiplataforma.
+- En la actualidad existen diversas plataformas móviles en el mercado:
+- iOS
+- Android
+- Otras:
+- Windows Phone (Fin 2020)
+- Blackberry (Fin 2022)
+- Tizen
+- WebOS
+- KaiOS (Fin 2025 – WhatsApp)
+
+[BLOQUE 5] iOS y Android
+- iOS:
+- Sistema operativo que sustenta a los iPhone y los iPad de Apple.
+- Se programa mediante Swift (Objective-C), usando el entorno de programación Xcode.
+- Necesidad de un ordenador de Apple para poder generar aplicaciones para el sistema.
+- Totalmente atado al mundo Apple.
+- Android:
+- La plataforma más extendida gracias a la variedad de dispositivos.
+- El sistema está basado en Linux y se programa en Kotlin (Java) usando:
+- Android Studio.
+
+[BLOQUE 6] Los puntos de referencia para el desarrollo multiplataforma
+- Cualquier plataforma de desarrollo transversal requiere escribir código para una aplicación y puesta a punto para cada sistema operativo.
+- La escritura de código nativo para Android, iOS requiere un equipo de programadores que tengan fluidez en Kotlin, Swift.
+- Los desarrolladores pueden ahorrar tiempo e implantar sus aplicaciones en el mercado más rápidamente mediante el uso de herramientas de desarrollo cruzado,
+- Principales Inconvenientes:
+- Utilizando un enfoque de mínimo común denominador → pierde la ventaja de las capacidades de cada dispositivo.
+- Tiempos más largos para la actualización de aplicaciones.
+- Los posibles retrasos en la carga de bibliotecas.
+- Capas de abstracción más grandes.
+- Las herramientas de desarrollo como Xamarin/MAUI, y Córdova/Ionic y otras, han simplificado el proceso.
+
+[BLOQUE 7] ¿Cómo acometer desarrollos para diferentes arquitecturas de dispositivo móvil?
+- Crear una versión para cada plataforma, usando sus herramientas nativas.
+- Utilizar algún framework intermedio, como Xamarin o MAUI, que funcione en todas ellas y que nos permita reutilizar la lógica y solo desarrollar la interfaz en cada caso.
+- Utilizar HTML+CSS+JavaScript y algún framework multiplataforma, como Apache Cordova o Ionic, que nos permita compilar la aplicación para todas las plataformas → Aplicación Híbrida.
+
+[BLOQUE 8] Aplicación híbrida
+- Nos permite desarrollar apps para móviles en base a las tecnologías web: HTML + CSS + Javascript.
+- Son como cualquier otra aplicación de las que puedes instalar a través de las tiendas de aplicaciones para cada sistema.
+- Los usuarios finales no percibirán la diferencia con respecto a las aplicaciones nativas.
+- Ventaja para desarrolladores con experiencia en tecnologías web,
+- Los desarrolladores pueden aprovechar sus conocimientos para lanzarse de una manera más rápida en el desarrollo de apps para móviles.
+- Las aplicaciones híbridas se ejecutan en lo que se denomina un web view, que no es más que una especie de navegador integrado en el móvil y en el que solamente se ejecuta la app híbrida.
+- Interesantes por diversos motivos:
+- Con una misma base de código serán capaces de compilar apps para funcionar correctamente en una gran cantidad de sistemas operativos de móviles o tablets.
+- El coste del desarrollo es sensiblemente menor, ya que no es necesario contar con varios equipos de desarrollo para cada lenguaje concreto de cada plataforma.
+- El tiempo de desarrollo también es menor, ya que solo es necesario construir la aplicación una vez e inmediatamente la tendremos en todas las plataformas a las que nos dirigimos.
+- Es de más fácil adaptación para los desarrolladores que vienen de la web.
+- Desventajas respecta a aplicaciones nativas:
+- El rendimiento de una aplicación nativa suele ser mejor que el de una híbrida, aunque las híbridas han mejorado mucho en este sentido.
+- Al ejecutarse en un web view dependemos de las tecnologías disponibles para el desarrollo web, que pueden ser menos ricas y potentes que las disponibles en nativo.
+- En las aplicaciones nativas trabajamos directamente con el hardware del teléfono, mientras que en las híbridas dependemos de plugins para su acceso → Esto puede derivar en problemas, pero afortunadamente cada vez son menores.
+
+[BLOQUE 9] Aplicación nativa vs híbrida
+- Aplicación Nativa vs Hibrida
+- Híbrido no es desarrollar en un lenguaje diferente.
+- Error al pensar si no usamos Swift (iOS) o Kotlin (Android) → desarrollo hibrido.
+- Si requieren una capa adicional para ejecutarse como un navegador o un contenedor, son híbridas.
+- Apache Cordova.
+- Ionic.
+- Unity.
+- Si se ejecutan directamente en el SO, son nativas:
+- ReactNative.
+- NativeScript.
+- Xamarin.
+- .Net MAUI
+- Aplicaciones Hibridas = Rendimiendo reducido
+- Los primeros desarrollos con phoneGap presentaban problemas de rendimiento.
+- En la actualidad con frameworks como Ionic, presentan apps con UI propias de los SO y conexión con HW muy amplia.
+
+[BLOQUE 10] Antes de continuar: contexto histórico
+- Las siguientes diapositivas presentan Xamarin y Apache Cordova / PhoneGap con el nivel de detalle con el que se enseñaban hace unos años.
+- Hoy son tecnologías descontinuadas o residuales: Xamarin dejó de tener soporte de Microsoft el 1 de mayo de 2024, y PhoneGap fue retirado por Adobe en 2020. Cordova sigue existiendo pero el ecosistema ha migrado mayoritariamente a Capacitor.
+- Se mantienen en este tema porque explican por qué surgieron sus sucesores actuales: .NET MAUI (heredero directo de Xamarin) e Ionic + Capacitor (heredero del modelo Cordova/PhoneGap).
+- Las diapositivas marcadas con la etiqueta "HISTÓRICO" describen el estado del ecosistema en el momento en que estas herramientas estaban vigentes, no la situación actual.
+
+[BLOQUE 11] [HISTÓRICO – ya no se usa] Xamarin
+- ¿Qué es Xamarin?
+- Xamarin es una herramienta para los desarrolladores de aplicaciones móviles, la principal característica de esta herramienta es la capacidad que tiene para que el desarrollador escriba su app en lenguaje C# y el mismo código sea traducido para ejecutarse en iOS, Android.
+- C# es el “lenguaje preferido” de Microsoft, por lo tanto es muy popular dentro de los programadores .NET, pero aunque este lenguaje sea muy popular existe una desventaja a la hora de crear aplicaciones móviles.
+- Para crear aplicaciones iOS se necesitan escribir código en Objetive-C y para crear Apps Android necesitamos conocer Java → Xamarin viene a unificar estas diferencias, ya que solamente necesitamos dominar C# para crear aplicaciones iOS, Android y Windows Phone.
+- Creación 2011.
+- Hasta 2016 → framework de pago, contaba con una versión gratuita
+- En Febrero del 2016, Microsoft compra xamarin → integrado en visual studio 2015/2017/2019.
+- https://www.xamarin.com
+- Fin Soporte 1 de Mayo del 2024.
+- Cuenta con IDE propio e integración con Visual Studio 2015/2017/2019
+  - Nota (2026): el IDE de Xamarin y su integración en Visual Studio quedaron descontinuados junto con el fin de soporte en 2024.
+- ¿Desarrollando para Android/iOS?
+- Algo que hay que saber en cuanto al desarrollo de aplicaciones para diversas plataformas, es que Xamarin Studio utiliza los recursos nativos de cada plataforma:
+- Si deseas crear aplicaciones para iOS uno de los requisitos previos es que cuentes con un sistema Mac OS X, tu Mac se enlazará con Windows para compilar el proyecto que estés creando.
+- Esta es una de las desventajas que aún se tienen, todavía no existe una herramienta para Windows que permita el desarrollo independiente de aplicaciones iOS.
+- Ventajas
+- Utiliza C# con el framework .Net para crear aplicaciones para cualquier plataforma móvil.
+- Herramientas de desarrollo multiplataforma como parte integrada del IDE sin costo adicional.
+- Las aplicaciones son nativas.
+- Buen rendimiento de la aplicación.
+- Puede crear elementos de interfaz de usuario específicos de la plataforma.
+- Hay muchas bibliotecas disponibles y admiten la vinculación con bibliotecas nativas.
+- Elimina problemas de compatibilidad de hardware.
+- Recarga en caliente.
+- Compatible con televisores, wearables e IoT.
+- Desventajas
+- Soporte ligeramente retrasado para actualizaciones de la plataforma.
+- Acceso limitado a bibliotecas de código abierto.
+- Costos para uso profesional y empresarial.
+- Grupo de desarrolladores y comunidad limitados.
+- Todavía se necesitan conocimientos básicos de idiomas nativos.
+- Tamaño de aplicación más grande.
+- Problemas de compatibilidad con bibliotecas y herramientas de terceros.
+- Fin Soporte 1 de Mayo del 2024.
+
+[BLOQUE 12] [HISTÓRICO – ya no se usa] Apache Cordova
+- Plataforma para la construcción de aplicaciones móviles nativas utilizando HTML, Javascript y CSS.
+- Apache Cordova es un conjunto de APIs de dispositivos que permiten a un desarrollador de aplicaciones móviles acceder a las nativa del dispositivo:
+- La cámara
+- El acelerómetro
+- …
+- Combinado con un framework de UI, como:
+- jQuery Mobile
+- Dojo Mobile
+- Sencha Touch
+- Bootstrap
+- Ionic
+- Onsen UI
+- Y un framework Javascript:
+- Jquery
+- Angular
+- React
+- Cuando se utiliza la API de Cordova, una aplicación se desarrolla sin ningún código nativo (Java, Objective-C, etc).
+- En su lugar, se utilizan tecnologías web, y todo se encuentra ubicado en la propia aplicación a nivel local.
+- Ya que las API de JavaScript son consistentes a través de múltiples plataformas de dispositivos y están construidas siguiendo los estándares web → la aplicación debe ser portable a otras plataformas de dispositivos con un cambio mínimo o ningún cambio.
+- Finalmente las Apps que utilizan Cordova se empaquetan como aplicaciones que utilizan los SDK de la plataforma destino, listas para la instalación en la tienda de aplicaciones de cada dispositivo.
+- Córdova ofrece un conjunto de bibliotecas de JavaScript uniformes que se pueden invocar, con el código de respaldo nativo del dispositivo.
+- Córdova está disponible para las siguientes plataformas:
+- iOS
+- Android
+- Blackberry
+- Windows Phone
+- Palm WebOS
+- Bada
+- Symbian.
+- En la URL https://cordova.apache.org/plugins , podemos encontrar infinidad de plugins.
+- Apache Cordova viene con un conjunto de plugins predesarrollado que dan acceso:
+- Cámara del dispositivo
+- GPS
+- Sistema de archivos
+- Etc.
+- Como los dispositivos móviles evolucionan, añadir soporte para hardware adicional es simplemente una cuestión de desarrollar nuevos plugins.
+- Las aplicaciones Cordova se instalan como aplicaciones nativas.
+- La construcción de su código para iOS producirá un archivo IPA.
+- Para Android un archivo APK.
+- Si se pone suficiente esfuerzo en el proceso de desarrollo, los usuarios “no distinguirán si están utilizando una aplicación nativa o híbrida”.
+
+[BLOQUE 13] [HISTÓRICO – ya no se usa] PhoneGap y Apache Cordova: contexto histórico
+- PhoneGap y Apache Cordova: contexto histórico
+- 2009: Nitobi crea PhoneGap, un framework para construir apps móviles con HTML5 y JavaScript, con una capa de acceso a funciones nativas del dispositivo.
+- 2011: Nitobi dona el código de PhoneGap a la Apache Software Foundation como proyecto Open Source. Ese mismo año, Adobe compra Nitobi y con ella la marca PhoneGap.
+- 2012: como “PhoneGap” queda registrada como marca de Adobe, Apache renombra el proyecto donado a Cordova (por la calle de Vancouver donde estaban las oficinas de Nitobi).
+- Desde entonces, PhoneGap fue en la práctica una distribución de Apache Cordova hecha por Adobe, con un servicio de compilación en la nube (PhoneGap Build) como principal diferencia.
+- Octubre 2020: Adobe retira PhoneGap definitivamente. Solo continúa Apache Cordova, hoy en declive frente a Ionic + Capacitor.
+
+[BLOQUE 14] Ionic
+- Ionic es un framework para el desarrollo de aplicaciones híbridas, inicialmente pensado para móviles y tablets, aunque ahora también capaz de implementar aplicaciones web e incluso aplicaciones de escritorio multiplataforma (https://ionicframework.com/docs/deployment/desktop-app).
+- Uso conjunto con Angular (podría ser Vue o React), para facilitar el desarrollo de las aplicaciones.
+- Permitirá contar con una excelente estructura de proyecto, trabajar con buenas prácticas, uso de patrones de diseño de software variados y una buena gama de componentes y directivas.
+- Permite crear aplicaciones para distintas plataformas móviles con una misma base de código.
+
+[BLOQUE 15] Ionic: arquitectura por capas
+- UI: Componentes Ionic — Botones, listas, tarjetas… construidos con Stencil como Web Components estándar
+- Framework de la app — Angular, React, Vue — o JavaScript/TypeScript sin framework (“vanilla”)
+- Capacitor: Native Bridge + Plugins — Cámara, GPS, almacenamiento, notificaciones… expuestos como API de JavaScript
+- Plataforma nativa — iOS: WKWebView (proyecto Xcode)   ·   Android: WebView (proyecto Gradle)
+
+[BLOQUE 16] Ionic: el Native Bridge de Capacitor
+- El código JavaScript no accede al hardware directamente: llama a window.Capacitor.Plugins, el objeto que el Native Bridge inyecta en la WebView.
+- ¿Cómo viaja una llamada, paso a paso?
+  - 1. La app llama, por ejemplo, a Camera.getPhoto() desde JavaScript.
+  - 2. El Native Bridge convierte esa llamada en un mensaje asíncrono (paso de mensajes, no acceso directo a memoria).
+  - 3. El Runtime nativo (Swift/Kotlin) recibe el mensaje y ejecuta el código nativo del plugin correspondiente.
+  - 4. El resultado (o el error) se envía de vuelta como mensaje a través del bridge.
+  - 5. La Promise de JavaScript se resuelve con el resultado, como si fuera una llamada asíncrona normal.
+- Es el mismo modelo que usaba Cordova (WebView + plugins + paso de mensajes), pero con un puente más moderno, tipado y mantenido activamente.
+
+[BLOQUE 17] Ionic: estructura de un proyecto con Capacitor
+- src/  Código fuente de la app: componentes Ionic + Angular/React/Vue/TypeScript.
+- www/ o dist/  Resultado de compilar src/ a HTML, CSS y JS — es lo que se carga en la WebView.
+- ios/  Proyecto Xcode nativo real, generado por Capacitor. Se puede abrir y editar como cualquier app iOS.
+- android/  Proyecto Gradle nativo real, generado por Capacitor. Se puede abrir en Android Studio.
+- capacitor.config.ts  Configuración del puente: nombre de la app, plugins, permisos, esquema del servidor local.
+- Se sigue renderizando en un WebView con HTML/CSS/JS, no con controles nativos (UIKit / Android Views) — en esto Capacitor es igual que Cordova. Es una diferencia real frente a Flutter, React Native, Xamarin o MAUI.
+
+[BLOQUE 18] Ionic: Cordova/Capacitor, Node.js e Ionic CLI
+- Posibilidad de emplear Cordova o bien de Capacitor (framework propio Ionic) para acceder a las capacidades de hardware de los dispositivos.
+- El primer paso para emplear Ionic, consiste en instalar node.js.
+- Las aplicaciones Ionic se crean y desarrollan principalmente a través de Ionic Cli.
+- Ionic CLI es el método de instalación preferido, ya que ofrece una amplia gama de herramientas de desarrollo.
+- https://ionicframework.com/docs/intro/cli
+
+[BLOQUE 19] Ionic: TypeScript
+- Typescript:
+- Es un "superset" de Javascript.
+- TypeScript es Javascript pero con añadidos pensados para mejorar el trabajo por parte de los desarrolladores, haciéndonos más productivos.
+- La mayor aportación de TypeScript al lenguaje Javascript es la posibilidad de definición de tipos para las variables.
+- TypeScript requiere una transpilación (transpiler) del código, de modo que el código que escribimos en TypeScript se convierta en código Javascript capaz de ejecutarse en cualquier navegador.
+- Esa transpilación la realiza Ionic internamente, por lo que no representa un problema para el desarrollador.
+
+[BLOQUE 20] Ionic: apariencia adaptada al dispositivo
+- Apariencia adaptada al dispositivo:
+- Los componentes de Ionic ya vienen adaptados al dispositivo de manera estética.
+- Cuando se compila una aplicación para iOS el componente se visualizará de manera diferente que cuando se compila para Android.
+- En Android usará Material Design mientras que en iOS usará las guías de diseño definidas por Apple.
+- Esto es una ventaja en sí, porque los usuarios disfrutarán de aplicaciones con una experiencia de usuario cercana a la que están acostumbrados en su dispositivo móvil y nos evita a los desarrolladores la necesidad de trabajar más para conseguir este efecto.
+
+[BLOQUE 21] Ionic: ventajas
+- Ventajas.
+- Reduce el tiempo, el esfuerzo y los recursos empleados para crear una aplicación multiplataforma al tiempo que le otorga una apariencia nativa.
+- Ahorra tiempo de compilación al proporcionar una interfaz simplista para acceder al SDK nativo y a la API nativa en cada plataforma.
+- Crea una única base de código mediante el uso de bibliotecas y marcos de Javascript familiares, lo que reduce las reescrituras de código.
+- Se escala de manera eficiente ya que la cantidad de usuarios activos no afecta su rendimiento.
+
+[BLOQUE 22] Ionic: desventajas
+- Desventajas.
+- Peor rendimiento que las aplicaciones nativas.
+- Dependencia con los plugins.
+- Aplicaciones mas pesadas que las nativas.
+- Es posible que los desarrolladores necesiten crear funciones muy específicas
+- Actualiza toda la aplicación cada vez que el desarrollador realiza algún cambio, lo que afecta la velocidad de desarrollo.
+
+[BLOQUE 23] Progressive Web Apps (PWA)
+- Es una solución basada en la web tradicional, aunque incorpora algunas particularidades que la hacen parecerse a una app nativa.
+- Son la intersección entre la facilidad de la Web y la experiencia de uso de las Apps.
+- Ventajas:
+- No se necesita entrar a Google Play o Apple Store para descargar nada. Solo se requiere, al principio, una conexión a internet y un navegador.
+- Cualquier usuario puede “instalarla” en la pantalla de inicio de su dispositivo.
+- Características:
+- Progresiva: Funciona para todos los usuarios.
+- Adaptable: Su funcionalidad se adapta al dispositivo.
+- Independiente de la conectividad: Soporta funciones sin conexión.
+- Estilo app: Para el usuario una PWA es similar a una App, de las que podría descargar desde una tienda.
+- Cache: Gracias a las estrategias de caching se podrá mantener actualizada cada vez que esté disponible una conexión.
+- Segura: Funciona sobre HTTPS.
+- Descubrible: Los motores de búsqueda son capaces de indexar la PWA, y la detectarán como App.
+- Acciones Posteriores: Va a permitir Push Notification tras instalar.
+- Instalable: Les permite a los usuarios tener la App disponible en su dispositivo con un icono de acceso como las Apps que descargas desde una tienda.
+- Vinculable: Se puede compartir fácilmente con una URL.
+- Tienen una estructura normal de una WebApp, con un índice y archivos HTML, CSS y JS. Pero además, para que sea considerada una Progressive Web App, debe tener 3 cosas adicionales:
+- Un archivo de manifiesto. Un archivo el cual describe la información de tu PWA.
+- Un icono de App. Una imagen que será utilizada para ser el icono en los dispositivos móviles al ser instalada.
+- Service Workers. Es un archivo Javascript que es registrado en el navegador y es el que va a permitir hacer las tareas de caching y el push notification, entre otras.
+- Ionic permite crear PWA:
+- https://ionicframework.com/docs/angular/pwa
+
+[BLOQUE 24] PWA: arquitectura por capas
+- App Shell (UI) — HTML/CSS/JS mínimos: navegación y estructura visual, se cargan al instante desde caché
+- Service Worker — Proxy programable entre la app y la red: intercepta cada petición (evento fetch)
+- Almacenamiento local — Cache Storage (assets estáticos) + IndexedDB (datos) para funcionar sin conexión
+- Web App Manifest + APIs del navegador — Instalación, icono, pantalla completa · Push Notifications · Background Sync
+
+[BLOQUE 25] PWA: ciclo de vida del Service Worker
+- El navegador pasa el Service Worker por tres fases, una sola vez cada vez que se instala una nueva versión:
+- 1. Install
+- El navegador descarga el Service Worker y guarda en caché los archivos básicos de la app.
+- 2. Activate
+- El nuevo Service Worker toma el control y limpia las cachés antiguas.
+- 3. Fetch
+- A partir de ahora, intercepta cada petición de red y decide cómo responderla.
+- Solo funciona sobre HTTPS: al poder interceptar todo el tráfico, el navegador exige una conexión segura.
+
+[BLOQUE 26] PWA: estrategias de caché
+- El Service Worker no solo guarda datos: decide cómo responder cada petición según lo que más importe, velocidad o actualidad.
+- Cache First
+- Rápido: responde desde caché y solo va a la red si falta. Para lo que casi no cambia (CSS, JS, iconos).
+- Network First
+- Actualizado: intenta la red primero y usa la caché como respaldo si falla. Para lo que cambia a menudo (noticias, precios).
+- Stale-While-Revalidate
+- Lo mejor de ambos: responde al instante desde caché y, en paralelo, la actualiza para la próxima vez.
+- También existen variantes "siempre red" o "siempre caché" para casos extremos, como pagos o el shell ya precacheado de la app.
+
+[BLOQUE 27] .NET MAUI
+- .NET MAUI (mayo 2022)
+- .NET Multi-platform App UI (.NET MAUI) es un framework multiplataforma capaz de crear aplicaciones móviles y de escritorio nativas con C# y XAML.
+- .NET MAUI, permite desarrollar aplicaciones que se pueden ejecutar en Android, iOS, macOS y Windows desde una sola base de código compartida.
+- .NET MAUI, código abierto.
+- Evolución de Xamarin.Forms.
+- Permite crear aplicaciones multiplataforma mediante un único proyecto.
+- Permite desarrollo en cualquier sistema operativo .
+- Aplicaciones multiplataforma en XAML y C#, desde una única base de código compartida en Visual Studio 2022/2026.
+- Permite Compartir el diseño de la interfaz de usuario entre plataformas.
+- Permite Compartir código, pruebas y lógica de negocios entre plataformas.
+- La compilación de aplicaciones para iOS y macOS requiere un equipo Apple. (Al igual que xamarin)
+- Recarga activa de .NET
+
+[BLOQUE 28] .NET MAUI: arquitectura por capas
+- Código de la app (XAML + C#) — Páginas, controles cross-platform y lógica de negocio, escritos una sola vez.
+- API de .NET MAUI — Común a todas las plataformas: layouts, navegación, gestos… y los Handlers que traducen cada control.
+- Runtime de .NET — Mono en Android/iOS/macOS, CoreCLR en Windows: ejecuta el código y da acceso uniforme a la BCL.
+- Plataforma nativa — Android (Kotlin/Java), iOS/macOS (Swift/Obj-C), Windows (WinUI 3) — controles y API reales del SO.
+- Nota: La app puede saltarse MAUI y llamar directamente a la API nativa de la plataforma cuando necesita algo muy específico.
+
+[BLOQUE 29] .NET MAUI: cómo funciona por dentro
+- MAUI no usa un WebView: cada control cross-platform (Button, Entry…) se traduce, mediante un Handler, en el control nativo real de cada plataforma (UIButton en iOS, MaterialButton en Android…).
+- Por eso la interfaz se ve y se comporta como una app nativa: no hay HTML/CSS ni motor de navegador de por medio.
+- El proyecto también es único: un solo .csproj compila para Android, iOS, macOS y Windows a la vez, sin mantener proyectos Xcode/Gradle separados.
+- Es la evolución de los Renderers de Xamarin.Forms, ahora más sencilla de extender.
+
+[BLOQUE 30] Uno Platform: la otra alternativa .NET
+- Alternativa .NET a MAUI: mismo lenguaje (C# + XAML), pero otro origen — reimplementa toda la superficie de la API de WinUI/WinRT (paquete Uno.WinUI) para que funcione en cualquier plataforma.
+- Dos modelos de renderizado, a elegir según prioridad:
+- Skia (por defecto)  dibuja todos los píxeles con el motor gráfico Skia — apariencia idéntica en todas las plataformas.
+- Nativo  usa UIView (iOS), ViewGroup (Android) o <div> (WebAssembly) cuando se prioriza accesibilidad/IME sobre consistencia visual.
+- En Windows no se usa Uno: la app compila directamente como aplicación WinUI nativa con el SDK de Microsoft.
+- Diferencia clave frente a MAUI: Uno también compila a WebAssembly (la misma app C#/XAML corriendo en el navegador) y a Linux de escritorio — objetivos que MAUI no cubre.
+- La app compila a código nativo real para cada plataforma (iOS, Android, Windows, macOS, Linux, WebAssembly) desde un único código base en C# y XAML.
+
+[BLOQUE 31] Flutter
+- Flutter es un SDK (Kit de Desarrollo de Software) desarrollado por Google que permite  desarrollar aplicaciones multiplataforma para Android, iOS, Linux, macOS, Windows, Google Fuchsia y web a partir de una única base de código.
+- Ventajas:
+- Compila en nativo tanto en Android como en iOS.
+- La creación de interfaces gráficas es muy flexible, puede combinar diferentes Widgets para crear las vistas.
+- El desarrollo es muy rápido, permite ver el resultado de forma instantánea mientras se escribe código.
+- Permite realizar aplicaciones multiplataforma,  utilizando Dart como lenguaje de programación.
+- Permite realizar aplicaciones móviles, web, escritorio, embebidas.
+- Menor tiempo de depuración y prueba.
+- Desventajas:
+- Las aplicaciones son de mayor tamaño que las nativas.
+- Aunque ha crecido mucho, la comunidad de desarrolladores experimentados de Flutter sigue siendo algo menor que la de JavaScript/React (aunque en 2026 es uno de los frameworks móviles más usados del mercado).
+- El lenguaje de programación Dart para Flutter no es tan utilizado.
+- Es posible que necesitemos crear funcionalidades personalizadas.
+- Depende del apoyo continuo de Google a largo plazo.
+
+[BLOQUE 32] Flutter: arquitectura por capas
+- Framework (Dart) — Todo lo que se ve y se toca: widgets, animaciones y gestos, escritos en el lenguaje Dart.
+- Engine (C++) — El motor que dibuja cada pantalla, pixel por pixel, con gráficos de alto rendimiento.
+- Embedder — La pieza que conecta Flutter con cada sistema operativo: abre la ventana y le pasa los eventos.
+- Sistema operativo / GPU — Funciona en Android, iOS, Windows, macOS, Linux y web. Flutter dibuja todo él mismo, sin usar los controles nativos.
+- Nota: A diferencia de Ionic (que usa un navegador) y MAUI (que usa controles nativos), Flutter dibuja su propia interfaz: se ve igual en todas las plataformas.
+
+[BLOQUE 33] Flutter: cómo funciona por dentro
+- No hay WebView: Dart se compila a código nativo (AOT) y Flutter dibuja su propia interfaz con su motor gráfico (Skia/Impeller) — píxel a píxel igual en todas las plataformas.
+- Cuando cambia el estado, Flutter solo vuelve a dibujar lo que ha cambiado, no toda la pantalla — por eso mantiene 60/120 fps de forma fluida.
+- Para lo que sí depende del sistema operativo (cámara, GPS, notificaciones…) usa un Platform Channel: un canal de mensajes entre Dart y el código nativo (Kotlin/Swift).
+- Es el mismo patrón de puente que Ionic/Capacitor, pero aquí solo se usa para APIs puntuales — la UI no depende de él.
+
+[BLOQUE 34] React Native
+- Framework de JavaScript/TypeScript para crear apps móviles nativas para iOS y Android usando React.
+- La UI se renderiza con componentes de forma nativa no hibrida.
+- UX nativa y rendimiento competitivo.
+- Cuando interesa:
+- Apps de producto/negocio con mucha UI, listas, formularios, sincronización offline.
+- Equipos que ya dominan React/TypeScript y quieren ir a móvil rápidamente.
+- Nueva Arquitectura (Fabric + JSI + TurboModules): por defecto desde RN 0.76, elimina el bridge asíncrono y permite llamadas JS-nativo síncronas; Hermes es el motor JS por defecto.
+
+[BLOQUE 35] React Native: arquitectura por capas
+- JavaScript (React) — El código de la app, escrito en JavaScript con React y ejecutado por el motor Hermes.
+- JSI (JavaScript Interface) — El puente que conecta JS con el código nativo de forma directa y rápida, sin pasar por JSON.
+- Fabric (UI) + TurboModules (APIs nativas) — Convierte los componentes de React en pantallas nativas reales y carga funciones del teléfono (cámara, GPS...) solo cuando se necesitan.
+- Plataforma nativa — iOS y Android muestran la app con sus propios controles nativos, no con HTML.
+- Nota: Igual que MAUI: la app se ve con los controles reales del sistema, no con una página web ni un dibujo propio (a diferencia de Ionic o Flutter).
+
+[BLOQUE 36] React Native: cómo funciona por dentro
+- Antes: JS y el código nativo se hablaban mandándose mensajes de texto (JSON), lo que era lento.
+- Ahora: JS habla directo con el código nativo, sin pasar por JSON, así que todo es mucho más rápido.
+- Cada cambio en pantalla pasa por 3 pasos: React decide qué mostrar, se prepara el diseño y luego se dibuja en la pantalla.
+- Hermes es el motor que ejecuta el JavaScript, hecho para que la app arranque rápido y use poca memoria.
+- Funciones como la cámara o el Bluetooth se cargan solo cuando se usan, no todas al abrir la app, para que arranque más rápido.
+
+[BLOQUE 37] Kotlin Multiplatform (KMP)
+- Kotlin y Kotlin Multiplatform son dos cosas distintas pero complementarias: Kotlin es el lenguaje de programación; KMP es la tecnología, construida sobre ese lenguaje, que permite escribir el código una sola vez y compartirlo entre Android, iOS, web y escritorio.
+- Tecnología de JetBrains/Google que permite compartir la capa de lógica de negocio (datos, red, reglas) entre Android, iOS, web y escritorio, manteniendo la interfaz nativa en cada plataforma.
+- A diferencia de Flutter o React Native, no obliga a compartir la UI: con Compose Multiplatform también se puede compartir interfaz si se desea.
+- Rendimiento nativo real: compila a código específico de cada plataforma, sin capa de abstracción en tiempo de ejecución.
+
+[BLOQUE 38] Kotlin Multiplatform (KMP): adopción y cuándo usarlo
+- Framework de más rápido crecimiento en 2026: adopción empresarial en fuerte aumento, respaldado oficialmente por Google para Android.
+- Cuando interesa:
+- Equipos con desarrolladores Android/Kotlin que quieren extender su lógica a iOS sin reescribirla.
+- Proyectos que priorizan rendimiento nativo y UI 100% nativa por plataforma.
+- Limitación actual: la compilación para iOS todavía suele requerir un equipo Mac (igual que Xamarin/MAUI); JetBrains trabaja en eliminar esta dependencia.
+
+[BLOQUE 39] Kotlin Multiplatform: arquitectura por capas
+- Código común (commonMain) — El código que se comparte entre todas las plataformas: la lógica del negocio, los datos y la conexión a internet.
+- expect / actual — Cuando algo necesita ser distinto en cada plataforma, se declara aquí y cada plataforma pone su propia versión.
+- Compiladores de Kotlin — Traducen el código Kotlin al lenguaje que entiende cada plataforma: Android, iOS y web.
+- Interfaz de usuario — La parte visual de la app. Normalmente se hace distinta para cada plataforma, pero también se puede compartir.
+- Nota: A diferencia de otras herramientas, aquí compartir la interfaz es opcional: se puede compartir solo la lógica, o también la parte visual.
+
+[BLOQUE 40] Kotlin Multiplatform: cómo funciona por dentro
+- Cuando el código común necesita algo que depende de la plataforma (fecha del sistema, almacenamiento seguro…), se declara sin implementar (expect) y cada plataforma aporta su propia versión real (actual).
+- El compilador exige que exista una versión "actual" por cada plataforma — si falta una, el proyecto no compila para esa plataforma.
+- El proyecto se organiza en módulos: shared/ contiene la lógica común y las implementaciones por plataforma; androidApp/ e iosApp/ son apps normales (Gradle y Xcode) que consumen ese módulo compartido.
+- Cada app dibuja su propia interfaz de forma nativa (Jetpack Compose en Android, SwiftUI en iOS) — salvo que se use Compose Multiplatform para compartir también la UI.
+- No hay runtime ni motor compartido en tiempo de ejecución: cada plataforma compila a su propio binario nativo.
+
+[BLOQUE 41] Tauri
+- Framework open source (primera versión estable en 2022, v2.0 en 2024) para construir aplicaciones de escritorio y, desde la v2.0, también móviles, usando tecnologías web (HTML/CSS/JS) para la interfaz.
+- A diferencia de Electron, no empaqueta Chromium ni Node.js: usa el WebView que ya trae el sistema operativo y un núcleo nativo en Rust, por lo que las apps resultantes son mucho más ligeras (unos MB frente a cientos) y consumen menos memoria.
+- Cuando interesa:
+- Equipos con conocimientos web que quieren una app de escritorio ligera y con permisos/seguridad reforzados (el backend en Rust controla explícitamente a qué puede acceder la UI).
+- Proyectos que ya tienen una app web y quieren distribuirla como app nativa de escritorio (o móvil) sin reescribir la interfaz.
+- Limitación actual: ecosistema y comunidad más pequeños que Electron, y el soporte móvil (Android/iOS) es más reciente y todavía menos maduro que el de escritorio.
+- Arquitectura Hibrida.
+
+[BLOQUE 42] Tauri: cómo funciona por dentro
+- La interfaz se sigue construyendo con tecnologías web (HTML, CSS, JavaScript) y se muestra en un WebView del propio sistema operativo, igual que en Ionic/Capacitor.
+- Lo que cambia es el núcleo: en lugar de un runtime como Node.js empaquetado, Tauri usa un binario nativo escrito en Rust, mucho más ligero y rápido.
+- La parte web se comunica con el núcleo Rust mediante comandos IPC (invoke() en JavaScript llama a funciones Rust marcadas con #[tauri::command]).
+- Para pintar el WebView, Tauri usa WRY (control WebView multiplataforma) y TAO (ventanas nativas) en lugar de depender de un motor propio como hace Flutter.
+- Desde Tauri 2.0 también soporta móvil (Android/iOS), reutilizando el mismo modelo: UI web + núcleo nativo en Rust.
+
+[BLOQUE 43] Tauri: arquitectura por capas
+- Frontend web — La parte visual de la app, hecha con las mismas tecnologías que una página web: HTML, CSS y JavaScript.
+- Núcleo Tauri (Rust) — El código en Rust que hace el trabajo pesado y se comunica con la parte web mediante mensajes.
+- WRY + TAO — Usa el navegador que ya viene instalado en el sistema para mostrar la interfaz, en vez de traer uno propio.
+- Sistema operativo — Funciona en Windows, macOS, Linux, iOS y Android sin cargar un navegador extra dentro de la app.
+- Nota: Lo importante: la interfaz se muestra con el navegador del sistema, igual que Ionic/Capacitor. Lo nativo de verdad es el código en Rust, no la pantalla.
+
+[BLOQUE 44] Comparativa de frameworks actuales (I): lenguaje y arquitectura
+- Frameworks comparados: Ionic + Capacitor · .NET MAUI · Flutter · React Native · Kotlin Multiplatform · Tauri · Uno Platform
+- Ionic + Capacitor — Lenguaje: TypeScript/JS (Angular/React/Vue) · Renderizado de la UI: WebView · Tecnología clave: Capacitor · Rendimiento: Medio (limitado por WebView)
+- .NET MAUI — Lenguaje: C# / XAML · Renderizado de la UI: Nativo (Handlers) · Tecnología clave: Handlers · Rendimiento: Alto (nativo)
+- Flutter — Lenguaje: Dart · Renderizado de la UI: Motor propio (Skia) · Tecnología clave: Widgets + Dart AOT · Rendimiento: Alto (compilado, GPU)
+- React Native — Lenguaje: JavaScript / TypeScript · Renderizado de la UI: Nativo (Fabric) · Tecnología clave: JSI + TurboModules · Rendimiento: Alto (con Fabric/Hermes)
+- Kotlin Multiplatform — Lenguaje: Kotlin · Renderizado de la UI: Nativo (Compose) · Tecnología clave: expect/actual · Rendimiento: Muy alto (100% nativo)
+- Tauri — Lenguaje: JS/TS + Rust (backend) · Renderizado de la UI: WebView del SO · Tecnología clave: WRY/TAO + Rust · Rendimiento: Alto en backend / medio en UI
+- Uno Platform — Lenguaje: C# / XAML · Renderizado de la UI: Skia / nativo · Tecnología clave: Uno.WinUI · Rendimiento: Alto (Skia) o nativo si se activa
+
+[BLOQUE 45] Comparativa de frameworks actuales (II): cuándo elegir cada uno
+- Ionic + Capacitor — Curva de aprendizaje (dev web): Muy baja · Distribución: App Store / Google Play · Mantenedor principal: Ionic (comunidad + empresa) · Cuándo elegirlo: Equipo web + app con un solo código
+- .NET MAUI — Curva de aprendizaje (dev web): Media-alta (si no conoces .NET) · Distribución: App Store / Google Play / Microsoft Store · Mantenedor principal: Microsoft · Cuándo elegirlo: Equipo/ecosistema .NET
+- Flutter — Curva de aprendizaje (dev web): Media (Dart es nuevo) · Distribución: Tiendas + web + escritorio · Mantenedor principal: Google · Cuándo elegirlo: Máximo rendimiento visual y UI consistente
+- React Native — Curva de aprendizaje (dev web): Baja (si ya usas React) · Distribución: App Store / Google Play · Mantenedor principal: Meta · Cuándo elegirlo: Equipo/ecosistema React, nativo real
+- Kotlin Multiplatform — Curva de aprendizaje (dev web): Media-alta (si no conoces Kotlin) · Distribución: Tiendas nativas (según plataforma) · Mantenedor principal: JetBrains · Cuándo elegirlo: Equipo Kotlin, compartir lógica con UI 100% nativa
+- Tauri — Curva de aprendizaje (dev web): Baja (si ya usas web) + Rust · Distribución: Tiendas + instaladores de escritorio ligeros · Mantenedor principal: Comunidad Tauri (Tauri Working Group) · Cuándo elegirlo: App de escritorio ligera (o móvil) desde web + Rust
+- Uno Platform — Curva de aprendizaje (dev web): Alta (si no conoces XAML/.NET) · Distribución: Tiendas + navegador (WASM) + Linux · Mantenedor principal: nventive · Cuándo elegirlo: Además de móvil/escritorio, necesitas web (WASM) o apariencia idéntica en todas partes
+
+[BLOQUE 46] Cuál elegir
+- Cual Elegir
+- Necesitamos apps con un solo código y mi equipo es web → Ionic + Capacitor.
+- Queremos máximo rendimiento visual y UI 100% consistente → Flutter.
+- Queremos nativo con JS/TS y ecosistema React → React Native.
+- Desarrollamos mediante .NET y priorizamos ecosistema .Net → .NET MAUI.
+- Tenemos equipo Android/Kotlin y priorizamos rendimiento nativo y UI 100% nativa → Kotlin Multiplatform.
+- Queremos una app de escritorio ligera (o también móvil) a partir de nuestra web, con backend en Rust → Tauri.
+- Somos equipo .NET y además necesitamos la misma app en el navegador (WebAssembly) → Uno Platform.
+
+[BLOQUE 47] Resumen
+- Cada herramienta y framework de trabajo tiene sus ventajas y desventajas.
+- Flutter y React Native ofrecen la mejor experiencia similar a la nativa.
+- Xamarin/Maui ofrece facilidad a empresas basadas en ecosistema .Net.
+- Ionic ofrece facilidad a los que vienen del desarrollo web (angular,vue,react), con curva de aprendizaje baja.
+- Kotlin Multiplatform es el framework de más rápido crecimiento en 2026, ideal cuando se quiere compartir lógica manteniendo la UI totalmente nativa.
+- La elección final debe realizarse de acuerdo con los requisitos de su proyecto.

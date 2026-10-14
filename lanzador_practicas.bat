@@ -1,13 +1,18 @@
 @echo off
-title Lanzador de Practicas DISM
+title Lanzador de Practicas DISM y Sistema de Registro Horario
+
 :MENU
 cls
 echo ===================================================================
-echo                     PANEL DE CONTROL DISM
+echo               PANEL DE CONTROL GENERAL DISM
 echo ===================================================================
 echo.
-echo Selecciona la practica que deseas ejecutar:
+echo === PROYECTO EVALUABLE: SISTEMA DE REGISTRO HORARIO ===
+echo   [A]  Lanzar Backend API REST Node.js (Puerto 8080 + Swagger UI)
+echo   [B]  Lanzar AppAdmin (Gestion Usuarios, Trabajos, Fichajes y Mapas)
+echo   [C]  Lanzar AppUsuarios (Fichaje Movil 12h, GPS y Consultas)
 echo.
+echo === EJERCICIOS GUIADOS DEL CURSO (DISM0 a DISM10) ===
 echo   [0]  DISM0  - Proyecto Base Tabs (Ionic + Angular)
 echo   [1]  DISM1  - Componentes Visuales Tabs (Botones, Listas, Toggles)
 echo   [2]  DISM2  - Menu Lateral Side (ion-split-pane, ion-menu)
@@ -20,12 +25,14 @@ echo   [8]  DISM8  - Ver Contrato OpenAPI 3.0 (HolaMundo.yaml)
 echo   [9]  DISM9  - Servidor Express OpenAPI (Puerto 8080 /api-docs)
 echo   [10] DISM10 - Servidor Express CRUD + MySQL (Puerto 8080 /api-docs)
 echo.
-echo   [T]  INSTALAR dependencias de TODAS las practicas de golpe
+echo   [T]  INSTALAR dependencias de TODO de golpe
 echo   [X]  Salir
-echo.
 echo ===================================================================
 set /p opt="Introduce tu opcion: "
 
+if /i "%opt%"=="A" goto RUN_BACKEND
+if /i "%opt%"=="B" goto RUN_APPADMIN
+if /i "%opt%"=="C" goto RUN_APPUSUARIOS
 if /i "%opt%"=="0" goto RUN_DISM0
 if /i "%opt%"=="1" goto RUN_DISM1
 if /i "%opt%"=="2" goto RUN_DISM2
@@ -39,6 +46,28 @@ if /i "%opt%"=="9" goto RUN_DISM9
 if /i "%opt%"=="10" goto RUN_DISM10
 if /i "%opt%"=="T" goto INSTALL_ALL
 if /i "%opt%"=="X" goto END
+goto MENU
+
+:RUN_BACKEND
+cd /d "%~dp0SistemaRegistroHorario\backend-api"
+echo Arrancando Backend API REST en puerto 8080...
+start http://localhost:8080/api-docs
+call npm start
+pause
+goto MENU
+
+:RUN_APPADMIN
+cd /d "%~dp0SistemaRegistroHorario\AppAdmin"
+echo Arrancando AppAdmin en Ionic...
+call ionic serve
+pause
+goto MENU
+
+:RUN_APPUSUARIOS
+cd /d "%~dp0SistemaRegistroHorario\AppUsuarios"
+echo Arrancando AppUsuarios en Ionic...
+call ionic serve
+pause
 goto MENU
 
 :RUN_DISM0
@@ -77,7 +106,6 @@ pause
 goto MENU
 
 :RUN_DISM5
-cd /d "%~dp0"
 echo Iniciando backend json-server en segundo plano...
 start "DISM4 Fake Backend (Puerto 3000)" cmd /c "cd /d %~dp0DISM4 && npx json-server db.json --port 3000"
 timeout /t 2 > nul
@@ -125,9 +153,9 @@ goto MENU
 :INSTALL_ALL
 cd /d "%~dp0"
 echo ===================================================================
-echo        INSTALANDO DEPENDENCIAS DE TODAS LAS PRACTICAS
+echo        INSTALANDO DEPENDENCIAS DE TODAS LAS APLICACIONES
 echo ===================================================================
-for %%P in (DISM0 DISM1 DISM2 DISM3 DISM5 DISM6 DISM7 DISM9 DISM10) do (
+for %%P in (DISM0 DISM1 DISM2 DISM3 DISM5 DISM6 DISM7 DISM9 DISM10 SistemaRegistroHorario\backend-api SistemaRegistroHorario\AppAdmin SistemaRegistroHorario\AppUsuarios) do (
     echo.
     echo --- Instalando en %%P ---
     cd /d "%~dp0%%P"

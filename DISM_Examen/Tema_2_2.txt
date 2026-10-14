@@ -1,0 +1,502 @@
+==============================================================================
+TEMA 2 (PARTE 2). INTRODUCCIÓN A LAS INFRAESTRUCTURAS MULTIMEDIA
+==============================================================================
+
+==============================================================================
+2. REQUERIMIENTOS DE LOS SISTEMAS MULTIMEDIA (continuación)
+==============================================================================
+
+[BLOQUE 1] Necesidad de RAID en los sistemas multimedia
+- Manejan grandes volúmenes de datos:
+- Vídeo, audio e imágenes de alta resolución ocupan una gran capacidad de almacenamiento.
+- Exigen un alto rendimiento de entrada/salida:
+- La reproducción y edición en tiempo real necesitan un flujo continuo de datos, sin cortes ni retardos.
+- Requieren alta disponibilidad y tolerancia a fallos:
+- El fallo de un disco no puede interrumpir el servicio (servidores de vídeo, streaming, difusión).
+  - RAID combina varios discos para ofrecer más rendimiento, capacidad y fiabilidad de las que da un único disco.
+
+[BLOQUE 2] RAID: definición y tipos
+  - Definición:
+  - Redundant Array of Inexpensive Disks.
+  - Hace referencia a un sistema de almacenamiento que usa múltiples discos duros mágneticos o SSD entre los que distribuyen o replican los datos.
+  - Un RAID permite combinar varios discos duros en una sola unidad lógica → en lugar de ver varios discos duros diferentes, el sistema operativo ve uno solo.
+  - Los RAIDs suelen usarse en servidores y normalmente (aunque no es necesario) se implementan con unidades de disco de la misma capacidad.
+  - Dependiendo de su configuración (a la que suele llamarse «nivel»), los beneficios de un RAID respecto a un único disco son uno o varios de los siguientes:
+  - mayor integridad.
+  - mayor tolerancia a fallos.
+  - mayor rendimiento.
+  - mayor capacidad.
+- Al crear un RAID los datos existentes en las unidades de disco se destruyen.
+- La distribución de los datos entre varias unidades se puede administrar por:
+- Software:
+- Como parte del sistema operativo.
+- El rendimiento es inferior por requerir del propio sistema operativos de las funciones necesarias para controlarlo.
+- Hardware:
+- Mediante una tarjeta de expansión o embebido en la placa base, que contiene el firmware.
+- Rendimiento mayor puesto que el S.O. se desentiende del RAID.
+  - Tipos:
+  - RAID 0 → Volumen dividido
+  - RAID 1 → Espejo
+  - RAID 01 → Un Espejo de Divisiones
+  - RAID 10 → Una División de Espejos
+  - RAID 10+0 → Una División de RAID 10
+  - RAID 10+1 → Un Espejo de Espejos
+  - RAID 2 → División a nivel de bits
+  - RAID 3 → División a nivel de bytes
+  - RAID 4 → División a nivel de bloques con un disco de paridad
+  - RAID 5 → División a nivel de bloques, distribuido con paridad
+  - RAID 6 → Amplia RAID 5 con otro bloque de paridad
+  - RAID 5E, RAID 6E, RAID 50…
+
+[BLOQUE 3] RAID 0, RAID 1
+  - RAID 0:
+  - Mínimo 2 discos.
+  - “No es un RAID”.
+  - Es una agrupación de discos que proporciona un rendimiento de lectura y escritura el cual se incrementa aproximadamente como múltiplo lineal del número del discos.
+  - La fiabilidad se decrementa exponencialmente respecto a un solo disco pues con que falle un solo disco, fallara todo el RAID. El fallo de un disco provoca la pérdida completa de los datos.
+  - No recomendado para un sistema crítico.
+- RAID 1:
+- Crea una copia exacta (o espejo) de un conjunto de datos en dos o más discos..
+- Útil cuando el rendimiento en lectura es más importante que la capacidad.
+- Puede ser tan grande como el más pequeño de sus discos.
+- Aumenta la fiabilidad respecto a un solo disco ya que para que el conjunto falle es necesario que lo hagan todos sus discos.
+- El rendimiento de lectura se incrementa aproximadamente como múltiplo lineal del número del discos (HW diferente para cada disco).
+- Al escribir, el conjunto se comporta como un único disco, dado que los datos deben ser escritos en todos los discos del RAID 1. Por tanto, el rendimiento no mejora.
+
+[BLOQUE 4] RAID 5
+  - RAID 5:
+  - División de datos a nivel de bloques distribuyendo la información de paridad entre todos los discos miembros del conjunto.
+  - El RAID 5 muy popular gracias a su bajo coste de redundancia.
+  - Mínimo 3 discos.
+- Paridad: Cálculo matemático que permite que las unidades dentro de una matriz RAID fallen sin la pérdida de datos. Ej.:
+- A + B = C
+- Se puede eliminar cualquiera de las letras de arriba y calcular su valor a partir de las 2 restantes. Si elimino B  → A +? = C, B = C - A. Para comprenderlo completamente en un sentido RAID, se requiere el conocimiento de binario y la expresión lógica XOR.
+- Cada vez que un bloque de datos se escribe en un RAID 5, se genera un bloque de paridad (operaciones XOR entre bloques) dentro de la misma división (stripe).
+- Un bloque se compone a menudo de muchos sectores consecutivos de disco.
+- Las escrituras en un RAID 5 son costosas en términos de operaciones de disco y tráfico entre los discos y la controladora.
+- Los bloques de paridad no se leen en las operaciones de lectura de datos, los bloques de paridad se leen cuando la lectura de un sector de datos provoca un error de CRC.
+- Interim Data Recovery Mode →  Notifica error al administrador.
+- El fallo de un segundo disco provoca la pérdida completa de los datos.
+  - RAID 5: paridad distribuida
+  - La paridad rota entre discos: cada franja la guarda en un disco distinto, así ningún disco es cuello de botella.
+  - La paridad es el XOR de todos los bloques de datos de la franja, esté donde esté P:
+- Ap = A1 ⊕ A2 ⊕ A3
+  - Con n discos hay k = n − 1 bloques de datos por franja (aquí 4 discos, k = 3).
+  - Si falla un disco, su bloque se reconstruye con el XOR de los bloques restantes de la franja. Recuadro: franja A (A1, A2, A3 + paridad Ap en el disco 3). El subíndice p marca la paridad de cada franja.
+- RAID 5: tipos de escritura
+- Full-stripe write Read-Modify-Write
+- Se escriben A1, A2 y A3 nuevos. Solo cambia un bloque, p. ej. A2.
+- Paridad calculada en memoria: Se leen A2 y Ap viejos:
+- Ap = A1 ⊕ A2 ⊕ A3 Ap' = Ap ⊕ A2viejo ⊕ A2nuevo
+- 4 escrituras 2 lecturas + 2 escrituras
+- → guardan 3 bloques nuevos (A1, A2, A3) → guardan 1 bloque nuevo (A2)
+- ≈ 1,3 accesos por bloque 4 accesos por bloque
+- Las 4 escrituras van en paralelo. Hay que leer antes de poder escribir.
+- Penalización de escritura pequeña: cambiar 1 solo bloque exige 4 accesos a disco (leer dato y paridad viejos, escribir los nuevos); sin RAID bastaría 1.
+- El modo no se elige: lo decide el tamaño de la escritura. El vídeo y el audio se graban en bloques grandes y secuenciales que llenan franjas completas, así que evitan la penalización y RAID 5 les conviene.
+  - RAID 5: ejemplo resuelto
+    - 1. Calcular la paridad 3. Actualizo D1: 1010 → 0001
+- Datos: D0 = 0110 · D1 = 1010 · D2 = 0011 Escritura parcial → Read-Modify-Write
+- P = D0 ⊕ D1 ⊕ D2 Leer D1 y P viejos (2 lecturas)
+- = (0110 ⊕ 1010) ⊕ 0011 D1viejo = 1010,  P = 1111
+- = 1100 ⊕ 0011 = 1111 Calcular la nueva paridad
+- P' = P ⊕ D1viejo ⊕ D1nuevo
+- = (1111 ⊕ 1010) ⊕ 0001
+    - 2. Falla el disco de D0 = 0101 ⊕ 0001 = 0100
+- Se recupera con el XOR del resto: Escribir D1 y P' (2 escrituras)
+- D0 = P ⊕ D1 ⊕ D2
+- Comprobación con los datos nuevos:
+- = (1111 ⊕ 1010) ⊕ 0011
+- 0110 ⊕ 0001 ⊕ 0011 = 0100 ✓
+- = 0101 ⊕ 0011 = 0110  ✓ dato original No hizo falta leer D0 ni D2.
+- RAID 5 Ejercicio:
+- Supongamos un sistema RAID 5 con 2 discos de datos (Disco A y Disco B) y 1 disco de paridad (Disco P).
+- Se debe calcular el valor de paridad para un conjunto de datos binarios dado.
+- Los datos originales son los siguientes:
+  - RAID 5 Ejercicio 2:
+    - Tres discos de datos en la franja (D0, D1, D2) y uno con paridad (P).
+- Disco D0: 1011 Disco D1: 0101 Disco D2: 1100 ¿Paridad?
+    - Calcula Paridad
+    - Reconstrucción si se pierde D1
+    - Si actualizo D2 de 1100 a 1000, ¿Qué sucede?
+
+[BLOQUE 5] RAID 6 y RAID 10
+  - RAID 6:
+    - Nivel de almacenamiento de datos que proporciona redundancia y tolerancia a fallos similar al RAID 5, pero con una mayor capacidad para resistir múltiples fallos de discos simultáneos.
+    - En un RAID 6, los datos se distribuyen y almacenan en varios discos duros, al igual que en el RAID 5, pero se utiliza una técnica llamada "paridad doble" para redundancia.
+- RAID 6, Características:
+  - Redundancia de datos: Los datos se dividen en bloques más pequeños y se distribuyen en varios discos, junto con la información de paridad. Esta información de paridad se utiliza para reconstruir los datos en caso de fallo de uno de los discos.
+  - Paridad doble: La diferencia principal entre el RAID 5 y el RAID 6 es que el RAID 6 utiliza dos bloques de paridad para cada conjunto de datos distribuido en los discos → mayor seguridad y fiabilidad.
+  - Mayor capacidad de tolerancia a fallos: Debido a la paridad doble, el RAID 6 es capaz de resistir la falla de hasta dos discos al mismo tiempo sin pérdida de datos → aplicaciones críticas .
+  - Capacidad efectiva: La capacidad efectiva en un RAID 6 se ve afectada por la redundancia. → Menor capacidad.
+  - Rendimiento: El rendimiento de escritura en un RAID 6 puede ser más bajo que en niveles de RAID que no utilizan paridad, como RAID 0. Sin embargo, el rendimiento de lectura puede ser similar al de otros niveles de RAID que utilizan paridad, como RAID 5.
+  - RAID 1+0 o 10:
+  - Es una división de espejos Un mínimo de 4 discos.
+  - Excelente redundancia (los bloques se reflejan en otro disco)
+  - Excelente rendimiento (los bloques se dividen)
+  - En cada división RAID 1 pueden fallar todos los discos salvo uno sin que se pierdan datos.
+  - Si los discos que han fallado no se reemplazan, el restante pasa a ser un punto único de fallo para todo el conjunto. Si ese disco falla entonces, se perderán todos los datos del conjunto completo.
+  - El RAID 10 es la mejor elección para bases de datos de altas prestaciones, debido a que la ausencia de cálculos de paridad proporciona mayor velocidad de escritura.
+
+[BLOQUE 6] RAID: comparativa, ventajas e inconvenientes
+- RAID 0 — Ventajas: alto rendimiento de lectura y escritura; aprovechamiento eficiente de los discos; adecuado para aplicaciones que requieren alta velocidad pero no necesitan redundancia. Inconvenientes: no proporciona redundancia de datos; tolerancia a fallos nula; un fallo en cualquier disco resulta en la pérdida de datos.
+- RAID 1 — Ventajas: alta redundancia y tolerancia a fallos; buena velocidad de lectura. Inconvenientes: la capacidad de almacenamiento efectiva es la mitad de la capacidad total debido a la duplicación de datos; mayor costo debido a la duplicación de discos; mayor complejidad en la controladora RAID.
+- RAID 5 — Ventajas: proporciona redundancia de datos a través de paridad distribuida; aprovecha eficazmente el espacio de almacenamiento; buena tolerancia a fallos con capacidad de recuperación de datos en caso de un solo fallo de disco. Inconvenientes: mayor complejidad en la controladora RAID; rendimiento de escritura más bajo que RAID 0 o RAID 1; rendimiento de lectura más bajo que RAID 0 o RAID 1.
+- RAID 6 — Ventajas: mayor tolerancia a fallos que RAID 5, ya que permite la recuperación de datos incluso en el caso de la falla simultánea de dos discos; proporciona redundancia de datos mediante paridad doble. Inconvenientes: mayor complejidad en la controladora RAID y requerimientos de capacidad de almacenamiento adicionales para la paridad dual; rendimiento de escritura más bajo que RAID 0, 1 o 5.
+- RAID 10 (1+0) — Ventajas: combinación de RAID 1 y RAID 0, proporcionando alta redundancia y alto rendimiento; tolerancia a fallos de nivel superior a RAID 5 o RAID 6. Inconvenientes: requiere al menos cuatro discos, lo que aumenta el costo; la capacidad efectiva es la mitad de la capacidad total debido a la duplicación de datos.
+- RAID Ventajas:
+  - Los niveles RAID 1, 10, 5 permiten que un disco falle mecánicamente y que aun así los datos del conjunto sigan siendo accesibles para los usuarios.
+  - Un RAID permite que los datos se recuperen en un disco de reemplazo a partir de los restantes discos del conjunto, al mismo tiempo permanece disponible para los usuarios en un modo degradado.
+  - RAID puede mejorar el rendimiento de ciertas aplicaciones.
+  - Las aplicaciones que trabajan con archivos grandes (multimedia), se benefician de esta mejora.:
+  - Los niveles RAID 0 y 5 usan variantes de división (striping) de datos → permitiendo que varios discos atiendan simultáneamente las operaciones de lectura lineales, aumentando la tasa de transferencia sostenida.
+  - El nivel RAID 1 acelera únicamente la lectura del disco porque posee dos copias de un mismo fichero, una en cada disco.
+- RAID “Inconvenientes”:
+  - RAID no protege los datos. Supone un punto único de fallo al ser vulnerable a una amplia variedad de riesgos adicionales al fallo físico de disco, (virus, ficheros corruptos, borrados accidentales,…)
+  - RAID no mejora el rendimiento de todas las aplicaciones. La mayoría de aplicaciones de escritorio y videojuegos hacen énfasis en la estrategia de buffering y los tiempos de búsqueda de los discos.
+  - Una mayor tasa de transferencia sostenida supone poco beneficio para los usuarios de estas aplicaciones, al ser la mayoría de los archivos a los que se accede muy pequeños.
+  - Mejor un disco de tamaño superior.
+  - RAID por hardware no facilita el traslado a un sistema nuevo.
+  - Los distintos fabricantes de controladoras RAID usan diferentes formatos de metadatos (incluso controladoras de un mismo fabricante son incompatibles si corresponden a series diferentes) es virtualmente imposible mover un conjunto RAID a una controladora diferente,
+
+[BLOQUE 7] Características deseables y componentes de un sistema multimedia
+- Características deseables de un sistema multimedia:
+  - Sistemas operativos específicos. Para que tanto el acceso al sistema de ficheros como el procesamiento de datos sea eficiente y rápido. Debe soportar transferencia directa a disco, planificación de procesos en tiempo real, tratamiento rápido de las interrupciones, etc.
+  - Memoria y almacenamiento. Grandes unidades de almacenamiento (cientos de TB) y memoria principal (varios GB). Cachés de tamaño considerable y buses de alta velocidad.
+  - Soporte de red. Arquitecturas cliente-servidor y distribuidas comunes.
+  - Herramientas software. Herramientas amigables para manipular y producir media, diseñar y desarrollar aplicaciones, etc.
+- Componentes de un sistema multimedia:
+  - Dispositivos de captura. Cámaras, micrófonos, teclados, ratones, tabletas gráficas, sensores táctiles, etc.
+  - Dispositivos de almacenamiento. Discos duros magnéticos o sólidos, DVD, memorias flash, etc.
+  - Redes de comunicación. Redes locales, intranets, Internet, redes específicas.
+  - Sistemas de procesamiento. Estaciones de trabajo, ordenadores de sobremesa, hardware específico (DSP, FPGA, etc.)
+  - Dispositivos de visualización (salida). Altavoces, Televisores, Proyectores, Monitores, etc.
+
+[BLOQUE 8] Formato de datos: texto y codificación de caracteres
+  - Texto y datos estáticos.
+    - Proceden de teclado, micrófono, OCR, datos en disco, etc.
+    - Introducido/almacenado carácter a carácter.
+      - Texto: 1 byte/carácter, 2 bytes/carácter, 4 bytes/carácter.
+    - Formato. Texto raw o formateado (p.ej. HTML), RTF, formatos específicos (Word, ODF)
+    - No tiene información temporal, pero de forma natural puede haber secuencias concretas (HTML, sentencias en lenguajes de programación, etc.).
+    - El tamaño no es importante con respecto a otros datos multimedia.
+    - Se pueden utilizar esquemas de compresión sencillos.
+- Codificación de caracteres
+- Permite convertir un carácter de un lenguaje en un símbolo de otro sistema de representación.
+- ASCII, se representa en 1 byte. 128 símbolos.
+- ASCII Extendido, 128 símbolos para cada tipo.
+- ISO-8859-1…-16
+- Windows-1250…-1258
+- UNICODE, estándar, superconjunto de todos los set de caracteres en un tipo:
+- UTF-8 utiliza 1 byte para representar caracteres en el set ASCII, dos bytes para caracteres en otros bloques alfabéticos y tres bytes para el resto del BMP (Basic Multilingual Plane). Para los caracteres complementarios se utilizan 4 bytes.
+- UTF-16 utiliza 2 bytes para cualquier carácter en el BMP y 4 bytes para los caracteres complementarios.
+- UTF-32 emplea 4 bytes para todos los caracteres.
+- Ventajas UTF8
+- UTF-8 permite codificar cualquier carácter Unicode.
+- Es compatible con US-ASCII, la codificación del repertorio de 7 bits es directa.
+- Fácil identificación. Es posible identificar claramente una muestra de datos como UTF-8 mediante un sencillo algoritmo. La probabilidad de una identificación correcta aumenta con el tamaño de la muestra.
+- UTF-8 ahorrará espacio de almacenamiento para textos en caracteres latinos, donde los caracteres incluidos en US-ASCII son comunes, cuando se compara con otros formatos como UTF-16.​
+- Codificación de caracteres
+- Desventajas UTF8
+- UTF-8 utiliza símbolos de longitud variable; eso significa que diferentes caracteres pueden codificarse con distinto número de bytes. Es necesario recorrer la cadena desde el inicio para encontrar el carácter que ocupa una determinada posición.
+- Los caracteres ideográficos usan 3 bytes en UTF-8, pero sólo 2 en UTF-16. Así, los textos chinos, japoneses o coreanos ocupan más espacio cuando se representan en UTF-8.
+- UTF-8 ofrece peor rendimiento que UTF-16 y UTF-32 en cuanto a coste de computación, por ejemplo en operaciones de ordenación.
+
+[BLOQUE 9] Esquemas de compresión
+- Shannon-Fano coding:
+- Utiliza palabras de longitud variable.
+- Símbolos con mayor probabilidad de ocurrencia se representan por palabras de código más cortas.
+- Huffman coding:
+- Forma sencilla y óptima de mapear cada símbolo de un alfabeto con un código de longitud óptima.
+- Los símbolos se representan con códigos cuya longitud es inversamente proporcional a la probabilidad del símbolo.
+- Más optimo que Shannon-Fano.
+- Es necesario disponer del árbol a partir del que se codifican los datos
+- Hay que comunicar al decodificador las probabilidades de la fuente (o el histograma asociado a los símbolos).
+- LZW:
+- Reemplaza cadenas de caracteres por códigos unitarios.
+- No analiza el texto según va entrando, sino que añade cada nueva cadena a una tabla de cadenas.
+- La compresión se da cuando un código unitario sustituye a una cadena de caracteres.
+- Derivan GIF y compress de UNIX.
+
+[BLOQUE 10] Formato de datos: gráficos
+  - Gráficos.
+    - Formados mediante la composición de objetos primitivos tales como líneas, polígonos, círculos, curvas, arcos, etc.
+    - Se almacena también la relación entre las primitivas
+    - Generados mediante un programa de edición gráfica (Illustrator) o automáticamente por otro tipo de programas (Postscript).
+    - A diferencia de las imágenes, los gráficos suelen ser editables o modificables.
+    - Dispositivos utilizados para su generación.
+    - Teclado, ratón, trackball, tableta gráfica, etc.
+    - Formatos estándar.
+    - OpenGL, Open Graphics Library
+    - PHIGS, Programmer's Hierarchical Interactive Graphics System
+    - GKS, Graphical Kernel System.
+    - …
+    - No suponen requerimientos excesivos de almacenamiento.
+
+[BLOQUE 11] Formato de datos: imágenes
+  - Imágenes.
+    - Imágenes estáticas que se pueden representar como bitmaps (malla de píxeles) sin comprimir.
+    - Generadas a partir de una cámara digital o mediante el escaneo de una imagen o fotografía sobre papel o soporte similar.
+    - También pueden ser generadas mediante programas similares a los de edición gráfica o animación.
+    - Diversas resoluciones para su representación: 1 bit/pixel (B/N), 8 bits/pixel (Escala de grises, Mapa de colores), 24 bits/pixel (Color verdadero).
+    - Tamaño. Una imagen de 512 Bytes x 512 Bytes en Color verdadero(24b/p) sin compresión ocupa 0.75 MB. Imágenes de 10 MPíxeles llegan a ocupar 29 MB sin comprimir → Compresión es prácticamente imprescindible.
+- El sistema visual humano (HVS) puede distinguir aprox. 10 millones de colores diferentes; 2^24 = 16.777.216.
+- También hay 16 bits/píxel, con 5 bits por color (modo 555) y 6 bits para el verde (565), porque permite incrementar la percepción de brillo para el HVS.
+- También hay 32 bits porque es más fácil gestionarlos con las arquitecturas de determinados procesadores.
+- El formato de 32 bits RGBA añade 8 bits (canal alfa) para las transparencias. Este valor se utiliza cuando se deben superponer dos imágenes.
+- También hay 48 bits (16 por color) en edición profesional de imágenes (Photoshop), cuando se pueden aplicar filtros sucesivos que pueden ir acumulando errores de redondeo y pérdida de precisión en la representación de los colores.
+  - Tipos de compresión:
+  - Lossless: Sin Pérdida.
+  - Los algoritmos de compresión sin pérdida reducen el tamaño de los archivos sin perder ninguna información en ellos, lo que significa que podemos reconstruir los datos originales a partir del archivo comprimido.
+  - Lossy: Con Perdida.
+  - Los algoritmos de compresión con pérdida reducen el tamaño de los archivos al descartar información menos importante, lo que puede reducir significativamente el tamaño de los archivos, pero también afecta su calidad.
+- (Diapositiva con una figura sobre tipos de compresión; sin texto extraíble.)
+    - BMP (Bit Mapped Picture). Muy buena calidad pero muy poco eficientes en el uso de recursos.
+    - GIF (Graphics Interchange Format). Soporta un máximo de 256 colores, con mejores resultados sobre imágenes con líneas definidas claramente y grandes áreas de color. Utiliza el sistema de compresión LZW de tipo lossless.
+    - PNG (Portable Network Graphics). Soporta cualquier nº de colores y cualquier tipo de imagen.  Utiliza la compresión zlib ; es una técnica lossless que no soporta animación.
+    - JPEG (Joint Photographic Experts Group). Comprime imágenes de 24 bits/pixel o escala de grises. Utiliza un algoritmo lossy. Se puede ajustar el grado de compresión y por tanto la calidad.
+    - TIFF (Tagged Image File Format). Además de datos propios de la imagen, se almacenan etiquetas que ayudan a procesarla (formato de la imagen, tipo de compresión, etc.).
+- El JPEG se basa en los defectos del HVS: (1) es mucho más sensible a variaciones en la luminancia (brillo) que en la crominancia (color); (2) se perciben más fácilmente pequeñas variaciones de brillo en zonas homogéneas que en zonas donde la variación es grande.
+- JPEG-2000: compresión lossy/lossless en función de los requerimientos del usuario, regiones de interés, características de seguridad, etc.
+    - WEBP (Google):
+    - WebP es un formato de imagen moderno que proporciona una compresión superior  lossy/lossless de imágenes en la web.
+    - Según Google, las imágenes y los gráficos en formato WebP son, un 30% más pequeñas que los archivos PNG o JPEG y tienen la misma calidad de imagen.
+    - Características:
+    - Compresión con perdida.
+    - Compersión sin perdida.
+    - Transparencia.
+    - Metadatos.
+    - Perfil de colores.
+    - Animaciones.
+    - Soporte por parte de los navegadores:
+    - https://caniuse.com/?search=webp
+- HEIF (MPEG):
+- High Efficiency Image File Format
+- Con HEIF se almacenan las imágenes fijas codificadas con el formato de vídeo HVEC (H.265)
+- Formato de archivo de imagen de alta eficiencia para almacenar imágenes y secuencias de estas.
+- Es un contenedor flexible de imágenes con compresión que es considerado actualmente uno de los posibles sustitutos del universal y extendido JPG.
+- Soporte de Apple (iOS 11 macOS High Sierra) y Microsoft (W10).
+- MPEG, afirma que se puede almacenar el doble de información en una imagen con el nuevo formato que en el antiguo JPEG.
+
+[BLOQUE 12] Formato de datos: audio
+  - Audio.
+    - Las señales originales de audio son continuas y analógicas.
+    - Generadas a partir de un sistema de micrófonos, se digitalizan y se almacenan.
+    - La digitalización implica realizar un muestreo (sampling) de la señal analógica.
+    - Para calidad CD, se requiere muestro a 44.1 KHz con 16 bits, o incluso mayores para calidad superior (96 KHz con 24 bits).
+    - 1 minuto de CD mono requiere 5 MB sin comprimir, 10 MB si es estéreo.
+    - Tamaño=Frecuencia de muestreo x Nº de canales x Nº de bits por segundo x segundos de duración.
+    - Por lo tanto, la compresión es prácticamente imprescindible: MP3, AAC, Flac, Ogg, Vorbis, etc.
+
+[BLOQUE 13] Formato de datos: vídeo
+  - Vídeo.
+    - Las señales originales de vídeo son continuas y analógicas.
+    - Generadas a partir de una cámara, se digitalizan y se almacenan.
+    - Gran variedad de formatos, tanto analógicos como digitales.
+    - El vídeo raw se puede considerar una secuencia de imágenes individuales. Típicamente, 25, 30 ó 50 frames/sec. (60 = HDTV).
+    - Un vídeo de imágenes con profundidad de 32 pixel de 1920*1080 a 30 fps, requiere un espacio de !!!13.90 GB/min sin comprimir!!!.
+    - Tamaño de vídeo = tamaño 1 frame x FPS x duración
+    - Por tanto, es imprescindible la compresión de vídeo.
+- Tabla de estándares MPEG. Columnas: Serie (ISO/IEC) · Año aprox. · Vídeo (partes / H.26x) · Audio (partes) · Contenedor / Transporte · Extensiones comunes · Usos típicos
+- MPEG-1 (11172) · 1993 · Part 2 (video) · MP3 = Audio Layer III (Part 3) · Program Stream (PS) · .mpg, .mp3 · VCD, primeros .mpg
+- MPEG-2 (13818) · 1995–96 · Part 2 = H.262 · AAC (MPEG-2 Part 7) · TS/PS (Part 1: Systems) · .mpg, .vob, .ts · DVD, TV digital (DVB/ATSC)
+- MPEG-4 (14496) · 1998– · Part 2 Visual; Part 10 = AVC/H.264 · AAC (Part 3) · MP4 / ISOBMFF (Part 12) · .mp4, .m4v, .m4a · Streaming, móvil, Blu-ray
+- MPEG-7 (15938) · 2002– · — · — (descriptores) · XML/JSON descriptors · .xml, .json · Búsqueda, metadata
+- MPEG-21 (21000) · 2003– · — · — (marco/DRM) · Digital Item / rights · (varios) · Gestión de contenidos y derechos
+- MPEG-DASH (23009-1) · 2012– · — (no códec) · — · HTTP + MPD (manifiesto) · .mpd (+ segmentos .mp4) · Streaming adaptativo
+- MPEG-H (23008) · 2013– · Part 2 = HEVC/H.265 · MPEG-H 3D Audio (Part 3) · MMT, TS · .ts, .mp4 · UHD/4K, HDR, broadcast moderno
+- MPEG-I (23090) · 2019– · Part 3 = VVC/H.266 · — · OMAF, ISOBMFF · .mp4 (OMAF) · VR/360, 8K, inmersivo (360/VR)
+- MPEG-5 (23094) · 2020– · EVC (Part 1), LCEVC (Part 2) · — · ISOBMFF · .mp4 · Streaming eficiente / baja complejidad
+- ⚠ Esta diapositiva (ejercicios de vídeo/audio) tenía dos capas de texto superpuestas en el PDF y solo se ha podido reconstruir en parte. Revisar contra la diapositiva original.
+- Ejercicios:
+  1. Espacio necesario para almacenar una foto de 12 Mpx (4000x3000) con 24 bits/píxel, sin comprimir.
+  2. Calcula el tamaño de un vídeo 4K UHD (3840x2160) de 15 minutos, 25 fps y 24 bits/píxel, sin comprimir.
+  3. Calcula el tamaño de un vídeo 4K del que solo conocemos el bitrate: 15 Mbit/s.
+  4. ¿Qué tamaño tiene un archivo de audio de alta resolución sin comprimir (24 bits, 96 kHz, estéreo)? ¿Y si se escucha en streaming a 320 kbit/s? (aparece también «30 MB/min»)
+- Digital vídeo (24 bits, PAL con 720x576 píxeles/frame) requiere [valor ilegible en el PDF] sin comprimir.
+- HD-DVD (High Definition: 1440x1080=1.5MPíxeles/frame) requiere 112.5 MB/min sin comprimir (hay formatos incluso de mayor definición).
+- Por tanto, es imprescindible la compresión de vídeo.
+
+[BLOQUE 14] Rendimiento de un sistema multimedia (MOPS/GOPS)
+- Rendimiento de un sistema multimedia.
+  - La complejidad o rendimiento de una aplicación que procesa datos multimedia se mide en MOPS o GOPS. Estas OPS son primitivas como carga y almacenamiento, aritméticas, lógicas, etc.
+  - Ejemplo: complejidad de una operación de decodificación MPEG-2
+  - Bitrate (tasa de transferencia) = 4Mbps, tamaño de símbolo = 4 bits.
+- Parser Compensación Conversión Decuantificación IDCT
+- & VLC de movimiento YUV a RGB
+- 12 MOPS 7 MOPS 148 MOPS 143-274 MOPS 299 MOPS
+- Bistream codificado Vídeo en MPEG reconstruido
+- (4 MBps) (720x480), 30 fps
+- En total, ¡ 609-740 MOPS !
+
+[BLOQUE 15] QoS en los sistemas multimedia
+- Capacidad de un sistema de telecomunicación de proporcionar servicios según los requerimientos del usuario (en este caso, multimedia).
+- Interactivo Responsivo Oportuno No crítico
+- (retraso << 1 s) (retraso  2 s) (retraso  10 s) (retraso >> 10 s)
+- Tolerante a Videollamada Notas de voz y vídeo Streaming Telemetría IoT
+- errores (Zoom, Teams) (WhatsApp, Telegram) (Netflix, Spotify) (sensores)
+- Intolerante a Control remoto Web y transacciones Mensajería Segundo plano
+- errores (juego online, SSH) (compras, banca móvil) (chat, descargas) (e-mail, backups)
+
+[BLOQUE 16] Características de las aplicaciones multimedia (MMA)
+- Las MMA poseen algunas características que las hacen muy distintas de las GPA:
+  - Respuesta en tiempo real y QoS.  Videoconferencia, control remoto, etc.
+  - Procesamiento de datos en streaming. Las MMA pueden mantener código on-chip y admitir datos en streaming desde el exterior.
+  - Bucles pequeños.  El 95% del tiempo de ejecución se dedica a los dos bucles más interiores, con una gran cantidad de iteraciones.
+  - La mayoría de instrucciones MMA procesan enteros de 8 ó 16 bits.
+  - La excepción son las aplicaciones gráficas, que procesan datos FP de simple precisión.
+- Localidad Temporal:
+- Si en un momento una posición de memoria particular es referenciada, entonces es muy probable que la misma ubicación vuelva a ser referenciada en un futuro cercano.
+- Existe proximidad temporal entre las referencias adyacentes a la misma posición de memoria. En este caso es común almacenar una copia de los datos referenciados en caché para lograr un acceso más rápido a ellos.
+- Localidad Espacial:
+- Si una localización de memoria es referenciada en un momento concreto, es probable que las localizaciones cercanas a ella sean también referenciadas pronto.
+- Existe localidad espacial entre las posiciones de memoria que son referenciadas en momentos cercanos. En este caso es común estimar las posiciones cercanas para que estas tengan un acceso más rápido.
+- Localidad Secuencial:
+- Las direcciones de memoria que se están utilizando suelen ser contiguas. Esto ocurre porque las instrucciones se ejecutan secuencialmente.
+- Las MMA poseen algunas características que las hacen muy distintas de las GPA:
+  - Memoria: Las MMA procesan grandes cantidades de datos, así que el sistema de memoria está sometido a mucha carga. A diferencia de las GPA, las MMA tienen alta localidad espacial, pero baja localidad temporal (raramente reutilizan los datos).
+  - Tipos de datos pequeños.
+  - Necesidad de gran ancho de banda de memoria.
+  - Operaciones aritméticas muy frecuentes. Tamaño operandos Frecuencia uso
+- 8 bits 40%
+- 16 bits 51%
+- 32 bits 9%
+- Tipo operación ALU load/store branch shift integer mult FP
+- Frecuencia 40% 26% 20% 10% 2% 4%
+
+==============================================================================
+3. ARQUITECTURAS PARA SISTEMAS MULTIMEDIA
+==============================================================================
+
+[BLOQUE 17] Clasificación de las arquitecturas de procesadores para tratamiento multimedia
+- Clasificación según la evolución de las arquitecturas. Procesamiento multimedia:
+  - Programables: de propósito general (CISC, RISC) y específicas (DSP, NPU, Procesadores Media/Vídeo).
+  - Dedicadas: Modulares, Monolíticas.
+  - Reconfigurables.
+- CISC y RISC: Con ISA extendida para media / Sin ISA extendida para media.
+
+[BLOQUE 18] Programables de propósito general (CISC y RISC)
+- Programables de propósito general:
+  - Muchas de ellas no tienen instrucciones específicas para procesamiento multimedia.
+  - Para potenciar el rendimiento:
+    - VLIW, Very Long Instruction Word. Esta arquitectura de CPU implementa una forma de paralelismo a nivel de instrucción.
+    - Code morphing (JIT: Just-in-time translation: pasar de interpretar a compilar en el último momento antes de la ejecución, permitiendo así optimizar recursos).
+    - Clock gating (modificación de los circuitos secuenciales síncronos para ahorrar área y poder dedicarla a otra circuitería).
+    - Media ISA compatibles hacia atrás: MMX → SSE → AVX (x86), NEON → SVE2 (Arm).
+  - Ejemplos CISC (x86): Intel Core Ultra, AMD Ryzen.
+  - Ejemplos RISC: Apple M4, Snapdragon X, RISC-V.
+- RISC (Reduced Instruction Set Computer). El juego de instrucciones se limita a las más frecuentes y simples.
+  - Las más complejas o inusuales se implementan como secuencias de las anteriores.
+  - Esto permite arquitecturas superescalares, que explotan el paralelismo a nivel de instrucción.
+  - Apple M1: superescalar, decodifica hasta 8 instrucciones por ciclo.
+  - Ejemplos: Apple M1–M4, Snapdragon X, RISC-V.
+- CISC (Complex Instruction Set Computer): juego de instrucciones muy rico y complejo.
+  - Instrucciones de longitud variable: una sola puede leer de memoria, operar y escribir.
+  - Extensiones multimedia SIMD: SSE, AVX2, AVX-512; y codificadores de vídeo (Intel Quick Sync, AMD VCN).
+  - Ejemplos (x86-64): Intel Core Ultra, AMD Ryzen, Xeon, EPYC.
+
+[BLOQUE 19] Programables específicas: DSP
+- Programables específicas (dedicadas):
+  - Se orientan directamente a procesar aplicaciones multimedia.
+  - Primero surgieron los DSP (audio), después las GPU y hoy las NPU (IA).
+  - DSP: TI C7x, Analog Devices SHARC, Qualcomm Hexagon.
+  - Procesadores media/vídeo: Apple Media Engine, NVIDIA NVENC.
+  - TI: Texas Instruments. Hexagon: DSP de los Snapdragon. Media Engine y NVENC: codificadores de vídeo por hardware.
+- Programables específicas: DSP
+  - DSP programables de uso general: los más conocidos.
+    - Ejemplos: TI C6000/C7x, Analog Devices SHARC.
+  - DSP de aplicación específica: hacen una sola tarea y suelen ir dentro de un SoC.
+    - El fabricante no los llama DSP: módem 5G, códec de audio, ISP de cámara.
+  - Se diseñan para ejecutar rápido algoritmos repetitivos con muchas operaciones numéricas.
+    - Son imprescindibles en aplicaciones de tiempo real.
+- El concepto clave del DSP es la capacidad de realizar una operación de multiplicación + acumulación (MAC) en un solo ciclo de reloj.
+- Es una operación muy común en los algoritmos DSP (filtros).
+- Los DSP actuales ejecutan varios MAC por ciclo combinando SIMD y VLIW.
+- Ejemplo: un TI C7x hace decenas de MAC de 16 bits por ciclo.
+- Aplicaciones actuales de los DSP:
+  - Comunicaciones: módems 4G/5G, Wi-Fi y Bluetooth.
+  - Audio: cancelación de ruido y detección de voz («Oye Siri»).
+  - Imagen: fotografía del móvil (ISP), diagnóstico médico.
+  - Control: motores de coches eléctricos, drones, robots.
+  - IA en el dispositivo: redes neuronales ligeras (Qualcomm Hexagon).
+- Algunos dispositivos que poseen DSP:
+  - Smartphones y relojes inteligentes
+  - Auriculares inalámbricos (cancelación de ruido)
+  - Altavoces inteligentes (Alexa, Google Home)
+  - Automóviles (ABS, asistentes de conducción, audio)
+  - Discos SSD y HDD
+  - Radio digital (DAB) y TV digital (TDT)
+  - Cámaras digitales y de videovigilancia
+  - Routers Wi-Fi, estaciones base 5G y satélites
+  - Equipos médicos (ecógrafos, audífonos)
+- Es necesario optimizar la arquitectura hardware y el conjunto de instrucciones para operaciones TDS.
+- Esto se consigue haciendo extensivo uso de conceptos de paralelismo.
+- Se utilizan técnicas como:
+  - Arquitectura Harvard
+  - Instrucciones separadas de datos
+  - Uso de pipelines
+  - Basada en filtros
+  - Multiplicadores/Acumuladores hardware dedicados
+  - Instrucciones especiales dedicadas a DSP
+  - Memoria caché interna
+  - Arquitectura VLIW (paralelismo a nivel de instrucción)
+  - Arquitectura SIMD (paralelismo a nivel de datos)
+- Las operaciones numéricas básicas en DSP son productos y sumas.
+- La multiplicación software consume mucho tiempo.
+- Las sumas son también costosas, especialmente si se utiliza aritmética en coma flotante.
+- Para hacer posible el TDS en tiempo real es necesario un MAC hardware, dedicado y optimizado, que use aritmética en coma fija o flotante.
+- Los DSP proporcionan instrucciones especiales optimizadas para TDS. Ventajas:
+  - Código más compacto que ocupa menos espacio en memoria.
+  - Aumento en la velocidad de ejecución de los algoritmos DSP.
+- Las instrucciones especiales empleadas por los chips DSP incluyen:
+  - Las que soportan operaciones generales DSP.
+  - Las que reducen la sobrecarga en los bucles de instrucciones.
+  - Las orientadas a la aplicación.
+
+[BLOQUE 20] Programables específicas: NPU
+- NPU (Neural Processing Unit): procesador para ejecutar redes neuronales (IA).
+- Es la evolución del MAC del DSP: miles de MAC por ciclo en matrices (systolic arrays).
+  - Usa baja precisión (INT8, INT4, FP16) y memoria SRAM local.
+- Rendimiento en TOPS (billones de operaciones por segundo).
+  - Apple Neural Engine (M4): 38 TOPS. Intel, AMD y Qualcomm: 45-50 TOPS.
+- Usos: desenfoque de fondo en videollamadas, voz a texto, traducción, mejora de fotos.
+
+[BLOQUE 21] Programables específicas: Media/Vídeo
+- Bloques de hardware que codifican y decodifican vídeo dentro del SoC o de la GPU.
+  - Formatos: H.264, H.265/HEVC y AV1.
+- Codifican 4K/8K en tiempo real con muy poco consumo y dejan libres la CPU y la GPU.
+- Ejemplos: Apple Media Engine, NVIDIA NVENC/NVDEC, Intel Quick Sync, AMD VCN.
+- Usos: grabar vídeo con el móvil, streaming (OBS, Twitch), videollamadas, ver Netflix o YouTube.
+
+[BLOQUE 22] Dedicadas (ASIC)
+- Dedicadas (ASIC)
+  - Chip diseñado para una sola tarea; no se reprograma.
+  - Ventaja: máximo rendimiento y mínimo consumo.
+  - Inconveniente: diseño largo y caro; solo compensa con millones de unidades.
+  - Monolíticas (single chip): todo en un chip.
+    - Ej.: Google TPU, chip de minería Bitmain.
+  - Modulares (chipset): varios chips cooperan.
+    - Ej.: minero Antminer (cientos de chips).
+
+[BLOQUE 23] Reconfigurables (FPGA)
+- Reconfigurables (FPGA)
+  - Hardware que se reconfigura después de fabricarse para adaptar el circuito a cada aplicación.
+  - FPGA (Field-Programmable Gate Array): matriz de bloques lógicos (CLB) con interconexiones programables.
+  - Punto intermedio: más rápidas que una CPU y más flexibles que un ASIC.
+  - Usos: prototipos de chips, vídeo profesional en directo, estaciones 5G, centros de datos.
+  - Monolíticas (un chip): AMD (antes Xilinx), Altera (antes Intel), Lattice.
+  - Modulares (varias FPGA): servidores AWS EC2 F2, con hasta 8 FPGA.
+
+[BLOQUE 24] Conclusiones
+- Las MMA son cotidianas: vídeo 4K, streaming, videollamadas, IA en el móvil.
+- Tienen necesidades específicas:
+  - Almacenamiento masivo y fiable: compresión y RAID.
+  - Cómputo intensivo y repetitivo: paralelismo (SIMD) y operaciones MAC; localidad espacial pero poca reutilización.
+  - E/S y comunicación masivas, con calidad de servicio (QoS).
+- Cuanto más flexible es una arquitectura, menos eficiente es:
+  - Propósito general (CPU + SIMD): ejecuta cualquier programa, pero gasta más energía.
+  - Específicas (DSP, NPU, Media/Vídeo): programables, pero optimizadas para un tipo de tarea.
+  - Reconfigurables (FPGA): el circuito se cambia tras fabricarlo; útil si el algoritmo evoluciona.
+  - Dedicadas (ASIC): circuito fijo; máximo rendimiento y mínimo consumo, sin flexibilidad.
+- Por eso un SoC combina varias y envía cada tarea al bloque más eficiente.
+  - Ej.: en una videollamada con un Apple M4 o un Snapdragon, la CPU ejecuta la app, la NPU desenfoca el fondo y el motor de vídeo codifica la imagen.

@@ -1,0 +1,823 @@
+==============================================================================
+TEMA 3 (PARTE 1). DISPOSITIVOS PORTÁTILES. ESTRUCTURA E INFRAESTRUCTURAS
+==============================================================================
+
+==============================================================================
+1. DISPOSITIVOS PORTÁTILES
+==============================================================================
+
+[BLOQUE 1] Dispositivos portátiles: introducción
+- En los últimos años, la utilización de medios digitales ha experimentado un crecimiento espectacular.
+- Las aplicaciones multimedia no sólo se exigen en contextos locales, sino que las tecnologías se orientan actualmente, en gran medida, a la portabilidad.
+
+[BLOQUE 2] Smartphones: introducción
+- Smartphones - Introducción:
+  - Definición:
+    - Dispositivo móvil avanzado que combina funciones de teléfono, ordenador personal y cámara.
+    - Integra hardware y software para comunicaciones, gestión de datos, acceso a Internet y funciones de IA.
+  - Características básicas:
+    - Pantalla táctil OLED o LCD de 6 a 7 pulgadas.
+    - Procesador (SoC) con CPU, GPU y NPU para IA.
+    - Conectividad: 5G, Wi-Fi 6E/7, Bluetooth, GPS, NFC, eSIM.
+    - Sistema operativo móvil (Android, iOS, HarmonyOS).
+
+[BLOQUE 3] Smartphones: arquitectura y componentes
+- Smartphones - Arquitectura y Componentes:
+  - Procesador (SoC):
+    - “System-on-Chip” (SoC): integra CPU, GPU, NPU (IA), módem y otros componentes.
+    - Basados mayoritariamente en arquitectura ARM (eficiencia y bajo consumo).
+    - Ejemplos: Qualcomm Snapdragon, Apple A20, Samsung Exynos, MediaTek Dimensity, Google Tensor.
+  - Memoria y almacenamiento:
+    - RAM entre 6 GB y 16 GB (hasta 24 GB en gama alta).
+    - Almacenamiento flash (UFS 4.x o NVMe), sin partes móviles.
+    - Expansión por microSD, cada vez menos habitual.
+  - Sensores:
+    - Acelerómetro, giroscopio, brújula, barómetro, proximidad, luz, huella dactilar, reconocimiento facial.
+
+[BLOQUE 4] Smartphones: funcionalidades y conectividad
+- Smartphones - Funcionalidades y Conectividad:
+  - Redes móviles 4G y 5G (el 3G ya se ha apagado en muchos países).
+  - Wi-Fi 6/6E/7, Bluetooth 5.x, NFC, GPS multibanda, eSIM y doble SIM.
+  - UWB (banda ultraancha): localiza objetos y dispositivos al centímetro.
+  - Mensajería por satélite (gama alta): SOS y SMS sin cobertura móvil.
+  - Aplicaciones y multitarea:
+    - Varias apps a la vez y sincronización con servicios en la nube.
+    - Apps de terceros: App Store, Google Play y tiendas alternativas (UE).
+    - Asistentes con IA integrada (Gemini, Apple Intelligence).
+  - Usos comunes:
+    - Comunicación (voz, mensajería, videollamadas).
+    - Fotografía y vídeo (varias cámaras y fotografía computacional).
+    - Navegación web, redes sociales, entretenimiento, banca y pagos móviles.
+
+[BLOQUE 5] Smartphones: sistemas operativos
+- Tabla: Sistema operativo · Desarrollador · Características principales
+  - Android · Google · Código abierto (AOSP), líder mundial, muy personalizable.
+  - iOS · Apple · Sistema cerrado, alta seguridad e integración con su ecosistema.
+  - HarmonyOS NEXT · Huawei · Núcleo propio, sin apps Android; extendido sobre todo en China.
+  - KaiOS · KaiOS Technologies · Basado en Linux y HTML5, para teléfonos básicos con 4G.
+  - Android sin Google; GrapheneOS · e Foundation, GrapheneOS Foundation · Variantes de AOSP centradas en la privacidad.
+  - Windows Phone, Tizen, webOS · Microsoft, Samsung, LG · Descontinuados en móviles; Tizen y webOS siguen en Smart TVs.
+- Android fue creado por Android Inc. (2003), adquirida por Google en 2005.
+- Su código base es el Android Open Source Project (AOSP) bajo licencia Apache.
+
+[BLOQUE 6] Smartphones: tendencias (I) pantallas y cámaras
+- Tendencias (I) - Pantallas y cámaras:
+  - Pantallas OLED LTPO:
+  - LTPO ajusta la frecuencia de refresco de 1 a 120 Hz según el contenido:
+- fluidez al desplazarse y ahorro de batería con imagen fija.
+  - Picos de brillo de 3.000 nits o más para leer a pleno sol.
+  - Pantalla siempre activa (always-on) con hora y avisos a muy bajo consumo.
+  - Cámaras:
+    - Fotografía computacional: cada disparo fusiona varias fotos procesadas por IA (HDR, modo noche, retratos).
+    - Teleobjetivo periscópico: la luz se desvía con un prisma y permite zoom óptico de 4x–5x sin engrosar el móvil.
+    - Vídeo 8K y 4K a 120 fps; edición con IA (borrar objetos, mejorar el audio).
+
+[BLOQUE 7] Smartphones: tendencias (II) procesadores e IA
+- Tendencias (II) - Procesadores e IA:
+  - Chips de 2–3 nm con NPU:
+    - Un proceso más fino mete más transistores en el mismo espacio: más rendimiento con menos consumo.
+    - Ejemplos: Apple A20 Pro (2 nm), Snapdragon 8 Elite Gen 5 y MediaTek Dimensity 9500 (3 nm).
+    - La NPU ejecuta modelos de IA en local: más rápido, más privado y sin conexión.
+  - Asistentes de IA:
+    - Gemini (Android), Apple Intelligence (iOS) y Galaxy AI (Samsung).
+    - Usos: resumir y traducir textos y llamadas, redactar mensajes, editar fotos, buscar lo que hay en pantalla.
+    - Modelo híbrido: las tareas sencillas se resuelven en el móvil y las complejas en la nube.
+
+[BLOQUE 8] Smartphones: tendencias (III) software y ecosistemas
+- Tendencias (III) - Software y ecosistemas:
+  - Actualizaciones OTA:
+    - OTA (Over The Air): el sistema se descarga e instala sin cable ni ordenador.
+    - Google (Pixel 8 y posteriores) y Samsung (Galaxy S24 y posteriores)
+- prometen 7 años de actualizaciones.
+  - En la UE, desde junio de 2025, son obligatorios al menos 5 años de actualizaciones.
+  - Integración con ecosistemas:
+    - El móvil como centro: smartwatch, auriculares, tablet, PC y hogar conectado.
+    - Continuidad: copiar en el móvil y pegar en el PC, contestar llamadas desde el ordenador.
+    - Coche: Android Auto y CarPlay; el móvil también sirve como llave digital.
+
+[BLOQUE 9] Smartphones: tendencias (IV) formatos y reparabilidad
+- Tendencias (IV) - Formatos y reparabilidad:
+  - Plegables:
+    - Tipo libro (Galaxy Z Fold7, Pixel 10 Pro Fold) y tipo concha (Galaxy Z Flip7, Motorola razr).
+    - Ya existen modelos de triple pliegue, como el Huawei Mate XT.
+  - Ultrafinos:
+    - iPhone Air (5,6 mm) y Galaxy S25 Edge (5,8 mm), a cambio de menos batería y menos cámaras.
+  - Reparabilidad (ecodiseño UE, junio de 2025):
+    - Piezas de repuesto disponibles durante 7 años.
+    - Baterías que aguantan 800 ciclos conservando el 80 % de su capacidad.
+    - Etiqueta energética con nota de reparabilidad (de A a E).
+
+[BLOQUE 10] Smartphones: cuota de uso de sistemas operativos móviles
+- (Diapositiva con una imagen; sin texto extraíble.)
+- Gráfico: cuota de uso de sistemas operativos móviles en el mundo, % (Android frente a iOS), años 2019, 2020, 2021, 2022, 2023, 2024, 2025 y Sep 2026.
+- Valores que aparecen en el gráfico (el orden por año no se conserva en el texto extraído): Android 75,5 % · 69,2 % · 70,3 %; iOS 29,0 % · 30,8 % · 22,7 %.
+- Nota: media anual de páginas vistas desde móviles; 2026 = septiembre. Fuente: StatCounter Global Stats, 2026.
+
+[BLOQUE 11] Tablets: introducción
+- Sección: El auge de los dispositivos portátiles
+- Tablets - Introducción:
+  - Definición:
+    - Dispositivo portátil con pantalla táctil, entre el smartphone y el portátil.
+    - Con teclado y lápiz, sustituye al portátil en muchas tareas.
+  - Características generales:
+    - Pantallas de 8 a 14,6 pulgadas (de iPad mini a Galaxy Tab Ultra).
+    - Peso de 290 a 750 g; grosor desde 5,1 mm (iPad Pro M4/M5).
+    - Autonomía de unas 10 horas de uso continuado.
+    - Uso mixto: consumo de contenidos, educación y trabajo.
+  - Mercado:
+    - 152 millones de unidades vendidas en 2025 (+5 %), según IDC.
+
+[BLOQUE 12] Tablets: características técnicas
+- Tablets - Características técnicas:
+  - Pantalla y entrada de datos:
+    - Multitáctil LCD u OLED (OLED tándem en iPad Pro), hasta 120 Hz.
+    - Lápiz con presión e inclinación: Apple Pencil Pro, S Pen.
+    - Teclados con trackpad que se acoplan por imán.
+  - Hardware:
+    - Chips ARM de bajo consumo: Apple M5, Snapdragon 8 Elite, Dimensity.
+    - NPU para IA en el dispositivo; de 8 a 16 GB de RAM.
+    - Almacenamiento flash de 128 GB hasta 2 TB.
+    - Wi-Fi 7, Bluetooth 5.x, 5G opcional y USB-C/Thunderbolt.
+
+[BLOQUE 13] Tablets: sistemas operativos y aplicaciones
+- Tablets - Sistemas Operativos y Aplicaciones:
+  - Sistemas operativos más comunes:
+    - iPadOS (Apple): iPadOS 26 añade ventanas libres y barra de menús.
+    - Android (Google): Samsung, Lenovo, Xiaomi; Fire OS en Amazon.
+    - HarmonyOS (Huawei): tablets MatePad (China).
+    - Windows 11 (Microsoft): convertibles como Surface Pro.
+  - Uso principal:
+    - Streaming de vídeo, navegación, redes sociales y lectura.
+    - Videollamadas y mensajería.
+    - Educación: apps didácticas y exámenes digitales.
+    - Creatividad y trabajo: dibujo, edición de vídeo, ofimática.
+
+[BLOQUE 14] Tablets: tipos y tendencias
+- Tablets - Tipos y Tendencias:
+  - Tipos de tablets:
+    - Básicas: precio bajo, ocio y lectura (iPad, Galaxy Tab A, Fire).
+    - Profesionales: teclado y lápiz (iPad Pro, Surface Pro, Galaxy Tab S11).
+    - Educativas y rugerizadas: resistentes, con gestión centralizada.
+  - Tendencias actuales:
+    - IA integrada: Apple Intelligence, Galaxy AI, Gemini.
+    - Multitarea de escritorio: ventanas y monitor externo.
+    - OLED y 120 Hz también en la gama media.
+    - Continuidad con móvil y PC (portapapeles, llamadas, archivos).
+    - Pantallas mate y modos de lectura contra la fatiga visual.
+
+[BLOQUE 15] Tablets: mercado
+- Tablets: la irrupción del iPad disparó el desarrollo de tablets.
+- Tablets: el iPad lidera, con el 45 % del mercado (4T 2025).
+- Cuota de tablets por fabricante, mundial, 4T 2025 (unidades): Apple 19,6 M · Samsung 6,4 M · Lenovo 3,9 M · Huawei 3,0 M · Xiaomi 2,8 M · Otros 8,3 M. (Samsung y Lenovo asignados por orden de aparición en el gráfico.)
+- Total del trimestre: 44 millones de unidades. Fuente: Omdia, febrero de 2026.
+
+[BLOQUE 16] Tablets: historia (sustitutos de los portátiles)
+- Las tablets surgen como sustitutos de los portátiles:
+  - 1972 · Dynabook: concebido en 1968 por el informático Alan Kay. Nunca llegó a fabricarse, pero fue el modelo del portátil y la tableta actuales.
+  - 1979 · Apple Graphics Tablet: Apple encargó un dispositivo con este nombre cuando la tableta aún era ciencia ficción.
+  - 1989 · GRiDPad: primer avance de la tableta en una década dominada por la informática de escritorio.
+  - 1993 · Apple Newton MessagePad: quiso redefinir la informática personal, pero falló por su precio, su poca batería y su reconocimiento de escritura.
+  - 2001 · Intel Web Tablet: pantalla táctil con lápiz y procesador Intel StrongARM 1110, para navegar por la web con conexión inalámbrica a un PC.
+- Entre 2006 y 2014 la tablet llega al gran público:
+  - 2006 · Samsung Q1: primer equipo de la categoría Ultra Mobile PC (UMPC); destacó por su diseño elegante.
+  - 2010 · Apple iPad: pantalla de 9,7 pulgadas, miles de aplicaciones y precio razonable; con WiFi, 3G y varias capacidades de almacenamiento.
+  - 2010 · Samsung Galaxy Tab: uno de los primeros dispositivos Android tras el iPad; pantalla de 7 pulgadas, manejable con una mano.
+  - 2013 · Microsoft Surface Pro 2: más rápida y con más batería que el modelo original; su teclado retroiluminado es de los mejores accesorios.
+  - 2014 · iPad Air 2: más delgada, más rápida y con más prestaciones que sus predecesoras; un modelo difícil de superar.
+- Desde 2015 la tablet se acerca al portátil:
+  - 2015 · iPad Pro: pantalla de 12,9 pulgadas, Apple Pencil y teclado: el iPad pasa a ser una herramienta de trabajo y creación.
+  - 2016 · Samsung Galaxy TabPro S: primera Galaxy con Windows y teclado extraíble, pensada como rival del Surface Pro.
+  - 2018 · iPad Pro (3.ª generación): diseño de borde a borde, Face ID en lugar de Touch ID y USB-C en lugar de Lightning.
+  - 2025 · Samsung Galaxy Tab S11 Ultra: pantalla de 14,6 pulgadas y modo DeX ampliado para trabajar con un monitor externo.
+  - 2025 · iPad Pro con chip M5: chip M5 y pantalla OLED. iPadOS 26 añade ventanas de apps, como en macOS.
+
+[BLOQUE 17] Wearables: introducción
+- Wearables
+- Wearables - Introducción
+- Definición:
+  - Los wearables (del inglés wearable technology, “tecnología vestible”) son dispositivos electrónicos que se llevan puestos en el cuerpo y que registran, procesan o transmiten información.
+  - Están diseñados para ser ligeros, cómodos y conectarse con smartphones u otros dispositivos.
+- Ejemplos más comunes:
+  - Relojes inteligentes (smartwatches).
+  - Pulseras de actividad (fitness bands).
+  - Gafas inteligentes (smart glasses).
+  - Auriculares inteligentes.
+  - Ropa o calzado con sensores integrados.
+
+[BLOQUE 18] Wearables: características
+- (Diapositiva con una imagen; sin texto extraíble.)
+- Wearables - Características
+- Características principales:
+- Tamaño reducido y portabilidad constante.
+- Conectividad Bluetooth, Wi-Fi o NFC con el teléfono móvil.
+- Sensores integrados (acelerómetro, pulsómetro, GPS, giroscopio…).
+- Baterías recargables de bajo consumo (litio-ión).
+- Interfaz simplificada: pantalla táctil, botones o comandos de voz.
+
+[BLOQUE 19] Wearables: componentes
+- Wearables - Componentes. Componentes típicos (Componente · Función):
+  - Microcontrolador / SoC ARM · Procesamiento y gestión de energía
+  - Sensores biométricos · Miden pulso, temperatura, movimiento, sueño
+  - Módulo inalámbrico · Comunicación con el smartphone
+  - Pantalla OLED / e-Ink · Interfaz visual
+  - Batería · Alimentación del sistema
+
+[BLOQUE 20] Wearables: funcionalidades y usos
+- Wearables - Funcionalidades y Usos
+- Principales usos de los wearables:
+  - Salud y bienestar: monitoreo de frecuencia cardíaca, sueño, estrés, oxígeno en sangre.
+  - Actividad física: conteo de pasos, calorías, seguimiento GPS.
+  - Comunicación: notificaciones, llamadas, mensajes.
+  - Seguridad: detección de caídas, alertas de emergencia.
+  - Productividad: control por voz, recordatorios, pagos móviles.
+- Ejemplos populares:
+  - Relojes y pulseras: Apple Watch, Huawei Watch, Xiaomi Smart Band, Samsung Galaxy Watch, Garmin.
+  - Anillos inteligentes: Oura, Samsung Galaxy Ring, Ultrahuman, RingConn.
+  - Gafas inteligentes: Ray-Ban Meta.
+  - Cuota de relojes inteligentes en 2025: Apple 23,3 %, Huawei 14,6 %, Samsung 10,7 %.1
+- 1 ABI Research, nota de prensa sobre el mercado de dispositivos vestibles, abril de 2026.
+
+[BLOQUE 21] Wearables: sistemas operativos
+- Wearables - Sistemas Operativos. Sistemas operativos más comunes (Sistema operativo · Fabricante · Características):
+  - watchOS · Apple · Integrado con iPhone y los servicios de Apple.
+  - Wear OS · Google · Base de los Galaxy Watch y Pixel Watch; requiere teléfono Android.
+  - HarmonyOS · Huawei · Integración con el ecosistema Huawei.
+  - Tizen · Samsung · Sustituido por Wear OS desde el Galaxy Watch 4 (2021).
+  - Sistemas propios · Xiaomi, Garmin, Fitbit · Ligeros y de bajo consumo (HyperOS, Garmin OS, Fitbit OS).
+
+[BLOQUE 22] Wearables: ecosistema
+- Wearables - Ecosistema
+- Integración con el ecosistema móvil:
+  - Sincronización con apps de salud y fitness.
+  - Conexión constante vía Bluetooth LE.
+  - Acceso a notificaciones, música, cámara, pagos móviles (NFC).
+- Cada fabricante tiene su propio ecosistema:
+  - Apple: Apple Watch con iPhone. Apps: Watch y Salud.
+  - Wear OS: Google y Samsung, con Android. Apps: Samsung Health, Fitbit.
+  - Huawei: HarmonyOS con Android o iOS. App: Huawei Health.
+  - Xiaomi y Garmin: HyperOS y Garmin OS, con Android o iOS. Apps: Mi Fitness, Garmin Connect.
+
+[BLOQUE 23] Wearables: tendencias y futuro
+- Wearables - Tendencias y Futuro
+- Tendencias actuales:
+  - Sensores más precisos y nuevos parámetros biométricos (ECG, presión arterial, glucosa no invasiva).
+  - IA en el dispositivo (NPU) para análisis de salud en tiempo real.
+  - Mayor autonomía energética y carga solar o inalámbrica.
+  - Ropa inteligente (smart clothing) y dispositivos médicos portátiles.
+  - Gafas inteligentes con IA y realidad aumentada o mixta (AR/MR): los envíos de gafas sin pantalla crecieron un 167 % interanual en el primer trimestre de 2026 y Meta concentra el 69 % del mercado.1
+  - Ejemplos emergentes: Meta Quest, Apple Vision Pro, Ray-Ban Meta, Meta Ray-Ban Display, Oura Ring.
+- 1 IDC, Worldwide Quarterly Wearable Device Tracker, primer trimestre de 2026 (cuota de Meta sobre el total de gafas inteligentes).
+- (Diapositiva con imágenes; sin texto extraíble.)
+- (Diapositiva con imágenes; sin texto extraíble.)
+
+[BLOQUE 24] Wearables: clasificación por atributos
+- Wearables, clasificación por atributos:
+  - Atributos físicos: Ligero · Estético · Discreto · Adaptable a la forma
+  - Atributos funcionales: Multifuncional · Configurable · Reactivo · Ancho de banda
+- Wearables, atributos físicos (Atributo · Qué implica · Ejemplo):
+  - Ligero · Pesa poco para llevarlo todo el día sin molestias. · Pulsera de actividad
+  - Estético · Diseño atractivo que el usuario quiere lucir. · Relojes con esferas y correas intercambiables
+  - Discreto · Pasa desapercibido, integrado en objetos de uso diario. · Anillo inteligente
+  - Adaptable a la forma · Se ajusta al cuerpo: flexible, elástico o curvado. · Ropa con sensores
+- Wearables, atributos funcionales (Atributo · Qué implica · Ejemplo):
+  - Multifuncional · Reúne varias funciones en un solo dispositivo. · Reloj con salud, pagos y llamadas
+  - Configurable · El usuario ajusta funciones, sensores y avisos. · Esferas y apps personalizables
+  - Reactivo · Responde en tiempo real al usuario o al entorno. · Aviso de caída o de pulso alto
+  - Ancho de banda · Transmite datos con rapidez y poco consumo. · Bluetooth LE con el móvil, Wi-Fi o LTE
+
+[BLOQUE 25] Wearables: taxonomía
+- Wearables, taxonomía. Criterios y opciones:
+  - Funcionalidad: Monofuncional · Multifuncional
+  - Tipo: Activo · Pasivo
+  - Modo de despliegue: Invasivo · No invasivo
+  - Modo de comunicación: Con cables · Inalámbrico
+  - Desechable o reutilizable: Desechable · Reutilizable
+  - Ámbito de uso: Salud · Información · Seguridad · Acústica · Ocio · Presión · Militar · Posición
+- Wearables, taxonomía: criterios de clasificación (Criterio · Opciones · Ejemplo):
+  - Funcionalidad · Monofuncional o multifuncional · Pulsera de pasos o reloj con salud, pagos y llamadas
+  - Tipo · Activo o pasivo · Reloj inteligente con batería o etiqueta NFC sin batería
+  - Modo de despliegue · Invasivo o no invasivo (con o sin contacto corporal) · Sensor subcutáneo de glucosa o reloj de muñeca
+  - Comunicación · Con cables o inalámbrica · Sensor con cable o reloj con Bluetooth
+  - Desechable o reutilizable · Un solo uso o uso repetido · Parche de ECG de un solo uso o reloj inteligente
+- Wearables, taxonomía: ámbito de uso (Ámbito · Aplicación):
+  - Salud · Pulsómetro, ECG y monitor de glucosa
+  - Procesamiento de información · Gafas con pantalla y relojes con apps
+  - Seguridad pública · Detección de caídas y alertas de emergencia
+  - Detección acústica · Auriculares que captan voz o ruido ambiente
+  - Ocio · Visores de realidad virtual y mandos de gestos
+  - Detección de presión · Plantillas y calzado con sensores
+  - Militar · Visión y comunicación del soldado
+  - Seguimiento de posición · GPS en pulseras y localizadores
+
+[BLOQUE 26] Wearables: crear un negocio asociado a un wearable
+- Wearables: crear un negocio asociado a un wearable. La prueba de fuego: demostrar valor para el usuario final.
+  1. Articulación de la necesidad: necesidad de la tecnología en un dominio elegido.
+  2. Eficacia de la tecnología: demostrar su eficacia a través de las métricas de coste, calidad y comodidad.
+  3. Mejora del rendimiento · Ventaja en costes · Mayor comodidad: el usuario final debe experimentar el valor de la tecnología que motivará al usuario o al pagador a «pagar por él».
+  4. Política pública: privacidad y acceso a datos.
+  5. Wearables en el mercado: una vez que las necesidades se articulan bien en el dominio y los beneficios son corroborados por el usuario final, la empresa procederá con el desarrollo y la comercialización del wearable.
+- Actores implicados: usuario final, pagador, experto del dominio y empresa comercializadora.
+
+[BLOQUE 27] Wearables: retos y oportunidades
+- Wearables, Retos y oportunidades:
+- El éxito de cualquier producto innovador en el mercado depende de:
+  - Su eficacia en la comprensión de las necesidades del usuario y su cumplimiento.
+  - Su compatibilidad con los productos o soluciones similares existentes.
+  - La magnitud de los cambios de comportamiento necesarios para utilizar el nuevo producto.
+  - La reducción en el coste de las soluciones o las tecnologías actuales que se pretende suplantar.
+  - La mejora en la calidad de servicio (o rendimiento)
+  - La mejora de la comodidad del usuario
+- Wearables, retos y oportunidades:
+  - La innovación debe proporcionar una ventaja tangible para el usuario.
+  - Debe ser coherente y compatible con los valores, las creencias y las necesidades del usuario.
+  - No siempre una tecnología innovadora ha sido un éxito en el mercado:
+    - (Diapositiva con imágenes de ejemplos; sin texto extraíble.)
+
+[BLOQUE 28] Textillography: definiciones y niveles
+- Textillography:
+  - Textil inteligente (e-textil): tejido que integra funciones electrónicas (sensores, conductores, a veces energía) y puede detectar o responder a su entorno.
+  - Meta-wearable: red de sensores y procesadores repartidos por la prenda y conectados entre sí, próxima al cuerpo humano.
+  - Textillography: proceso que automatiza las interconexiones durante la fabricación de la tela, para que salga ya con las uniones hechas en lugar de unirlas a mano.
+- Definición de textil inteligente basada en: Energy Reports 14 (2025), «The future of fabric». Las demás, del temario de la asignatura.
+- Textillography (tejidos inteligentes o smart fabrics): la tela se fabrica ya con sensores, conductores y conexiones integrados.
+- Tres niveles:
+  1. Electrónica añadida: un módulo se coloca sobre la prenda o se lleva en un bolsillo. Ejemplo: banda de pecho con módulo extraíble.
+  2. Electrónica integrada: sensores y conductores cosidos o bordados en la prenda. Ejemplo: camiseta con electrodos textiles.
+  3. La tela como dispositivo: fibras conductoras tejidas: la propia tela es sensor y cableado. Ejemplo: tejido con bus de datos y conectores en T.
+- Retos técnicos: Interconexión · Interfaz y señal · Materiales · Energía y entorno · Privacidad
+
+[BLOQUE 29] Textillography: interconexión
+- Textillography: interconexión
+  - Red próxima al cuerpo: el éxito de los wearables depende de conectarse sin problemas.
+  - Interconexión manual: hasta ahora las uniones en materiales textiles se hacen a mano (framework Meta-wearable).
+  - Textillography: automatizar las interconexiones durante la fabricación de la tela.
+  - Tolerancia a fallos: si falla el bus de datos, se reconoce de inmediato y se establece un camino alternativo.
+- Esquema: fibras base, bus de datos, puntos de interconexión, conectores en T, sensores, micrófono y procesador multifunción.
+
+[BLOQUE 30] Textillography: capas de la prenda
+- Textillography: capas de la prenda (esquema de una camisa inteligente, «The smart schematic»):
+  - Conductor eléctrico: transporta señales y energía por la prenda.
+  - Detección óptica: capta información mediante luz, por ejemplo el pulso.
+  - Ajuste a la forma: adapta la prenda al cuerpo para medir con precisión.
+  - Disipación estática: evita la acumulación de electricidad estática.
+  - Confort: mantiene el tacto y la transpirabilidad del tejido.
+- Un cambio en una capa afecta a las demás: la prenda se diseña como un sistema, no como sensores sueltos.
+
+[BLOQUE 31] Textillography: interfaz y señal
+- Textillography: interfaz y señal
+  - Interfaz común:
+    - Una toma común, similar a la RJ-11 de los teléfonos.
+    - Sensores y procesadores del metawearable intercambiables.
+    - Dispositivos y sensores de uso general: menor coste.
+  - Procesamiento de señal:
+    - Estudios profundos de sistemas y algoritmos.
+    - Procesamiento de señal robusto.
+    - Datos de calidad generados por los wearables.
+- Sin una interfaz común, cada fabricante diseña su propio módulo y el coste sube.
+
+[BLOQUE 32] Textillography: materiales conductores
+- Textillography: materiales conductores (Requisito · Qué se necesita):
+  - Conductividad · La del cobre.
+  - Propiedades textiles · Las de las fibras comunes: algodón, poliéster o nailon.
+  - Producción · Disponibles en cantidades comerciales.
+  - Durabilidad · Conservar la conductividad tras los lavados.
+- Estado actual: el lavado sigue siendo el principal obstáculo y no existen métodos estandarizados para lavar e-textiles. Los hilos electrónicos, los recubrimientos protectores y los encapsulados robustos lo van resolviendo.
+
+[BLOQUE 33] Textillography: energía y entorno
+- Textillography: energía y entorno
+  - Energía:
+    - Baterías rígidas: las de iones de litio son el factor limitante, porque los wearables son flexibles.
+    - Alternativas: baterías flexibles y captación de energía en la propia tela (piezoeléctrica, triboeléctrica, termoeléctrica y solar).
+    - Límite actual: su potencia aún no basta para tareas exigentes, como la IA en tiempo real.
+  - Entornos de uso:
+    - Interior y aire libre.
+    - Materiales peligrosos.
+    - Zonas de altas temperaturas (p. ej., fuego).
+    - Lavados repetidos de la prenda.
+    - Deben funcionar con eficacia y sin problemas en una amplia gama de entornos.
+
+[BLOQUE 34] Textillography: privacidad de datos
+- Textillography: privacidad de datos
+- Los wearables recogen información personal: la privacidad, la seguridad de los datos y la aceptación social deben abordarse desde el diseño.
+  - Qué recogen: pulso, temperatura, movimiento y sueño, de forma continua y en contacto con la piel.
+  - Qué riesgo hay: acceso no autorizado, uso sin consentimiento y filtración de datos de salud.
+  - Qué exige la ley: el RGPD prohíbe tratar datos de salud salvo excepciones, como el consentimiento explícito.¹
+- Buenas prácticas: recoger solo los datos necesarios, cifrarlos y dejar que el usuario decida quién accede a ellos.
+- ¹ Reglamento (UE) 2016/679 (RGPD), art. 9: tratamiento de categorías especiales de datos personales.
+
+[BLOQUE 35] Wearables: enfoque transdisciplinario
+- Wearables: enfoque transdisciplinario para hacer realidad el futuro (el wearable en el centro).
+  - Disciplinas y su aportación: Ingeniería de materiales y textiles (da forma y tacto) · Electrónica (mide y procesa) · Informática y comunicación (analiza y conecta) · Ingeniería de fabricación y sistemas (lo produce) · Diseño industrial (lo hace usable) · Ciencias sociales (lo hace aceptable).
+  - Elementos del wearable: Sensores · Fuentes de energía · Materiales · Actuadores · Procesadores · Métodos de fabricación · Interconexiones · Estándares.
+- Un cambio en cualquiera de los bloques afecta a los demás.
+- Es importante verlo como un ecosistema unificado en lugar de una colección de piezas individuales.
+
+[BLOQUE 36] Wearables: conclusión («Information Anywhere, Anytime, Anyone»)
+- Wearables
+  - Los wearables se están convirtiendo en parte integral de nuestras vidas digitales.
+  - Las posibles áreas de aplicación están sólo limitadas por nuestra imaginación.
+  - Actualmente, es difícil imaginar la vida sin un wearable.
+- El paradigma «Information Anywhere, Anytime, Anyone» es una realidad gracias a los wearables:
+  - Anywhere (en cualquier lugar): en casa, en la calle, en el trabajo o haciendo deporte.
+  - Anytime (en cualquier momento): de forma continua: de día, de noche y mientras dormimos.
+  - Anyone (para cualquier persona): de cualquier edad, en salud, ocio, trabajo y seguridad.
+
+==============================================================================
+2. INTERFACES
+==============================================================================
+
+[BLOQUE 37] Pantallas táctiles: qué son
+- Pantallas táctiles: qué son
+  - Una pantalla táctil es un periférico de entrada y de salida a la vez: muestra la imagen y detecta dónde la toca el dedo o un lápiz, sin necesidad de ratón ni teclado.
+  - Táctil: detecta un solo punto de contacto a la vez. Ejemplo: cajero automático o TPV.
+  - Multitáctil: detecta varios puntos a la vez y reconoce gestos: pellizcar para ampliar, deslizar o girar. Ejemplo: móvil o tableta.
+- Ventaja clave: la interfaz cambia con el software, así que el mismo dispositivo sirve para teclado, mapa, juego o dibujo.
+
+[BLOQUE 38] Pantallas táctiles: historia
+- Pantallas táctiles: historia
+  - 1971 · Primeros usos: se inventó la pantalla táctil; se empleó al inicio en TPV y cajeros automáticos.
+  - 1983 · HP-150: primer ordenador comercial con pantalla táctil (Sony).
+  - Años 90 · Llegan al consumo: surgen las primeras aplicaciones de consumo.
+  - 1997 · Tiger Electronics: lanza la primera consola con pantalla táctil.
+- Pantallas táctiles: historia reciente
+  - 2004 · Nintendo DS: segunda consola táctil, con dos pantallas.
+  - 2007 · iPhone: populariza la pantalla multitáctil en el móvil.
+  - 2010 · iPad: lleva el multitáctil a las tabletas.
+  - 2012 · Tesla Model S: pantalla táctil de 17 pulgadas en el salpicadero, en lugar de botones.
+  - 2019 · Samsung Galaxy Fold: primer móvil plegable de Samsung, con pantalla táctil flexible.
+
+[BLOQUE 39] Pantallas táctiles: tipos de tecnología
+- Pantallas táctiles: tipos de tecnología (Tecnología · Cómo detecta el toque):
+  - SAW (onda acústica) · Ondas de ultrasonido absorbidas por el dedo
+  - Infrarrojos · Haces de luz interrumpidos
+  - Imagen óptica · Cámaras que ven la sombra del dedo
+  - Resistiva · Dos capas conductoras que se tocan
+  - Capacitiva de superficie · El dedo altera el campo eléctrico de la superficie
+  - Capacitiva proyectada (PCAP) · Rejilla de electrodos; permite multitáctil
+  - Pantallas integradas · Sensores táctiles dentro del propio panel
+
+[BLOQUE 40] Pantallas táctiles: SAW (onda acústica)
+- Usos: Cajeros automáticos, quioscos y terminales bancarios.
+- Onda Acústica Superficial (SAW, del inglés Surface Acoustic Wave)
+- Utiliza ondas de ultrasonidos que se transmiten sobre la pantalla táctil. Al tocar la pantalla, una parte de la onda es absorbida. Este cambio en las ondas permite registrar la posición en la que se ha tocado la pantalla y enviarla al controlador.
+- El funcionamiento de estas pantallas puede verse afectado por elementos externos (polvo, agua…).
+- La presencia de contaminantes sobre la superficie también puede interferir con el funcionamiento.
+- Ventaja: al ser toda de cristal, sin capas sobre la imagen, ofrece gran claridad.
+
+[BLOQUE 41] Pantallas táctiles: infrarrojos
+- Pantallas táctiles: infrarrojos Usos: Quioscos, pizarras digitales y aplicaciones militares.
+- Infrarrojos
+- Consisten en una matriz de sensores y emisores infrarrojos horizontales y verticales.
+- En cada eje los receptores están en el lado opuesto a los emisores, de forma que al tocar con un objeto la pantalla se interrumpe en un haz infrarrojo vertical y otro horizontal, permitiendo de esta forma localizar la posición exacta en que se realizó el contacto.
+- Son muy resistentes, por lo que son utilizadas en muchas aplicaciones militares que exigen pantalla táctil.
+- Limitación: los emisores consumen más energía, por lo que se usan sobre todo en equipos conectados a la red.
+
+[BLOQUE 42] Pantallas táctiles: imagen óptica
+- Pantallas táctiles: imagen óptica Usos: Pizarras digitales y pantallas de gran tamaño.
+- Imagen Óptica
+- Dos o más sensores se ubican alrededor de la pantalla, por lo general en las esquinas. Emisores de infrarrojos se ubican en el campo de vista de la cámara en los otros lados de la pantalla.
+- Un toque en la pantalla muestra una sombra de forma que cada par de cámaras puede triangularizarla para localizar el punto de contacto.
+- Empleado especialmente para pantallas de gran tamaño.
+
+[BLOQUE 43] Pantallas táctiles: resistivas
+- Pantallas táctiles: resistivas Usos: Industria, TPV, sanidad y PDA antiguas.
+- Formada por varias capas. Las más importantes son dos finas capas de material conductor entre las que hay una pequeña separación.
+- Cuando algún objeto toca la superficie de la capa exterior, las dos capas conductoras entran en contacto en un punto concreto. Así, se produce un cambio en la corriente eléctrica que permite a un controlador calcular la posición del punto en el que se ha tocado la pantalla midiendo la resistencia.
+- Responde a la presión, así que vale un dedo, un guante o un lápiz.
+- Algunas pantallas pueden medir, además de las coordenadas del contacto, la presión ejercida sobre la superficie.
+- Son económicas, pero las múltiples capas reducen la luz que llega al usuario: transmiten entre el 75 % y el 85 % del brillo de la pantalla. Pueden dañarse con objetos afilados. El polvo y el agua no las afectan.
+
+[BLOQUE 44] Pantallas táctiles: capacitiva de superficie
+- Pantallas táctiles: capacitiva de superficie Usos: Quioscos, cajeros y terminales públicos.
+- Está cubierta con un material conductor transparente, normalmente óxido de indio y estaño, al que se aplica un voltaje pequeño creando un campo eléctrico. Este campo de electrones está controlado con precisión tanto en el eje vertical como en el horizontal; es decir, adquiere capacitancia.
+- El cuerpo humano también se puede considerar un dispositivo eléctrico, por lo que también dispone de capacitancia.
+- Cuando el campo de capacitancia normal del sensor (su estado de referencia) es alterado por otro campo de capacitancia, como un dedo, los circuitos electrónicos situados en cada esquina de la pantalla miden la distorsión resultante y envían la información acerca del evento al controlador para su procesamiento
+- Los sensores deben tocarse con un dispositivo conductivo en contacto directo con la mano o con un dedo
+- Son inmunes a elementos externos y tienen una alta claridad, sensibilidad y calidad.
+
+[BLOQUE 45] Pantallas táctiles: capacitiva proyectada (PCAP)
+- Pantallas táctiles: capacitiva proyectada Usos: Móviles, tabletas, portátiles y coches.
+- Capacitiva proyectada (PCAP)
+- Una rejilla de electrodos transparentes (filas y columnas) bajo el cristal mide la capacitancia en cada cruce.
+- Cuando un dedo se acerca, cambia la capacitancia en ese punto y el controlador calcula la posición.
+- Detecta varios dedos a la vez (multitáctil, de 5 a 10 puntos) y funciona a través de un cristal protector.
+- Frente a la de superficie, no depende de circuitos en las esquinas, sino de la rejilla, y por eso permite multitáctil.
+
+[BLOQUE 46] Pantallas táctiles: pantallas integradas (on-cell, in-cell)
+- Pantallas táctiles: pantallas integradas Usos: La mayoría de los móviles actuales.
+- Pantallas integradas (on-cell, in-cell)
+- Los sensores táctiles van dentro del propio panel de la pantalla, en lugar de añadir una capa aparte.
+- On-cell: los electrodos se sitúan sobre la capa de color del panel. In-cell: se integran dentro de las celdas de píxeles.
+- El dispositivo resulta más fino y ligero, y la imagen gana claridad al eliminar una capa.
+- Suelen usar detección capacitiva; es una forma de fabricar la capacitiva, no un principio físico distinto.
+
+[BLOQUE 47] Pantallas táctiles: especificación HID
+- Pantallas táctiles: especificación HID HID (Human Interface Device)
+- Es la especificación que define cómo un dispositivo de entrada se comunica con el ordenador, sin necesidad de un controlador propio.
+- Nació para USB y hoy también se usa por Bluetooth.
+- Las pantallas táctiles se encuentran definidas dentro de la especificación HID como digitalizadores, igual que otros dispositivos:
+  - Touchpads.
+  - Tabletas digitalizadoras.
+  - Otros dispositivos de entrada similares.
+    - La especificación incluye campos, como la presión o el toque, que el sistema traduce en acciones.
+
+[BLOQUE 48] Pantallas táctiles: eventos de toque
+- Pantallas táctiles: eventos de toque (Campo · Qué indica · El sistema lo interpreta como):
+  - Tip Pressure · La fuerza ejercida por un transductor, habitualmente un puntero o también un dedo · Pulsación más o menos fuerte
+  - Touch · Que un dedo está tocando la pantalla · Un clic de botón
+  - Untouch · Que el dedo ha perdido contacto con la superficie · Soltar el botón
+  - Tap · Un toque rápido: el dedo se levanta sin prolongar el contacto · Un evento provocado por un botón
+  - Contact ID y Contact Count · Qué dedo es cada contacto y cuántos hay a la vez · Gestos multitáctiles
+
+[BLOQUE 49] Displays: panorama de tecnologías
+- Displays: panorama de tecnologías (Tecnología · Cómo produce la imagen · Uso típico):
+  - LCD (TFT, IPS) · Cristal líquido iluminado por una retroiluminación · Monitores, televisores y móviles de gama media
+  - OLED / AMOLED · Cada píxel emite su propia luz · Móviles, relojes y televisores de gama alta
+  - Mini-LED · LCD con miles de pequeños LED de retroiluminación · Televisores, tabletas y portátiles de gama alta
+  - MicroLED · Cada píxel es un LED microscópico · Televisores de gama alta; poco extendido
+  - Tinta electrónica · Partículas que reflejan la luz ambiental · Lectores de libros electrónicos y etiquetas
+
+[BLOQUE 50] Displays: LCD (TFT e IPS)
+- LCD (Liquid Crystal Display)
+- Una capa de cristal líquido, iluminada por detrás, deja pasar más o menos luz en cada píxel.
+- TFT (Thin Film Transistor): transistores de película fina que controlan cada píxel. Es la base de casi todos los LCD actuales.
+- IPS (In-Plane Switching): tipo de panel LCD con mayores ángulos de visión y mejor color. Es habitual en móviles de gama media, tabletas y monitores.
+- Ventaja: el coste de producción es bajo.
+- Desventaja: la retroiluminación consume mucha energía, sobre todo en pantallas grandes, y reduce la batería.
+
+[BLOQUE 51] Displays: Retina
+- Displays: Retina. Retina: una marca, no una tecnología
+  - Es una marca registrada por Apple, no una tecnología en sí.
+  - Se basa en pantallas de alta densidad de píxeles (PPI): primero LCD IPS y hoy también OLED.
+  - Objetivo: píxeles tan pequeños que el ojo humano no los distingue a la distancia normal de uso.
+  - ≈ 300 píxeles por pulgada: umbral Retina en un teléfono.
+  - Por encima del umbral, los bordes se ven más suaves y las imágenes y los textos parecen impresos.
+  - Si nos acercamos demasiado, se notan los píxeles; si nos alejamos, se pierde el detalle.
+- Displays: IPS y funciones Retina
+  - IPS frente al LCD tradicional:
+    - Mayor ángulo de visión: hasta 178º.
+    - Mejor reproducción del color y contraste.
+    - Menor variación de brillo al cambiar de ángulo.
+  - Funciones Retina actuales:
+    - True Tone: ajusta el color según la luz ambiental.
+    - ProMotion: frecuencia de refresco adaptativa, hasta 120 Hz.
+    - P3 Wide Color: gama cromática ampliada.
+  - Tabla (Dispositivo · Densidad · Tipo de panel · Denominación comercial):
+    - iPhone 17 Pro · 460 ppi · OLED · Super Retina XDR
+    - iPad Air · 264 ppi · LCD IPS · Liquid Retina
+    - iPad Pro · 264 ppi · OLED tándem · Ultra Retina XDR
+    - MacBook Pro 14" · 254 ppi · Mini-LED · Liquid Retina XDR
+
+[BLOQUE 52] Displays: OLED y AMOLED
+- Displays: OLED y AMOLED OLED (Organic Light-Emitting Diode)
+- Diodos orgánicos que producen luz por sí mismos: no hay cristal líquido ni retroiluminación.
+- Cada píxel se ilumina solo cuando se activa electrónicamente; para el negro, se apaga.
+- AMOLED (Active Matrix OLED): OLED con una matriz activa de transistores TFT que controla cada píxel. Es la variante habitual en móviles y relojes.
+- Frente a la OLED de matriz pasiva (PMOLED), consume menos y permite pantallas más grandes y de más resolución.
+- Permite paneles flexibles y plegables.
+
+[BLOQUE 53] Displays: AMOLED frente a LCD
+- Displays: AMOLED frente a LCD (Aspecto · AMOLED · LCD (IPS)):
+  - Negros y contraste · Negro real, contraste muy alto · Negro menos intenso: la retroiluminación se filtra
+  - Grosor · Más fino: sin retroiluminación · Más grueso
+  - Consumo · Menor, sobre todo con imágenes oscuras · Constante, por la retroiluminación
+  - Tiempo de respuesta · Muy rápido · Más lento
+  - Durabilidad · Puede sufrir quemado de imagen · Sin quemado; más estable
+  - Coste · Mayor · Menor
+
+[BLOQUE 54] Displays: nuevas tecnologías
+- Displays: nuevas tecnologías (Tecnología · Qué aporta · Dónde está):
+  - Mini-LED · LCD con miles de LED pequeños y atenuación local: más contraste y brillo · Televisores, tablets y portátiles de gama alta
+  - MicroLED · Cada píxel es un LED microscópico: negro real y mucho brillo; fabricación muy cara · Televisores gama alta; poco extendido
+  - OLED tándem y QDOLED · Dos capas emisoras, o puntos cuánticos: más brillo, color y vida útil · Tablets de gama alta y televisores
+  - LTPO · Refresco variable de 1 a 120 Hz: ahorra batería · Móviles y relojes con pantalla siempre activa
+  - Pantallas plegables · OLED sobre un sustrato flexible · Móviles plegables
+
+==============================================================================
+3. CONECTIVIDAD
+==============================================================================
+
+[BLOQUE 55] Conectividad: introducción
+- Los sistemas multimedia modernos basan gran parte de su funcionalidad en la capacidad de conectarse e intercambiar datos con otros dispositivos y servicios digitales.
+- Esta conectividad permite ampliar las prestaciones, mejorar la experiencia de usuario y crear ecosistemas inteligentes.
+- Los dispositivos multimedia pueden comunicarse con:
+  - Otros dispositivos del mismo tipo (p. ej. tvs o consolas en red).
+  - Periféricos externos (mandos, altavoces, cámaras, proyectores, etc.).
+  - Smartphones, tablets y ordenadores (control remoto, sincronización de contenidos).
+  - Sensores y objetos inteligentes (IoT) (relojes, balanzas, domótica, etc.).
+  - Servicios en la nube (almacenamiento, streaming, actualizaciones OTA).
+- La creación de redes multimedia depende de:
+  - Requerimientos de la plataforma (ancho de banda, latencia, consumo energético).
+  - Tipo de medio de transmisión (inalámbrico o cableado).
+  - Protocolos y estándares empleados (Wi-Fi, Bluetooth, NFC, Ant, Zigbee, etc.).
+  - Los entornos inalámbricos suelen ser variables y ruidosos, por lo que se requieren protocolos robustos y mecanismos de corrección de errores.
+
+[BLOQUE 56] IrDA
+- Estándar que define la forma de transmisión y recepción de datos por rayos infrarrojos.
+- Permite comunicación bidireccional con tasas de transferencia de 9.600 bps a 4 Mbps.
+- La distancia entre transmisor y receptor debe ser pequeña (10 m) y con un ángulo mínimo de 15o.
+- Actualmente, está siendo sustituido por otras tecnologías como Bluetooth y WiFi.
+
+[BLOQUE 57] Bluetooth: características
+- Permite transmitir voz y datos entre distintos dispositivos mediante un enlace por radiofrecuencia en la banda ISM de 2,4 GHz.
+- ISM: bandas de radio reservadas para uso (i)ndustrial, (s)científico y (m)edico.
+- Los dispositivos no tienen por qué estar alineados e incluso pueden estar en estancia separadas
+- Simplicidad de conexión:
+  - Permite detectar y enlazar dispositivos de forma automática, sin necesidad de configurar direcciones IP, contraseñas o parámetros de red complejos.
+  - Los dispositivos pueden anunciar sus servicios disponibles (por ejemplo, audio, transferencia de archivos, control remoto), facilitando el emparejamiento.
+  - Reduce la complejidad del usuario: el proceso de conexión se realiza con unos pocos toques
+  - incluso de forma transparente (auto-pairing).
+- Accesibilidad universal:
+  - Casi todos los smartphones, tablets, ordenadores portátiles y vehículos actuales incorporan conectividad Bluetooth.
+  - Garantiza una alta interoperabilidad entre dispositivos de distintos fabricantes.
+  - No requiere infraestructura externa (routers, puntos de acceso, etc.).
+- Otras ventajas complementarias:
+  - Bajo consumo energético, ideal para wearables, sensores y auriculares inalámbricos.
+  - Coste reducido de implementación en hardware.
+  - Compatibilidad retroactiva: las nuevas versiones mantienen conexión con las anteriores.
+  - Estándar global, soportado por la Bluetooth Special Interest Group (SIG).
+
+[BLOQUE 58] Bluetooth: hardware
+- El hardware de un dispositivo Bluetooth está compuesto por dos partes:
+  - un dispositivo de radio, encargado de modular y transmitir la señal.
+  - un controlador digital, compuesto por :
+    - una CPU
+    - un DSP ( llamado Link Controller o controlador de enlace), encargado de:
+  - Procesar la banda base.
+  - Gestionar las funciones de transferencia (tanto asíncrona como síncrona).
+  - Codificar el audio.
+  - Cifrar los datos.
+  - interfaces con el dispositivo anfitrión.
+  - La CPU se encarga de atender las instrucciones relacionadas con Bluetooth del dispositivo anfitrión, para así simplificar su operación.
+  - La CPU ejecuta un software llamado Link Manager que tiene la función de comunicarse con otros dispositivos.
+
+[BLOQUE 59] Bluetooth: versiones
+- Bluetooth: versiones (Versión · Año · Ancho de banda (BW) · Características destacadas):
+  - 1.2 · 2003 · 1 Mbit/s · Mejora en interferencias y emparejamiento más rápido.
+  - 2.0 + EDR · 2004 · 3 Mbit/s · Enhanced Data Rate — incremento de velocidad.
+  - 3.0 + HS · 2009 · 24 Mbit/s · High Speed mediante Wi-Fi auxiliar.
+  - 4.0 (BLE) · 2010 · 32 Mbit/s · Introducción de Bluetooth Low Energy.
+  - 5.0 · 2016 · 50 Mbit/s · Mayor alcance y velocidad, mejor eficiencia.
+  - 5.1 · 2019 · — · Localización precisa mediante Direction Finding.
+  - 5.2 · 2020 · — · Codec LC3, audio multidispositivo, eficiencia energética.
+  - 5.3 · 2021 · — · Mejoras en la gestión de energía y transmisión simultánea.
+  - 5.4 · 2023 · — · Optimizado para IoT industrial y sensores de bajo consumo.
+  - 6.0 · 2024 · — · Channel Sounding (medición precisa de distancia), mejoras en latencia y eficiencia de red.
+- Bluetooth v5.1 (2019)
+- Introduce funciones de localización por Angle of Arrival (AoA) y Angle of Departure (AoD).
+- Permite ubicar dispositivos con precisión de centímetros.
+- Usos:
+  - Sistemas de rastreo industrial o comercial.
+  - Seguimiento en interiores (museos, tiendas).
+  - Bluetooth v5.2 (2020)
+  - Mejora la calidad de audio inalámbrico con el codec LC3 (Low Complexity Communication Codec).
+  - Permite transmitir audio a varios dispositivos a la vez (Multi-Stream Audio).
+  - Mayor eficiencia energética en modo BLE.
+- Bluetooth v6.0 (2024)
+- Añade Channel Sounding, una función que permite medir la distancia real entre dispositivos con precisión centimétrica.
+- Mejora la latencia, la fiabilidad y el rendimiento de red en entornos IoT.
+- Nuevos mecanismos de publicidad selectiva (advertising filtering) y mejoras de seguridad.
+- Preparado para integrar IA y posicionamiento avanzado en wearables, sensores y sistemas multimedia.
+
+[BLOQUE 60] ANT y ANT+
+- ANT es un protocolo inalámbrico ultra baja potencia (ULP), que se encarga de enviar información de forma inalámbrica desde un dispositivo a otro dispositivo, de manera robusta y flexible.
+- Es una tecnología propietaria (Open Access).
+- Los dispositivos ANT pueden utilizar cualquier frecuencia RF de 2400MHz a 2524MHz, con la excepción de 2457MHz, que está reservado para los dispositivos ANT +
+- ANT está diseñado específicamente para redes de sensores inalámbricos (WSN) que requieren:
+  - Muy bajo consumo de energía.
+  - Alta optimización de recursos.
+  - Fácil de usar.
+  - Bajo coste.
+- Ant+ es un subsistema del protocolo base Ant.
+- ANT+ es un conjunto de definiciones de lo que representa la información enviada a través de ANT.
+- Ej. un monitor de ritmo cardíaco le enviará información sobre el ritmo cardíaco que se define en el perfil ANT + de dispositivos para monitoreo de ritmo cardíaco.
+- Esta diseñado para interoperar con infinidad de dispositivos:
+  - Monitores de ritmo cardiaco
+  - Sensores de cadencia
+  - Monitores de actividad
+  - Calorímetros
+  - Monitores de presión arterial
+  - Sensores de temperatura
+  - Control de vehículos
+  - Sistemas de monitoreo de presión de neumáticos.
+  - Etc..
+- Ant vs Ant+
+  - Aun cuando ambas partes están hablando ANT, todavía no se entienden entre sí.
+  - ANT + permite a ambas partes entenderse.
+
+[BLOQUE 61] Zigbee
+- Especificación de un conjunto de protocolos de alto nivel de comunicación inalámbrica para su utilización con radiodifusión digital de bajo consumo.
+- Basada en el estándar IEEE 802.15.4 de redes inalámbricas de área personal (WPAN)
+- El objetivo son las aplicaciones que requieren comunicaciones seguras con baja tasa de envío de datos y maximización de la vida útil de sus baterías.
+- Su uso está orientado a la domótica.
+- Muy económico y de construcción sencilla.
+- (Diapositiva con una imagen; sin texto extraíble.)
+
+[BLOQUE 62] Wi-Fi: introducción y estándares
+- Es la marca comercial correspondiente al estándar IEEE 802.11 que define la comunicación entre dispositivos utilizando ondas de radio de alta frecuencia.
+- Define una serie de protocolos que permiten desde la comunicación entre pares hasta la creación de una red local completa, resolviendo toda la problemática asociada (colisiones, conexión y desconexión de dispositivos, etc.).
+- Ofrece velocidades entre 1 Mbps y “46 Gbps” a diferentes alcances.
+- La única diferencia entre el 802.11 y el 802.3 (Ethernet) es la forma en que se transmiten los paquetes de datos.
+- De este modo, una red local 802.11 es compatible con todos los servicios de la redes locales Ethernet.
+  - Existen diversos estándares basados en el 802.11 (1997, 1-2Mbits/s):
+    - 802.11b (1999, 11 Mbits/s). No puede interactuar directamente con el 802.11a.
+- WIFI 1
+    - 802.11a (1999). Opera en la banda de 5 GHz, que no utilizan otras tecnologías y por tanto sufre pocas interferencias. Esta mayor frecuencia supone menor alcance. 54 Mbits/s. WIFI2
+    - 802.11g (2003, 54 Mbits/s). Puede coexistir con 802.11a y b.
+    - 802.11n (2009). Sube el límite teórico hasta 600 Mbits/s. WIFI3 Existen productos que cumplen el estándar con un máximo de 300 Mbits/s. Puede trabajar en las frecuencias 2.4 y 5 GHz. Trabaja con frecuencias entre 20 y 40 Mhz. WIFI4
+    - 802.11ac (2014). También conocido como WiFi 5G o WiFi Gigabit. Consigue teóricamente tasas de 1.3 Gbit/s empleando 3 antenas. Opera dentro de la banda de 5 GHz, amplia el ancho de banda hasta 160 MHz . WIFI5
+- 802.11ax (2018), velocidad máxima teórica 11Gbps, emplea banda 2.4Ghz y 5Ghz, emplea MIMO-OFDA (mejorar eficiencia espectral), trabaja con frecuencias has 160Mhz.
+- El verdadero valor de WiFi 6 está en el incremento en la eficiencia y mantenimiento de conexiones incluso cuando la red está muy congestionada.
+- Existen diversos estándares basados en el 802.11 (1997, 1-2Mbits/s):
+  - 802.11be (2024), Certificación oficial del programa Wi-Fi CERTIFIED 7 iniciada en enero de 2024.
+  - Opera en las bandas 2,4 GHz, 5 GHz y 6 GHz.
+  - Puede ofrecer velocidades teóricas muy elevadas (hasta 46 Gbps) bajo condiciones óptimas.
+  - Introduce mejoras técnicas como:
+    - Multi-Link Operation (MLO): posibilidad de usar múltiples bandas simultáneamente para la misma conexión.
+    - Canales más anchos (hasta 320 MHz).
+    - Modulación más avanzada (4096-QAM) para aumentar la eficiencia del canal.
+    - Mejoras en latencia, gestión de interferencias y eficiencia energética.
+
+[BLOQUE 63] Wi-Fi: tipos de dispositivos
+- Wi-Fi: tipos de dispositivos
+  - Dispositivos de distribución:
+    - Puntos de acceso (AP). Generan la red WiFi, permitiendo el acceso de dispositivos inalámbricos a una red.
+    - Routers inalámbricos. Suelen estar formados por un router, un punto de acceso y un switch. Se encargan de proporcionar acceso a Internet a los equipos que tenga conectados, por cable o inalámbricos.
+    - Repetidores inalámbricos. Extiende la cobertura de una red inalámbrica, amplificando una señal débil.
+- Wi-Fi: tipos de dispositivos
+  - Dispositivos terminales. Son las tarjetas receptoras.
+    - Tarjetas PCI y mini-PCI (normalmente ya integradas), PCMCIA, USB.
+
+[BLOQUE 64] Wi-Fi: ventajas y desventajas
+- Ventajas de la tecnología Wifi.
+  - Portabilidad.
+  - Ahorro de infraestructuras (cables).
+  - Compatibilidad soportada por estándares.
+- Desventajas.
+  - “Menor velocidad” que el cable debido al medio de transmisión.
+  - Incompatibilidad con otros tipos de tecnologías inalámbricas (incluso interferencias en algunos casos).
+  - Problemas de seguridad.
+  - Protocolos de cifrado (WEP, WPA, WPA2, WPA3, WPA4) filtrado de MAC, ocultación del SSID, etc.
+  - WEP: Wired Equivalent Privacy, desaprobado en 2004 (no aconsejado aunque no prohibido).
+  - WPA: WiFi protected access
+
+[BLOQUE 65] RFID (Radio Frequency IDentification)
+- La identificación por radiofrecuencia, o RFID, es un término genérico para las tecnologías que utilizan ondas de radio para identificar automáticamente personas u objetos.
+- Hay varios métodos de identificación, pero el más común es para almacenar un número de serie que identifica a una persona o un objeto en un microchip que está unido a una antena (el chip y la antena juntos se llaman un transpondedor RFID o una etiqueta de RFID).
+- La antena permite que el chip pueda transmitir la información de identificación a un lector.
+- El lector convierte las ondas de radio reflejadas de vuelta de la etiqueta RFID en información digital que puede ser transmitida a los equipos que pueden hacer uso de ella.
+- (Diapositiva con imágenes; sin texto extraíble.)
+- Es una tecnología que lleva aproximadamente desde 1970.
+- Actualmente muy utilizado por el abaratamiento de costes
+- Dispositivos
+- Tags
+- Presente en forma de tags en multitud de objetos…
+- Presenta varias frecuencias de trabajo, así como dos modos:
+  - Activo
+  - Pasivo
+  - Dependiendo de la frecuencia y el modo, la distancia de lectura varía.
+  - Orientado al mundo empresarial.
+  - Comunicación bidireccional.
+- (Diapositiva con imágenes; sin texto extraíble.)
+- (Diapositiva con imágenes; sin texto extraíble.)
+
+[BLOQUE 66] NFC (Near Field Communication)
+- Definición:
+  - Conjunto de estándares de comunicación inalámbrica de corto alcance (basados en RFID — Radio Frequency Identification).
+  - Permite el intercambio bidireccional de datos entre dispositivos situados a pocos centímetros de distancia (habitualmente ≤ 4 cm).
+  - Diseñado para interacciones rápidas y seguras: acercar → comunicar → retirar.
+- Funcionamiento:
+  - Opera en la frecuencia 13,56 MHz.
+  - Velocidad de transferencia: hasta 848 Kbit/s.
+  - Establece una conexión inmediata (~0,1 s).
+- Puede funcionar en tres modos:
+  - Lectura/escritura: un dispositivo lee o graba datos en una etiqueta (tag NFC).
+  - Punto a punto (peer-to-peer): intercambio de información entre dos dispositivos.
+  - Emulación de tarjeta: el dispositivo actúa como una tarjeta sin contacto (pagos, accesos)
+- Ventajas:
+  - Emparejamiento inmediato y sencillo (sin configuración manual).
+  - Muy bajo consumo de energía.
+  - Posibilidad de comunicación con dispositivos pasivos (sin alimentación).
+  - Alta seguridad por la corta distancia y el cifrado implementado.
+  - Ideal para pagos móviles, identificación y automatización de tareas IoT.
+- Limitaciones:
+  - Alcance muy corto (máx. 10 cm).
+  - Velocidad reducida comparada con Bluetooth o Wi-Fi.
+  - Limitado a pequeños volúmenes de datos.
+  - Dependencia del hardware (no todos los modelos de móviles lo incluyen).
+- Ejemplos de uso:
+  - Pagos móviles: Google Pay, Apple Pay, Samsung Pay, Bizum, etc.
+  - Transporte público y accesos: tarjetas contactless, abonos, credenciales.
+  - Intercambio rápido: contactos, enlaces, emparejamiento Bluetooth/Wi-Fi.
+  - Etiquetas NFC programables: automatizar acciones (activar Wi-Fi, abrir apps, etc.).
+- Compatibilidad:
+  - Integrado en la mayoría de smartphones Android e iOS modernos.
+  - Compatible con Windows 10 Mobile, Android y iOS (iPhone 6 → 16).
+  - Marcas y gamas compatibles: Samsung Galaxy, Xiaomi, Huawei, LG, BQ, Google Pixel, etc.
+
+[BLOQUE 67] RFID vs NFC
+- NFC es una extensión de la tecnología RFID
+- RFID es capaz de transmitir más allá de unos metros, mientras que NFC está restringido a unos 10cms de distancia.
+- RFID ampliamente utilizado en entorno empresarial/industrial.
+- NFC utilizado en dispositivos móviles.
+- RFID vs NFC: NFC opera en 1 frecuencia; RFID opera en 3 frecuencias y 2 modos (pasivo y activo).

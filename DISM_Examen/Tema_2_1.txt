@@ -1,0 +1,616 @@
+==============================================================================
+TEMA 2 (PARTE 1). INTRODUCCIÓN A LAS INFRAESTRUCTURAS MULTIMEDIA
+==============================================================================
+
+==============================================================================
+1. SISTEMAS MULTIMEDIA
+==============================================================================
+
+[BLOQUE 1] Multimedia: definición y aplicaciones
+- Multimedia:
+- Campo que estudia la integración controlada por computador de:
+- Texto,
+- Gráficos,
+- Dibujos,
+- Imágenes estáticas o en movimiento,
+- Animaciones,
+- Audio,
+- Otros medios,
+- Donde cada tipo de información puede ser representada, almacenada, transmitida y procesada digitalmente.
+- Una aplicación multimedia es aquella que utiliza diversos medios procedentes de distintas fuentes, como texto, gráficos, audio, vídeo, etc.
+  - WWW
+  - Creación multimedia, diseño de cursos hipermedia
+  - TV interactiva, edición y producción de vídeo digital
+  - Juegos para Pc y plataformas móviles
+  - Realidad virtual y aumentada
+  - Sistemas de bases de datos multimedia…
+
+[BLOQUE 2] Clasificación multimedia
+- Multimedia Lineal
+- El usuario no tiene el control de cambiar o modificar los contenidos de un proyecto multimedia y lo visualiza en un orden predeterminado. (Ej. Cine)
+- Hipermedia
+- El usuario tiene mayor control sobre el proyecto multimedia mediante un sistema de navegación.
+- Conjunto de métodos o procedimientos para escribir, diseñar o componer contenidos que integren soportes tales como:
+- Texto,
+- Imagen,
+- Video,
+- Audio,
+- Mapas
+- Otros soportes de información emergentes,
+- El resultado obtenido debe permitir interactuar con los usuarios.
+- Hipermedia Interactica
+- Hipermedia
+- Hipermedia Interactiva
+- Al usuario (el observador de un proyecto multimedia) se le permite interactuar con el dispositivo permitiendo controlar ciertos elementos de los contenidos de una presentación multimedia:
+- La secuencia.
+- La velocidad.
+- El momento en que deben presentarse.
+- Etc…
+- Estas aplicaciones son las más utilizadas en la educación.
+
+[BLOQUE 3] Sistema multimedia
+- Es un sistema informático capaz de procesar aplicaciones y datos multimedia.
+- Características:
+- Almacenamiento.
+- Procesamiento.
+- Generación.
+- Manipulación.
+- Interpretación.
+- Controlado por computador.
+- La integración de componentes es fundamental.
+- La información debe estar representada en formato digital.
+- Interactividad.
+- Transparencia.
+- Navegación.
+
+[BLOQUE 4] Ámbitos de aplicación de los sistemas multimedia
+- Mundo empresarial: presentaciones, comunicación corporativa y marketing.
+- Industria: control de procesos, formación técnica y mantenimiento.
+- Educación: presentaciones interactivas, simulaciones y educación a distancia.
+- Doméstico: TV, dispositivos móviles, consolas y domótica.
+- Público: puntos de información en espacios públicos, disponibles 24x7.
+- Mundo empresarial
+- Presentaciones de proyectos, resultados, productos y previsiones.
+- Marketing y publicidad: catálogos multimedia, encuestas online y campañas publicitarias.
+- Formación: cursos y materiales interactivos para empleados.
+- Gestión interna: bases de datos, comunicaciones, planificación y control de proyectos, por ejemplo:
+- CRM y ERP con contenido multimedia integrado.
+- Intranets corporativas y videoconferencia.
+- Documentación técnica interactiva.
+- Industria
+- Sistemas de control industrial: supervisión visual en tiempo real de líneas de producción (paneles SCADA).
+- Herramientas de simulación: entrenamiento de operarios, pilotos y técnicos en entornos virtuales, sin riesgo.
+- Gestión de piezas y stocks: catálogos visuales e inventario con códigos de barras o RFID.
+- Sistemas de producción: monitorización y control de procesos mediante paneles interactivos.
+- Mantenimiento: manuales técnicos interactivos y realidad aumentada para reparación de maquinaria.
+- Educación
+- Presentaciones interactivas.
+- Powerpoint
+- Impress
+- Keynote
+- Prezi
+- Plataformas de aprendizaje (LMS) como Moodle: seguimiento del progreso, evaluación y ejercicios interactivos.
+- Vídeos y simulaciones: animaciones de estructuras y modelos, y laboratorios virtuales —incluida la realidad virtual/aumentada— para practicar sin riesgo.
+- Educación a distancia: videoconferencia y contenidos multimedia para el aprendizaje remoto.
+- Doméstico
+- Electrónica de consumo está confluyendo con el modelo multimedia, más allá del PC:
+- TV: streaming de vídeo y aplicaciones interactivas.
+- Dispositivos móviles: vídeo, música y juegos en movilidad.
+- Consolas: videojuegos online y contenido bajo demanda.
+- Domótica: asistentes de voz y hogares conectados.
+- Su evolución futura es difícil de predecir: depende en gran medida de los avances en redes y sistemas telemáticos, como:
+- Redes 5G: mayor velocidad y menor latencia.
+- Internet de las Cosas (IoT): dispositivos domésticos conectados entre sí.
+- Banda ancha ultrarrápida: streaming en alta calidad sin cortes.
+- Público
+- Puntos de acceso a información en espacios públicos: bibliotecas, museos, campus universitarios, centros comerciales, aeropuertos y estaciones, entre otros.
+- Un contenido visual atractivo y una interfaz de usuario rica son claves para su éxito.
+- Disponibilidad 24x7: acceso a la información en cualquier momento, sin depender de personal.
+- Servicios habituales:
+- Compra de entradas y reserva de alojamiento.
+- Llamada de taxi y planos con itinerarios al destino.
+- Pago electrónico y acceso a Internet.
+
+[BLOQUE 5] Etapas de un proyecto multimedia
+- Planificación y evaluación de costes
+- Necesidades de material, personal y tiempo.
+- Documento de requisitos y especificaciones del producto.
+- Elaboración de un prototipo básico para validar el concepto.
+- Diseño y producción
+- Desarrollo de todos los materiales: audio, vídeo, gráficos y código.
+- El trabajo en equipo exige coordinación en el control de cada tarea y en la integración de resultados.
+- Pruebas
+- Se pone a prueba el sistema en distintas situaciones y se evalúa si cumple los requisitos de las especificaciones.
+- Distribución
+- Empaquetado, salida al mercado y promoción: claves para el éxito comercial del producto.
+
+==============================================================================
+2. REQUERIMIENTOS DE LOS SISTEMAS MULTIMEDIA
+==============================================================================
+
+[BLOQUE 6] Cuestiones fundamentales y características deseables
+- 2. Requerimiento de los sistemas multimedia
+  - Cuestiones fundamentales que debe gestionar un sistema multimedia:
+    - Cómo representar y almacenar información temporal, por ejemplo, mediante marcas de tiempo (timestamps) en audio y vídeo.
+    - Cómo mantener estrictamente las relaciones temporales en la reproducción multimedia.
+    - Cómo representar y procesar digitalmente todos los datos – Conversión AD-DA, muestreo (sampling), etc.
+    - Necesidades de almacenamiento y procesamiento de grandes cantidades de datos – ancho de banda, dispositivos de memoria.
+    - La compresión de los datos se convierte en una necesidad, con códecs como MP3, JPEG o H.264.
+- Características deseables de un sistema multimedia:
+  - Capacidad de procesamiento muy alta. Necesaria para lograr procesamiento de grandes cantidades de datos y entrega de datos multimedia en tiempo real – Hardware especializado.
+  - Sistema de ficheros preparado para multimedia. Necesario para producir datos multimedia en tiempo real – Vídeo-Audio streaming, tecnología RAID.
+  - Software/hardware especializado.
+  - Representación de la información. Formato de ficheros que soporten multimedia, sean fáciles de manejar, y permitan compresión y descompresión en tiempo real.
+  - E/S eficiente. La E/S al subsistema de ficheros debe ser eficiente y rápida, tanto para grabación en tiempo real como para reproducción.
+
+[BLOQUE 7] Streaming y descarga tradicional
+- Streaming:
+- Definición:
+- Distribución de multimedia a través de una red de manera que el usuario consume el producto al mismo tiempo que se descarga.
+- El termino streaming se refiere a: una corriente continua (sin interrupción).
+- Este tipo de tecnología funciona mediante un búfer de datos que va almacenando lo que se va descargando en el dispositivo del usuario para luego mostrar el material descargado.
+- Se envía la información a través de la red y el cliente la reproduce en tiempo real al recibirla
+- Audio / Vídeo Tiempo real
+- SERVIDOR RED CLIENTE
+- Descarga tradicional:
+  - Los ficheros de audio o vídeo se almacenan en el servidor y se transfieren mediante protocolos como HTTP.
+  - El cliente descarga el fichero completo a disco antes de reproducirlo.
+  - No hay streaming: hay que esperar a que la descarga termine para empezar a reproducir.
+  - Ventaja: una vez descargado, no depende de la red para reproducirse.
+  - Desventaja: requiere más espacio en disco y un tiempo de espera inicial largo.
+  - Ejemplos: descargar una canción en MP3, un vídeo guardado en el dispositivo, o instalar un videojuego desde una tienda digital.
+- Streaming:
+  - Los datos se transfieren segmentados y se pasan al reproductor a medida que llegan, sin esperar a la descarga completa.
+  - El sistema calcula el tiempo de búfer necesario según la velocidad de recepción, para evitar cortes en la reproducción.
+  - Requiere garantizar la calidad de servicio (ancho de banda y latencia) para una reproducción fluida.
+  - Puede ser en directo (eventos en tiempo real) o a la carta (contenido bajo demanda, como vídeo o música).
+  - Ventaja: reproducción casi inmediata, sin la larga espera inicial de la descarga tradicional.
+  - Desventaja: la calidad de la reproducción depende de la conexión en cada momento.
+  - Ejemplos: Netflix, YouTube y Spotify.
+- Descarga Tradicional
+  - 1. Grabación 2. Transmisión 3. Recepción 4. Inicio de
+- en el servidor del fichero completa reproducción
+- Tiempo de espera: no hay reproducción todavía ¡Ahora sí se reproduce!
+- Delay de red
+- Servidor: Transmisión de datos
+- Cliente: Recepción de datos Reproducción
+- Aquí empieza a reproducirse
+- tiempo
+- Streaming
+  - 1. Grabación 2. Envío 3. Buffer 4. Reproducción
+- en el servidor segmentado inicial breve (en paralelo)
+- ¡Reproducción casi Espera mínima: solo el búfer inicial inmediata!
+- Network delay + buffer
+- Servidor: Transmisión continua de datos
+- Cliente: Buffer Reproducción (mientras sigue llegando)
+- Aquí empieza a reproducirse
+- tiempo
+
+[BLOQUE 8] Tipos de servicios: en directo (live) y bajo demanda (VOD)
+- Tipos de Servicios
+- En directo Bajo demanda
+- (live) (Video On Demand – VOD)
+- Todos ven el mismo instante a la vez. Se El usuario controla la reproducción: puede puede pausar, pero al reanudar se vuelve al pausar, retroceder o elegir cuándo directo (no hay retroceso). empezar.
+- Ejemplo: eventos deportivos, conciertos y Ejemplo: Netflix, YouTube.
+- noticias en directo.
+- Tipos de Servicios: En directo (live).
+  - Está orientado a la multidifusión: varios usuarios reciben la misma señal a la vez.
+  - El servidor comienza a transmitir en un instante dado y los usuarios ven la información que se está emitiendo en ese momento.
+  - La interactividad es mínima: únicamente permite pausar la reproducción.
+  - Al reanudar, el usuario ve lo que se esté transmitiendo en ese instante, no lo que se perdió durante la pausa (no hay retroceso).
+- Inicio de la transmisión Fin de la transmisión
+- Servidor: transmisión en directo
+- Cliente 1
+- Cliente 2 pausa
+- Cliente 3
+- Cliente 4
+- Cliente 5
+- En el instante t, todos los clientes activos ven lo mismo
+- tiempo
+- Tipos de Servicios: En directo (live).
+- Según el origen de las señales de audio/vídeo
+- Con información en vivo.
+- Con información almacenada.
+- Productor Servidor Clientes
+- Cámara (en vivo) Servidor Clientes
+- Sistema de almacenamiento
+- Según el tipo de transmisión
+- Unicast: se envía un flujo de información a cada usuario.
+- Multicast: se envía un único flujo de información a un grupo específico.
+- Broadcast: se envía un flujo de información a los usuarios sin saber quien lo va a recibir.
+  - ¿TV en directo por internet?
+  - ¿TV Satélite?
+  - ¿TV sistema hospitalario?
+  - ¿TDT?
+  - ¿IPTV live?
+  - ¿Quién consume más ancho de banda Unicast, Broadcast, Multicast?
+- Tipos de Servicios: Video Bajo Demanda (VOD)
+  - Los usuarios solicitan el envío de información en cualquier instante
+  - Envío de un flujo a cada usuario
+  - Existen diversos tipos de interacciones
+  - Pausas
+  - Saltos hacia delante
+  - Saltos hacia atrás t_fin
+- Cliente 1 t₀ pausa
+- Cliente 2
+- Cliente 3
+- Cliente 4
+- Cliente 5
+- tiempo
+- VOD: Video On Demand, permite a los usuarios ver cualquiera de una gran colección de vídeos en cualquier momento.
+- Vías de entrega: el VOD puede llegar al usuario por dos caminos principales.
+- VOD por cable: a través del decodificador del operador o de su app con inicio de sesión.
+- OTT (over-the-top): a través de Internet, sin necesidad de suscribirse a un servicio tradicional de televisión de pago por cable o satélite.
+- Ejemplos de OTT: Netflix, Amazon Prime Video, HBO Max.
+- Tipos de Servicios: Video Bajo Demanda (VOD)
+- VOD
+- VOD por cable OTT (apps y servicios)
+- App con inicio AVOD SVOD TVOD
+- Decodificador
+- de sesión (publicidad) (suscripción) (pago/visión)
+- Decodificador Smart TV Apps móviles
+- y consola y streaming y ordenador
+- Los tres modelos (AVOD, SVOD, TVOD) pueden entregarse mediante cualquiera de estos dispositivos.
+
+[BLOQUE 9] Tipos de servicios OTT: AVOD, SVOD, TVOD
+- Tipos de Servicios: OTT
+  - AVOD:
+  - Los sistemas AVOD (Advertising Video on Demand) son un modelo de entrega de contenido donde el usuario tiene acceso gratuito a los videos pero estos videos contienen inserciones de publicidad.
+  - Mediante esta estrategia de publicidad el dueño del contenido puede rentabilizar los videos sin hacer que el usuario tenga que pagar por ellos.
+  - Los anuncios son conocidos como Video Insert :
+  - Antes del video y se denominan pre-Rolls.
+  - En un punto intermedio del video mid-rolls.
+  - Al final del video post-rolls.
+  - La publicidad suele ser de pocos segundos y el usuario podrá decidir si quiere dejar de verla transcurridos unos segundos. De esta forma se define el precio que el anunciante va a pagar por aparecer en el video.
+  - Ejemplo Youtube.
+  - SVOD:
+  - TVOD:
+- SVOD:
+- Los sistemas SVOD (Subscription Video on Demand) son la forma de ofrecer contenido al usuario mediante una suscripción.
+- Permite el acceso a Contenido Premium como estrenos, contenido exclusivo y extenso catálogo de videos disponibles solo para los usuarios suscritos.
+- En algunos casos se permite a los usuarios descargar contenido para poder disfrutarlo posteriormente sin necesidad de una conexión a Internet.
+- Ejemplo: Netflix
+- TVOD:
+- Tipos de Servicios: OTT
+  - AVOD:
+  - SVOD:
+  - TVOD:
+  - Los sistemas TVOD (Transactional Video on Demand) son la manera de que el usuario pague por el contenido que quiera.
+  - El contenido está disponible mientras transcurre el video si se trata de un contenido en vivo (fútbol), o el usuario puede acceder al video durante un periodo de tiempo. Similar a un alquiler.
+  - El usuario puede elegir determinado contenido para consumir sin tener que comprar una suscripción completa y paga solo una vez.
+  - Lo más común es el sistema PPV, donde el usuario paga por los eventos individuales o la película que desea ver.
+  - Ejemplo: ITunes o Amazon Instant Video.
+- SVOD AVOD TVOD HÍBRIDO
+- Netflix YouTube Apple TV YouTube (gratis + Disney+ Pluto TV (compra/alquiler) Premium)
+- HBO Max RTVE Play Google Play Películas Amazon Prime Video Amazon Prime Video Amazon Video (alquiler) (suscripción + alquiler)
+- HBO Max (con o sin Apple TV+ anuncios)
+
+[BLOQUE 10] Arquitectura streaming: servidor, conexiones e interacciones
+- Sistema de
+- almacenamiento
+- Formato + compresión
+- Servidor Clientes
+- (software A/V) Red (protocolos)
+- (software cliente)
+- Sistema de
+- producción
+- El servidor recibe el contenido (almacenado o en vivo), lo empaqueta y lo distribuye por la red a los clientes.
+- Protocolos habituales: RTSP, RTMP, HTTP adaptativo (HLS, MPEG-DASH).
+- Arquitectura Streaming. Servidor:
+  - Funcionamiento bajo demanda
+    - 1. Espera peticiones de los clientes.
+    - 2. Cuando recibe una petición decide si la acepta (control de admisión).
+    - 3. Establece una conexión con el cliente.
+    - 4. Responde a las interacciones del cliente (pausar, reanudar, saltar) iniciando o deteniendo la transmisión según corresponda.
+    - 5. Finaliza la conexión al terminar la comunicación o la información solicitada.
+  - Funcionamiento en directo
+    - 1. Recibe la transmisión del productor.
+    - 2. Comienza la emisión.
+    - 3. Espera peticiones de los clientes.
+    - 4. Cuando recibe una petición decide si la acepta (control de admisión).
+    - 5. Establece una conexión con el cliente.
+    - 6. Recibe la interacción del cliente (sólo pausa) y actúa en la transmisión convenientemente.
+  - Transmitiendo un flujo continuo de información.
+  - No transmitiendo.
+    - 7. Finaliza la conexión cuando el cliente lo solicita.
+    - 8. Finaliza la emisión cuando deja de recibir señal del productor.
+- Arquitectura Streaming. Conexiones
+- Canal para el control de los flujos multimedia.
+- Canal bidireccional .
+- Recibe las interacciones del cliente y transmite las respuestas.
+- Canales para el envío de los datos multimedia.
+- Unidireccionales .
+- Transmiten la información cuando las interacciones lo requieren.
+- Canal de control (bidireccional)
+- Servidor Cliente
+- de Streaming de Streaming
+- Canal de transporte (unidireccional)
+- Arquitectura Streaming. Interacciones
+- Recibe las interacciones del cliente (play, stop, pause, etc.) y actúa sobre el flujo de información multimedia
+- play pause play pause play stop
+- avance t
+- Se establece la conexión Se destruye la conexión
+- Transmitiendo información A/V
+- Arquitectura Streaming. Transmisión de medios
+- Fracciona la información y la envía de forma temporizada Fichero con formato para streaming (segmentos t1…tn)
+- Segmentos de audio y vídeo
+- Canal de vídeo
+- Servidor de Cliente de
+- Streaming Canal de audio Streaming
+- Vídeo Audio
+- El servidor extrae los segmentos t1…tn del fichero y los envía al cliente por canales separados de vídeo y audio, sincronizados en la reproducción.
+
+[BLOQUE 11] Arquitectura streaming: condiciones de la red y proxy
+- Arquitectura Streaming. Condiciones de la red
+- Se modifica la calidad del vídeo en tiempo real en función de las condiciones de la red
+- Vídeo codificado en varios niveles de Condiciones de la calidad red
+- Calidad A ALTA
+- Calidad B MEDIA
+- Servidor de Cliente de
+- Streaming Streaming
+- BAJA
+- Calidad C
+- Selecciona la calidad
+- segmento a segmento
+- Medición continua de ancho de banda y pérdidas
+- Mayor calidad Menor calidad
+- El servidor adapta cada segmento a las condiciones instantáneas de la red: sube la calidad cuando mejora el ancho de banda y la reduce cuando aparecen congestión o pérdidas.
+- Arquitectura Streaming. Proxy
+- Funcionalidades según el tipo de servicio:
+- Bajo demanda:
+- Almacena temporalmente la información más recientemente utilizada y la transmite a los clientes en caso de ser nuevamente solicitada
+- En directo:
+- Reduce el número de flujos que salen del servidor. Proxy de Streaming: un punto intermedio para reutilizar y distribuir flujos
+- n flujos BAJO DEMANDA
+- Cliente 1
+- Proxy de
+- 1 flujo
+- Streaming Reutiliza segmentos Servidor de almacenados si Cliente 2 vuelven a solicitarse.
+- Streaming
+- Caché temporal
+- EN DIRECTO
+- Cliente 3
+- El servidor envía un único flujo al proxy.
+
+[BLOQUE 12] Arquitectura streaming: protocolos
+  - RTP (Real Time Transport Protocol)
+  - RTCP (RTP Control Protocol)
+  - RTMP (Real Time Messaging Protocol)
+  - RTSP (Real Time Streaming Protocol)
+  - HLS (HTTP Live Stream)
+  - MPEG-DASH (Dynamic Adaptive Streaming over HTTP)
+  - HDS (HTTP Dynamic Streaming)
+- RTP (Real-time Transport Protocol)
+- ¿QUÉ HACE? PRIORIDAD CÓMO SE ORDENA
+- Numera y marca Transporta audio y Favorece la continuidad temporalmente los vídeo en tiempo real y la baja latencia frente paquetes para entre emisor y receptor. a una entrega perfecta. reproducirlos en secuencia.
+- RTP transporta el contenido multimedia; no controla por sí solo la sesión ni corrige todas las pérdidas.
+- Cómo se complementan RTP, RTCP y RTSP
+- RTP · TRANSPORTA RTCP · SUPERVISA RTSP · CONTROLA
+- Informa sobre pérdidas, Gestiona las órdenes Lleva el audio y el retardo y calidad de de reproducción de la vídeo en tiempo real.
+- recepción. sesión.
+- Los tres protocolos pueden trabajar juntos: RTSP controla, RTP transporta y RTCP supervisa.
+- RTCP (RTP Control Protocol)
+- OBSERVA INFORMA AYUDA A ADAPTAR
+- Comunica pérdidas, Permite que la Supervisa cómo está retardo variable y aplicación ajuste llegando el flujo RTP al estadísticas básicas de calidad o velocidad receptor.
+- recepción. cuando la red empeora.
+- RTCP no sustituye a RTP: RTP lleva el contenido y RTCP aporta información de control y calidad.
+- RTMP (Real-Time Messaging Protocol)
+- ¿QUÉ HACE? FORTALEZA USO ACTUAL
+- Envía audio y vídeo en Se utiliza sobre todo Mantiene una conexión directo desde un para la ingestión de continua y estable codificador hacia un directos; su relación durante la emisión.
+- servidor o plataforma. con Flash es histórica.
+- RTMP sigue siendo útil para llevar la señal al servidor, aunque la reproducción al usuario suele realizarse con HLS o DASH.
+- RTSP (Real-Time Streaming Protocol)
+- ¿QUÉ CONTROLA? ACCIONES DÓNDE SE USA
+- Permite iniciar, Es habitual en cámaras Gestiona una sesión de reproducir, pausar, IP, videovigilancia y streaming como si fuera reanudar y finalizar la sistemas multimedia un mando a distancia.
+- sesión. controlados.
+- RTSP controla la reproducción; el audio y el vídeo suelen viajar mediante RTP u otro canal de transporte.
+- RTSP: funcionamiento básico
+- El reproductor envía órdenes y el servidor responde ejecutando la sesión.
+- 1  SETUP · prepara la sesión
+- 2  PLAY · inicia la reproducción
+- REPRODUCTOR SERVIDOR
+- Cliente Multimedia
+- 3  AUDIO / VÍDEO
+- 4  PAUSE · detiene temporalmente
+- 5  TEARDOWN · finaliza la sesión
+- El servidor confirma las órdenes y mantiene la sesión hasta que el cliente la finaliza.
+- HLS (HTTP Live Streaming)
+- SEGMENTOS MANIFIESTO M3U8 ADAPTACIÓN
+- Divide el contenido en Indica al reproductor El reproductor cambia fragmentos cortos qué versiones y de calidad según el disponibles mediante segmentos puede ancho de banda HTTP. solicitar. disponible.
+- Desarrollado por Apple para iOS. HLS funciona bien con servidores web y CDN, ofrece gran compatibilidad y prioriza la estabilidad de reproducción.
+- MPEG-DASH (Dynamic Adaptive Streaming over HTTP)
+- ESTÁNDAR ABIERTO MANIFIESTO MPD ADAPTACIÓN
+- Define una forma Describe las calidades, El reproductor elige y común de distribuir pistas y segmentos cambia la calidad vídeo adaptativo entre disponibles para la según las condiciones fabricantes. reproducción. de la red.
+- MPEG-DASH aplica el mismo principio general que HLS, pero mediante un estándar independiente de un proveedor concreto.
+- HDS (HTTP Dynamic Streaming) — tecnología heredada
+- ORIGEN FUNCIONAMIENTO SITUACIÓN ACTUAL
+- Usaba manifiestos y Quedó ligada al Tecnología de segmentos HTTP para ecosistema Flash y hoy streaming adaptativo cambiar la calidad del se considera una desarrollada por Adobe.
+- vídeo. tecnología heredada.
+- Conviene conocer HDS como antecedente histórico, pero para nuevos sistemas se prefieren HLS o MPEG-DASH.
+
+[BLOQUE 13] Arquitectura streaming: cliente y buffer
+- Arquitectura Streaming. Cliente
+- Componentes:
+- Recepción.
+- Recibe la información solicitada por el usuario.
+- Presentación.
+- Reproduce la información recibida de forma temporizada.
+- Proporciona un interfaz para que el usuario interaccione.
+- Buffer.
+- Se utiliza para controlar la calidad del servicio.
+- El buffer se carga antes de comenzar la reproducción
+- Cuando el buffer se vacía, se detiene la reproducción para recargarlo (fallo de reproducción).
+- El buffer amortigua posibles retrasos en la llegada de paquetes (por problemas en la red o sobrecarga en el servidor).
+- Habitualmente existen buffers tanto de audio como de vídeo.
+- El tamaño del buffer debe balancear el tiempo de arranque y calidad de reproducción.
+- Arquitectura streaming: el buffer absorbe el jitter
+- 1 · LLEGADA DESDE LA RED 2 · BUFFER DEL CLIENTE 3 · REPRODUCCIÓN
+- JITTER
+- variación del tiempo de salida llegada BUFFER
+- RED estable
+- reserva temporal
+- Los paquetes no Δ Δ Δ
+- llegan siempre a t t t
+- intervalos guales PLAYOUT
+- espera inicial = latencia
+- ¿Qué hace el buffer? Resultado Compromiso
+- Almacena paquetes antes de Más buffer → menos Convierte una llegada irregular en reproducir. Si uno llega tarde, el interrupciones, pero mayor una salida regular y reduce cortes reproductor usa los que ya retardo inicial. Menos buffer → mientras exista reserva suficiente.
+- estaban guardados. menor latencia, más riesgo de cortes.
+
+[BLOQUE 14] Streaming clásico y P2P
+- Streaming clásico y P2P: distribución y coordinación
+- STREAMING CLÁSICO · CLIENTE–SERVIDOR STREAMING P2P · SERVIDOR + PEERS
+- control
+- SERVIDOR
+- TRACKER
+- (señalización)
+- SERVIDOR Cliente A
+- Fuente solo coordina
+- de vídeo
+- SEED INICIAL
+- Fuente de vídeo
+- streaming
+- Cliente B
+- 1 flujo independiente por cliente
+- Peer A Peer B Peer C
+- Cliente C
+- CHUNKS = FRAGMENTOS
+- El servidor envía una copia completa a cada cliente SEED: nodo que ya posee el contenido y comienza a distribuirlo.
+- CHUNK: pequeño fragmento del vídeo que los peers descargan y La fuente entrega el contenido al servidor. Los clientes nunca reenvían.
+- se envían vídeo entre sí.
+- Diferencia esencial Clásico: todo el tráfico de vídeo sale del servidor.  P2P: el servidor coordina e inicia, pero gran parte del vídeo circula entre peers.
+- Streaming P2P: los peers intercambian fragmentos
+- El vídeo se divide en chunks: cada peer descarga unos y comparte otros mientras reproduce.
+- 2 · LOCALIZAR 4 · BUFFER Y 1 · ARRANQUE 3 · INTERCAMBIO
+- PEERS PLAYOUT
+- SEED peer
+- T
+- peer
+- BUFFER
+- P P peer
+- Tracker o señalización El seed entrega los Los peers descargan y El buffer ordena y indica qué peers están primeros chunks. reenvían chunks. reproduce sin cortes.
+- disponibles.
+- VENTAJAS LIMITACIONES EJEMPLOS REALES
+- PeerTube: espectadores
+- Escala con la audiencia • Arranque variable comparten segmentos mediante WebRTC
+- Reduce carga del origen • Peers pueden desconectarse
+- Microsoft eCDN: empleados
+- Usa la subida de los peers • Más control y señalización
+- comparten el streaming en eventos corporativos
+
+[BLOQUE 15] Caso Netflix: escala y arquitectura (Open Connect y AWS)
+- Netflix en 2026: escala global apoyada por Open Connect
+- Comparativa homogénea del segundo trimestre (Q2), 2022–2026
+- Métrica Q2 2022 2023 2024 2025 2026
+- Ingresos (B$) 7,97 8,19 9,56 11,08 12,56
+- Crecimiento interanual +8,6% +2,7% +16,8% +15,9% +13,4%
+- Beneficio operativo (B$) 1,58 1,83 2,60 3,78 4,19
+- Q2 2022→Q2 2026: ingresos +58% y beneficio operativo +166%; el crecimiento se modera desde 2024.
+- Cómo se entrega el vídeo Control centralizado; el contenido se almacena cerca del usuario.
+- OPEN CONNECT
+- SERVICIOS NETFLIX control + stream USUARIOS
+- manifiesto OCAs dentro o cerca de los ISP adaptativo
+- Catálogo, TV, móvil, web y consola personalización, licencias reciben el stream desde el y selección del origen OCA disponible más adecuado
+- vídeo precargado y servido localmente
+- Idea clave Netflix evita servir cada reproducción desde un único centro: acerca las copias al ISP para reducir tránsito, acelerar el arranque y escalar la demanda.
+- Publicidad: más de 250 M de espectadores activos mensuales; más del 80% ve Netflix semanalmente.
+- Fuentes: Netflix Q2 shareholder letters 2022–2026; Netflix 10-Q Q2 2026; Open Connect.
+- Netflix separa el control de la entrega del vídeo
+- AWS gestiona la experiencia; Open Connect sirve el contenido audiovisual
+- 1 · CLIENTES 2 · PLANO DE CONTROL 3 · PLANO DE ENTREGA
+- API: login, selección DISPOSITIVOS catálogo, play SERVICIOS EN AWS OCA OPEN CONNECT
+- OCA cercano o dentro del ISP
+- Smart TV Identidad y suscripción
+- autenticación y permisos
+- Móvil / tablet
+- Catálogo y personalización
+- búsqueda y recomendaciones Vídeo codificado en múltiples Web calidades
+- Consola / Orquestación de reproducción
+- Entrega HTTP(S) desde la Decodificador manifiesto, DRM y selección del OCA caché más adecuada
+- La app solicita catálogo, reproducción y calidad adaptativa
+- VÍDEO HTTP(S) DIRECTO DESDE OPEN CONNECT
+- Dos rutas distintas Los metadatos y decisiones viajan a AWS; los bytes del vídeo se descargan directamente desde Open Connect. AWS no sirve normalmente cada película al usuario.
+- Fuente: Netflix Open Connect; Netflix Technology Blog. Arquitectura simplificada, septiembre de 2026.
+- AWS sostiene el streaming; Open Connect lo entrega
+- El cliente solicita contenido; AWS resuelve cómputo, datos y catálogo; Open Connect envía los bytes de vídeo
+- 1 · CLIENTE 2 · SERVIDOR BACKEND (AWS) 3 · OPEN CONNECT
+- Peticiones Selección API SERVICIOS EN AWS OCA
+- Instancias informáticas escalables
+- AWS EC2
+- Almacenamiento escalable
+- AWS S3
+- CLIENTE Microservicios de lógica empresarial OPEN CONNECT
+- Framework específico de Netflix
+- Bases de datos distribuidas escalables
+- AWS DynamoDB, Cassandra
+- Análisis y procesamiento de datos
+- AWS EMR, Hadoop, Spark, Flink, Kafka
+- Transcodificación de vídeo
+- Herramientas propias de Netflix
+- Nota El backend en AWS resuelve identidad y catálogo; el cliente reproduce el vídeo servido desde Open Connect.
+- Open Connect: la red de entrega de vídeo de Netflix
+- Servidores OCA alojados dentro de los ISP e IXP que entregan el vídeo al cliente
+- 1 · QUÉ ES 2 · DÓNDE ESTÁ 3 · QUÉ HACE
+- Open Connect Appliances Dentro de ISP e IXP Entrega directa al cliente
+- (OCA)
+- Red de servidores optimizada Los servidores OCA se ubican Cada OCA transmite el vídeo para almacenar y transmitir dentro de las redes de directamente a los clientes vídeos de gran tamaño. proveedores de Internet (ISP) y finales.
+- en puntos de intercambio de Internet (IXP) de todo el mundo.
+- Nota Estos tres elementos definen la arquitectura de Open Connect: qué es, dónde está y qué hace.
+  - Centro de Datos:
+  - Propio centro de datos hasta 2008.
+  - Tras una interrupción del servicio en sus propios centros de datos cerró todos los servicios de alquiler de DVD durante tres días.
+  - Migra la infraestructura de TI de sus centros de datos a una nube pública y reemplaza programas monolíticos con pequeños componentes de software manejables por una arquitectura de microservicios. (Éxito)
+- Un microservicio almacena todos los programas a reproducir.
+- Otro deduce la tarifa mensual de su tarjeta de crédito.
+- Otro proporciona a su dispositivo el archivo de video a reproducir.
+- …
+  - AWS.
+  - Independencia de centro de datos.
+  - Sistema distribuido.
+  - Alta tolerancia a fallos.
+  - 39 regiones a nivel mundial, 124 zonas de disponibilidad.
+  - https://aws.amazon.com/es/about-aws/global-infrastructure/?p=ngi&loc=1
+
+[BLOQUE 16] Caso Netflix: arquitectura de reproducción
+- Al Reproducir contenido en la aplicación o dispositivo, el Cliente hablará tanto con Backend en AWS como con OCA en Netflix CDN para transmitir videos.
+  - 1. Los OCA envían constantemente informes de salud sobre el estado de la carga de trabajo, la capacidad de enrutamiento y los videos disponibles al servicio de control de caché que se ejecuta en AWS EC2
+- 2. Se envía una solicitud de reproducción desde el dispositivo cliente al servicio de aplicaciones de reproducción de Netflix que se ejecuta en AWS EC2 para obtener las URL con la transmisión del video.
+  - 3. El servicio de aplicaciones de reproducción debe determinar que la solicitud de reproducción sea válida para poder ver el video en particular: verificar el plan del suscriptor, la licencia del video ,etc.
+- 4. El servicio Playback Apps habla con el servicio Steering que también se ejecuta en AWS EC2 para obtener la lista de servidores OCA apropiados del video solicitado.
+  - 5. De la lista de 10 servidores OCA diferentes devueltos por el servicio Playback Apps, el cliente prueba la calidad de las conexiones de red a estos OCA y selecciona el OCA más rápido y confiable para solicitar archivos de video para la transmisión.
+- 6. El servidor OCA seleccionado acepta solicitudes del cliente y comienza a transmitir videos.
+
+[BLOQUE 17] Caso Netflix: arquitectura backend y objetivos finales
+- Backend maneja:
+- El registro.
+- Inicio de sesión.
+- Facturación.
+- Tareas de procesamiento complejas como la transcodificación de video.
+- Recomendaciones personalizadas.
+- Etc.
+- Netflix emplea la arquitectura de microservicios para su sistema basado en la nube.
+- 1. El cliente envía una solicitud de reproducción al backend que se ejecuta en AWS. AWS Load balancer (ELB) maneja esa solicitud.
+  - 2. AWS ELB enviará esa solicitud al servicio API Gateway que se ejecuta en instancias AWS EC2.
+- Se aplicarán algunos filtros predefinidos correspondientes a la lógica de negocio y se reenviará a la API de la aplicación para su posterior manejo.
+- 3. El componente API de la aplicación es la lógica de negocio central detrás de las operaciones de Netflix. Tipos API:
+  - API Registro.
+  - API recomendaciones.
+  - API Player.
+  - 4. Play API llamará a un microservicio o una secuencia de microservicios para cumplir con la solicitud.
+    - ServIcio Playback Apps
+    - Servicio Steering
+    - Servicio Cache Control
+- Los microservicios son en su mayoría pequeños programas sin estado y pueden llamarse entre sí.
+- 5. El resultado tras la ejecución se puede almacenar en una caché, para permitir un acceso más rápido.
+  - 6. Los microservicios pueden guardar u obtener datos de un almacén de datos durante su proceso.
+- 7. Los microservicios pueden enviar eventos para rastrear las actividades del usuario u otros datos a Stream Processing Pipeline.
+  - 8. Los datos que salen de Stream Processing Pipeline pueden ser persistidos en otros almacenes de datos:
+    - AWS S3
+    - Hadoop HDFS
+    - Cassandra
+    - etc.
+- Streaming Caso NetFlix (Objetivos finales)
+  - Garantizar una alta disponibilidad para los servicios de transmisión a escala global.
+  - Diseñar un sistema en la nube capaz de recuperarse automáticamente de fallos o interrupciones del sistema.
+  - Minimizar la latencia de transmisión para cada dispositivo compatible en diferentes condiciones de red.
+  - Admitir escalabilidad con un gran volumen de solicitudes.

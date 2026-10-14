@@ -1,0 +1,39 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="success">
+    <ion-title>Control de Fichajes</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="logout()">
+        <ion-icon slot="icon-only" name="log-out-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div style="max-width: 500px; margin: 20px auto; text-align: center;">
+    <h2>Hola, {{ empleadoName }}</h2>
+    <p style="color: gray;">Gestiona tu jornada laboral diaria</p>
+
+    <ion-card button [routerLink]="['/registrar-fichaje']" style="margin-top: 25px; text-align: left;">
+      <ion-item lines="none">
+        <ion-icon name="finger-print-outline" slot="start" color="success" style="font-size: 40px;"></ion-icon>
+        <ion-label>
+          <h2>Registrar Fichaje</h2>
+          <p>Fichar entrada (asociar trabajo + GPS) o salida si ya has fichado</p>
+        </ion-label>
+        <ion-icon name="chevron-forward-outline" slot="end" color="medium"></ion-icon>
+      </ion-item>
+    </ion-card>
+
+    <ion-card button [routerLink]="['/consulta-fichajes']" style="margin-top: 15px; text-align: left;">
+      <ion-item lines="none">
+        <ion-icon name="calendar-outline" slot="start" color="primary" style="font-size: 40px;"></ion-icon>
+        <ion-label>
+          <h2>Consulta de Fichajes</h2>
+          <p>Ver fichajes de hoy o filtrar por rango de fechas</p>
+        </ion-label>
+        <ion-icon name="chevron-forward-outline" slot="end" color="medium"></ion-icon>
+      </ion-item>
+    </ion-card>
+  </div>
+</ion-content>

@@ -1,0 +1,490 @@
+==============================================================================
+TEMA 3 (PARTE 2). DISPOSITIVOS PORTÁTILES. ESTRUCTURA E INFRAESTRUCTURAS. TELEFONÍA MÓVIL I
+==============================================================================
+
+==============================================================================
+3. CONECTIVIDAD - TELEFONÍA MÓVIL
+==============================================================================
+
+[BLOQUE 1] Telefonía móvil: introducción
+- Los sistemas de telefonía móvil se han convertido en los últimos años en un medio esencial de intercambio de información multimedia.
+- Son Comunicaciones entre estaciones que se mueven libremente, en entornos…
+- Terrestre
+- Marítimo
+- Aeronáutico
+- Han surgido distintas tecnologías (generaciones) que han ido mejorando paulatinamente las prestaciones.
+- La telefonía móvil consiste en el establecimiento de una comunicación entre usuarios cuando al menos uno de los terminales implicados es un teléfono móvil.
+- La transmisión se realiza por radio, utilizando la asignación de frecuencia realizada por la UIT y el CNAF (9KHz-50 GHz)
+  - CNAF: Cuadro Nacional de Asignación de Frecuencias
+  - UIT: Unión Internacional de Telecomunicación
+
+[BLOQUE 2] Espectro electromagnético
+- Espectro electromagnético: menor frecuencia · mayor longitud de onda → mayor frecuencia · menor longitud de onda.
+  - Radio: < 300 MHz · Usos: AM, FM · No ionizante
+  - Microondas: 0,3–300 GHz · Usos: TDT, móvil, Wi-Fi, radar · No ionizante
+  - Infrarrojo: 0,3–400 THz · Usos: mandos, fibra óptica · No ionizante
+  - Visible: 400–790 THz · Usos: visión, láser · No ionizante
+  - Ultravioleta: 0,8–30 PHz · Usos: esterilización · Ionizante
+  - Rayos X: 30 PHz–30 EHz · Usos: radiografía · Ionizante
+  - Rayos gamma: > 30 EHz · Usos: radioterapia · Ionizante
+- Dentro de las microondas:
+  - Telefonía móvil, de 2G a 5G: 0,7–26 GHz
+  - Wi-Fi: 2,4 · 5 · 6 GHz
+  - Televisión digital terrestre: 470–694 MHz
+
+[BLOQUE 3] Bandas móviles en España
+- Bandas móviles en España: más alcance y penetración (700–900 MHz) → más velocidad, menos alcance (26 GHz).
+  - 700–900 MHz · Cobertura: rural e interiores.
+    - 700 MHz: 5G y 4G
+    - 800 MHz: 4G
+    - 900 MHz: 2G y 4G
+  - 1,8–2,6 GHz · Capacidad: zonas urbanas.
+    - 1800 MHz: 2G a 5G
+    - 2100 MHz: 4G y 5G (antes 3G)
+    - 2600 MHz: 4G
+  - 3,5 GHz · Velocidad: núcleos urbanos.
+    - n78: 3,4–3,8 GHz
+    - Solo 5G
+    - 80–110 MHz por operador
+  - 26 GHz · Velocidad extrema: estadios, aeropuertos, industria.
+    - n258: 5G mmWave
+    - 24,25–27,5 GHz
+    - 14 bloques de 200 MHz
+
+[BLOQUE 4] Generaciones de telefonía móvil (1G a 5G)
+- Generaciones de telefonía móvil:
+  - 1G · años 80 · Analógico · Solo voz · Terminales grandes y escucha fácil · Casi apagado
+  - 2G · años 90 · GSM · Voz digital y SMS · Datos lentos: unos 0,1 Mbps
+  - 3G · años 2000 · UMTS / HSPA · Internet en el móvil · Hasta 42 Mbps
+  - 4G · años 2010 · LTE · Banda ancha móvil · Hasta 1 Gbps teórico · Vídeo en streaming
+  - 5G · años 2020 · NR · Hasta 10 Gbps teórico · Latencia muy baja · Industria, vehículos y sensores
+- España (2026): el 3G casi está apagado (fin 31-12-2027) y el 2G sigue hasta 2027–2030. El 4G y el 5G llevan los datos.
+
+[BLOQUE 5] Cómo viaja una llamada móvil
+- Cómo viaja una llamada móvil:
+  1. Teléfono emisor: convierte la voz en ondas de radio.
+  2. Antena de su celda: recibe las ondas y las pasa a la red.
+  3. Red del operador: enruta la llamada por fibra y radioenlaces.
+  4. Antena de la otra celda: emite las ondas hacia el destino.
+  5. Teléfono receptor: convierte las ondas en sonido.
+- Solo los dos extremos son inalámbricos: las ondas viajan por el aire entre cada móvil y su antena. El resto del camino es cable, fibra o radioenlace.
+
+[BLOQUE 6] Elementos de un sistema de telefonía móvil
+- Elementos de un sistema de telefonía móvil (Espectro radioeléctrico como medio):
+  - Terminales: emiten y reciben la señal y se desplazan por el área de cobertura.
+    - Clásico: Estación móvil (MS). Actual: UE, equipo de usuario.
+  - Estaciones base: transceptores fijos que cubren una celda y supervisan la señal de los terminales.
+    - Clásico: BTS (2G), NodeB (3G). Actual: eNodeB (4G), gNodeB (5G).
+  - Núcleo de red (unido a las estaciones base por fibra y radioenlaces): conmuta las estaciones base, conecta con otras redes y traspasa las llamadas en curso.
+    - Clásico: Central de conmutación (MSC). Actual: EPC (4G), 5G Core.
+- Medio de transmisión: el espectro es limitado, así que las celdas reutilizan frecuencias y se coordinan para evitar interferencias.
+
+[BLOQUE 7] Sistemas sin hilos y sistemas celulares
+- Sistemas sin hilos frente a sistemas celulares:
+  - Sistemas sin hilos (ejemplo: DECT):
+    - Cobertura: local, de decenas a cientos de metros.
+    - Uso: residencial y de empresa.
+    - Banda: 1880–1900 MHz en Europa.
+    - Movilidad: desplazamientos cortos alrededor de la base.
+  - Sistemas celulares (ejemplo: GSM, 4G y 5G):
+    - Cobertura: amplia: celdas que cubren el territorio.
+    - Clave: reutilización de frecuencias y división en celdas.
+    - Servicio: voz y datos, con traspaso de llamadas entre celdas.
+- Dato histórico: la TMA (1982–2003) fue el primer servicio celular de España, analógico y solo de voz (TMA-450 y TMA-900/MoviLine).
+
+[BLOQUE 8] Sistemas celulares: reutilización de frecuencias y trunking
+- El espectro radioeléctrico es limitado, por lo que se ha abandonado la idea de asignar canales exclusivos y se ha optado por la reutilización de frecuencias.
+- Inicialmente existían sistemas precelulares poco eficientes:
+  - Gran cobertura: una única antena con gran potencia.
+  - Capacidad limitada, alta probabilidad de bloqueo.
+  - Uso de frecuencias diferentes en cada ubicación autónoma para evitar interferencias.
+  - Escasez de frecuencias. Necesidad de reestructurar el sistema de telefonía móvil.
+  - En NY (1970), 12 llamadas simultaneas sobre un área de 2500 Km2
+- La primera aproximación fue el trunking: un usuario ocupa un canal de entre un conjunto disponible en una frecuencia determinada, y se libera cuando el usuario no lo utiliza.
+- El área cubierta por una BS se denomina célula.
+- División del área de cobertura en células contiguas.
+- Cada celda queda cubierta por una estación base BS, que tiene asignado un subconjunto de canales dentro del área de cobertura.
+- Las BS están interconectadas entre sí.
+- No es posible reutilizar frecuencias en celdas contiguas (interferencias) pero sí en otras más alejadas (cocélulas).
+- Las células finalmente adoptarán una apariencia amorfa aunque se planifican siguiendo formas regulares.
+
+[BLOQUE 9] Sistemas celulares: forma de las celdas
+- Sistemas celulares (introducido por Bell Labs en 1971)
+  - El área de cobertura de una BS es sin forma.
+  - Al comienzo de los sistemas celulares: necesidad de utilizar una forma geométrica regular.
+  - La cobertura circular no es válida: zonas de solapamiento
+  - Se necesita que se tesele completamente el área: elegir entre el triángulo, el cuadrado y el hexágono.
+  - Se necesita que se tesele completamente el terreno.
+  - Se elige el hexágono por tener un área mayor: se necesitan menos estaciones base para cubrir el terreno.
+- Cobertura: el territorio se divide en celdas.
+  - Celda: zona que cubre una estación base. Juntas cubren todo el territorio sin huecos.
+  - Tamaño: de unas pocas manzanas en ciudad a radios de hasta 20 km en el campo.
+  - Forma: se dibuja como hexágono: cubre sin huecos con pocas celdas y deja las antenas a la misma distancia.
+- Cada hexágono es una celda con su antena.
+- Celdas contiguas usan frecuencias distintas; así no se interfieren.
+
+[BLOQUE 10] Sistemas celulares: reuso de frecuencias y cluster
+- Reuso de Frecuencias
+- El grupo de células que conjuntamente usan todas las frecuencias disponibles se denomina cluster
+- El número de células por cluster (N) se denomina factor de reutilización.
+- El elemento diferenciador de los sistemas celulares es el reuso de las frecuencias.
+- Mediante este proceso se asignan los diferentes canales a todas las células.
+- Usuarios de diferentes clusters pueden usar simultáneamente el mismo canal.
+- El nº de veces que un canal puede ser utilizado es tanto mayor cuanto menor es el área de las celdas.
+- Sólo los usuarios de diferentes clusters pueden usar simultáneamente el mismo canal.
+- Para asignar canales a las diferentes células se emplean dos parámetros: i, j
+  - Desplazamiento de i células
+  - Rotación de 60º
+  - Desplazamiento de j células
+- A partir de i, j se obtiene el tamaño del cluster: N(i,j) = i² + j² + i·j
+- Como i, j son enteros, no todos los valores de N son geométricamente realizables.
+- Clusters típicos son de 4, 7 y 12 células.
+- N(i,j) = i² + j² + i·j
+- Figuras de ejemplo: i = 2, j = 0 · i = 2, j = 1 · i = 2, j = 2.
+- T = número de canales duplex del sistema
+- N = tamaño del cluster (valores típicos 4, 7, 12, …)
+- K = T/N número de canales por celda.
+- Factor de reutilización de frecuencia viene dado por 1/N
+- Para un área específica, si los clúster se replican M veces:
+  - Capacidad del sistema: M x T
+  - La elección de N determina la distancia entre celdas que usan la misma frecuencia (co-canal).
+  - N depende de la interferencia que toleran los móviles entre otros factores.
+
+[BLOQUE 11] Ejemplo: elegir el tamaño del cluster
+- Ejemplo: elegir el tamaño del cluster.
+  - Una ciudad se cubre con 84 celdas hexagonales y el operador dispone de T = 420 canales dúplex. Compara tres planes con (i, j) = (2, 0), (2, 1) y (2, 2).
+  - Se pide: N, factor de reutilización, canales por celda (K), número de clusters (M) y capacidad del sistema.
+  - Tabla (i, j · N = i² + j² + i·j · 1/N · K = T/N · M = 84/N · Capacidad M × T):
+    - (2, 0) · 4+0+0 = 4 · 1/4 · 105 canales · 21 clusters · 8820 canales
+    - (2, 1) · 4+1+2 = 7 · 1/7 · 60 canales · 12 clusters · 5040 canales
+    - (2, 2) · 4+4+4 = 12 · 1/12 · 35 canales · 7 clusters · 2940 canales
+- Menos N, más capacidad y más interferencia: con N = 4 la capacidad triplica la de N = 12 (8820 frente a 2940 canales), pero las celdas cocanal quedan más cerca. Por eso N depende de la interferencia que toleren los móviles.
+
+[BLOQUE 12] Ejercicios de sistemas celulares
+- Sistemas celulares. Ejemplo 1:
+  - Obtener i, j, el tamaño del clúster y el factor de reutilización, para la siguiente figura de planificación celular.
+  - (La figura de planificación celular es una imagen; sin texto extraíble.)
+- Sistemas celulares. Ejemplo 2:
+  - Dado el siguiente sistema celular, que se replica 3 veces y donde T = 490:
+    - Obtener el factor de reutilización de la frecuencia.
+    - Obtener la capacidad del sistema.
+    - Número de canales por celda.
+  - (La figura del sistema celular es una imagen; sin texto extraíble.)
+- Ejemplo 3:
+  - Dado un ancho de banda de 33 MHz que es asignado a un sistema telefónico celular que utiliza dos canales simplex de 25 kHz para proporcionar voz full dúplex y canales de control.
+- Calcula el número de canales disponibles por célula si un sistema utiliza:
+  - (A) Reutilización de 4 células
+  - (B) Reutilización de 7 células
+  - (C) Reutilización de 12 células
+
+[BLOQUE 13] Interferencia cocanal
+- Interferencia cocanal:
+  - Es el factor que más limita el rendimiento. Nace de la reutilización: celdas distintas usan los mismos canales.
+  - Subir la potencia no la reduce: aumenta también la de las BS interferentes.
+  - Depende de la relación D/R, no de la potencia transmitida.
+    - D/R = √(3N)
+    - D: distancia entre las BS de celdas cocanal. R: radio de celda. N: celdas por cluster.
+  - Más N, menos interferencia, pero menos canales por celda (K = T/N).
+- Ejemplo: cluster de 7
+  - N = 7: D/R = √21 ≈ 4,6
+  - Con R = 2 km, las celdas cocanal quedan a D ≈ 9,2 km.
+  - Para comparar: N = 4 → 3,5; N = 12 → 6,0.
+
+[BLOQUE 14] Reutilización de frecuencias, de 2G a 5G
+- Reutilización de frecuencias, de 2G a 5G:
+  - 2G · GSM:
+    - Acceso: FDMA / TDMA.
+    - Reutilización: N = 4, 7 o 12.
+    - Interferencia: se evita con frecuencias distintas en celdas vecinas.
+    - Papel del cluster: base del diseño de la red.
+  - 3G · UMTS:
+    - Acceso: CDMA.
+    - Reutilización: N = 1: misma frecuencia en todas las celdas.
+    - Interferencia: se separa con códigos.
+    - Papel del cluster: se planifican códigos, no frecuencias.
+  - 4G y 5G · LTE, NR:
+    - Acceso: OFDMA.
+    - Reutilización: N = 1 de partida.
+    - Interferencia: coordinación entre celdas (ICIC) y haces.
+    - Papel del cluster: reutilización parcial en el borde de celda.
+- El cluster sigue vigente: explica la interferencia cocanal (D/R y relación señal/interferencia), se aplica al borde de celda en 4G y 5G, y el 2G sigue activo en España hasta 2027–2030.
+
+[BLOQUE 15] Relación señal/interferencia (S/I)
+- Relación señal/interferencia (S/I):
+  - Qué mide: cuántas veces es más potente la señal que queremos que la interferencia de otras celdas. S/I = S / I
+  - Por qué 6 interferentes: en el diseño hexagonal, cada celda tiene 6 vecinas cocanal en el primer anillo, todas a distancia D. Las siguientes están mucho más lejos y se desprecian.
+  - Figura: S: celda que escuchamos. I: las 6 celdas cocanal que interfieren.
+  - N (mayúscula): celdas por cluster. Número entero (3, 4, 7, 12) que elige el diseñador de la red. Más N: las celdas cocanal quedan más lejos y hay menos interferencia.
+  - n (minúscula): exponente de pérdidas. Potencia recibida = 1 / dⁿ (d: distancia). Al duplicar d, se divide por 2ⁿ:
+    - n = 2 (espacio libre): ÷4
+    - n = 4 (ciudad): ÷16
+
+[BLOQUE 16] Los decibelios (dB)
+- Los decibelios (dB):
+  - Qué es el decibelio: expresa cuántas veces una potencia es mayor que otra; no es un valor absoluto. Al ser logarítmico, comprime cocientes enormes y convierte productos en sumas.
+  - dB = 10 · log₁₀(P₁ / P₂), donde P₁ y P₂ son las dos potencias que se comparan.
+  - Relación de potencia → dB: 1 → 0 dB · 2 → 3 dB · 10 → 10 dB · 100 → 20 dB · 1000 → 30 dB · 0,5 → −3 dB
+  - Dos reglas para calcular de cabeza: ×10 de potencia: +10 dB; ×2 de potencia: +3 dB (÷2: −3 dB).
+  - Ejemplo: P₁ = 40 mW, P₂ = 1 mW. Relación 40: entre 10 (10 dB) y 100 (20 dB). Exacto: 10·log₁₀(40) ≈ 16 dB.
+- Más dB de S/I, mejor calidad. El 1G analógico exigía unos 18 dB de S/I, y por eso usaba N = 7.
+
+[BLOQUE 17] Cálculo de S/I
+- Cálculo de S/I:
+  1. Señal: de su estación, a distancia R (radio). S = k · R⁻ⁿ (k: potencia y ganancias).
+  2. Interferencia: 6 celdas cocanal, cada una a distancia D. I = 6 · k · D⁻ⁿ.
+  3. Al dividir, k se cancela (igual en S e I). S/I = (D/R)ⁿ / 6.
+  4. En diseño hexagonal, D/R = √(3N). S/I = (3N)^(n/2) / 6.
+  - dB = 10·log₁₀(S/I): pasa la relación a escala logarítmica.
+- Ejemplo: N = 7, n = 4
+  - D/R = √21 ≈ 4,58
+  - (D/R)⁴ = 441
+  - S/I = 441 / 6 ≈ 73,5
+  - En dB: 10·log₁₀(73,5) ≈ 18,7 dB
+  - Con N = 4: 13,8 dB. Con N = 12: 23,3 dB.
+- Más N, más S/I y mejor calidad, pero menos canales por celda (K = T/N). El mínimo de S/I lo fija la calidad que exige el servicio.
+
+[BLOQUE 18] Ejercicio: reutilización e interferencia
+- Ejercicio: reutilización e interferencia.
+  - Datos: red GSM; T = 280 canales dúplex; N = 7 celdas por cluster; R = 1,5 km (radio de celda); n = 4 (exponente de pérdidas); 6 celdas cocanal interferentes.
+  - Se pide:
+    - a) La relación D/R y la distancia D entre celdas cocanal.
+    - b) Los canales por celda, K.
+    - c) La relación señal/interferencia S/I, en veces y en dB.
+    - d) Lo mismo con N = 4, y comparar con N = 7.
+- Ejercicio: solución paso a paso.
+  - N = 7:
+    - a) D/R = √(3N) = √21 ≈ 4,58; D = 4,58 · 1,5 km ≈ 6,9 km
+    - b) K = T/N = 280/7 = 40 canales
+    - c) S/I = (D/R)⁴ / 6; (D/R)⁴ = 21² = 441; S/I = 441/6 = 73,5 veces; 10·log₁₀(73,5) ≈ 18,7 dB
+  - N = 4:
+    - d) D/R = √(3·4) = √12 ≈ 3,46; D = 3,46 · 1,5 km ≈ 5,2 km
+    - K = 280/4 = 70 canales
+    - S/I = (D/R)⁴ / 6; (D/R)⁴ = 12² = 144; S/I = 144/6 = 24 veces; 10·log₁₀(24) ≈ 13,8 dB
+- N = 7 frente a N = 4: qué se gana y qué se pierde (N = 4 · N = 7 · Cambio):
+  - D/R: 3,46 · 4,58 · ×1,3
+  - Distancia D (R = 1,5 km): 5,2 km · 6,9 km · +1,7 km
+  - S/I: 24 (13,8 dB) · 73,5 (18,7 dB) · ×3 (+4,9 dB)
+  - Canales por celda K: 70 · 40 · −30 (−43 %)
+- Gana N = 7: calidad. Las celdas cocanal quedan más lejos, a 6,9 km en vez de 5,2 km. La relación S/I es 3 veces mayor.
+- Gana N = 4: capacidad. 70 canales por celda frente a 40. Con las mismas celdas, 75 % más de capacidad.
+- Cuál elegir depende del S/I mínimo del servicio. Con 18 dB (1G analógico), N = 4 no llega (13,8 dB) y N = 7 sí. Con unos 9 dB (GSM), N = 4 ya basta y da más canales.
+
+[BLOQUE 19] División celular (cell splitting)
+- División celular (cell splitting):
+  - Si una celda se satura, se divide en celdas más pequeñas.
+  - Cada una tiene su BS y menos potencia; a veces se inclina la antena (downtilting).
+  - Radio a la mitad: 4 veces más celdas y unas 16 veces menos potencia.
+  - Coste: nuevos emplazamientos y asignación de canales más compleja.
+  - En 4G y 5G, las celdas pequeñas (small cells) siguen este principio.
+- Tabla (Tipo · Radio · Zona típica):
+  - Macrocélula · 1,5–20 km · Rural, baja densidad
+  - Minicélula · 0,5–1,5 km · Núcleos urbanos medios
+  - Microcélula · 0,2–0,5 km · Núcleos urbanos, alta densidad
+  - Picocélula · < 250 m · Interiores densos (aeropuertos)
+
+[BLOQUE 20] Antenas: en el campo y en la ciudad
+- Antenas: en el campo y en la ciudad.
+  - Rural: antena omnidireccional en el centro de cada celda.
+  - Urbana: antenas en tres vértices no consecutivos de cada hexágono.
+  - Instalación: pequeñas; caben en tejados de edificios y torres.
+- La estación base (BTS) conecta a los usuarios de su celda para hablar y conectarse a Internet.
+
+[BLOQUE 21] Una llamada paso a paso
+- Una llamada, pasos 1 y 2: conectarse y pedir la llamada.
+  1. Buscar la BTS más cercana: al encender, el móvil busca señal y se conecta a la BTS más cercana. Envía sus números de identificación y se verifican sus datos (operador y número). El móvil elige la señal más fuerte (BTS más cercana frente a BTS lejana).
+  2. Pedir la conexión: el móvil envía un mensaje a la BTS pidiendo una conexión con el número al que quiere llamar. El MSC que controla la zona lo recibe. La petición sube de la BTS al MSC que controla la zona.
+- Una llamada, pasos 3 a 5: localizar, aceptar y hablar.
+  3. Localizar al destinatario (paging): el MSC envía un aviso (paging) a varias BTS para localizar el móvil del destinatario. La BTS que lo oye es la más cercana: el MSC acepta la llamada y elige un canal libre. El aviso llega a varias BTS; la que recibe respuesta es la elegida.
+  4 y 5. Conectar y hablar: el MSC establece la conexión entre los dos móviles a través de las BTS a las que están conectados. Se realiza la llamada (Móvil A – BTS – MSC – BTS – Móvil B).
+
+[BLOQUE 22] Handover o traspaso
+- Handover o traspaso: qué es y cómo ocurre.
+  - Traspaso: pasar una llamada en curso a otra celda, o a otro canal de la misma, cuando el móvil se desplaza o la calidad baja. La llamada no se corta.
+  - 1. Medida (quién: móvil y red): se mide la calidad del enlace con la BS actual y con las vecinas. RSSI, BER, S/I y carga. En 4G y 5G: RSRP y SINR.
+  - 2. Decisión (quién: red, o móvil): se decide si conviene cambiar y a qué celda. Se cambia si la vecina supera a la actual en un margen.
+  - 3. Ejecución (quién: red): la red reserva un canal en la celda nueva y ordena al móvil cambiar a él. El usuario no nota nada.
+- Debe ser automático y solo el necesario: cada traspaso añade señalización y retardo.
+- Cuándo se hace el traspaso. El móvil va de A a B (dBm, ilustrativo; gráfico con BS actual, BS vecina, cruce y margen H):
+  - Al salir de A: la BS actual da buena señal y la vecina, mala. No se hace nada.
+  - En el cruce: ambas señales son iguales, pero todavía no se cambia.
+  - Traspaso: la vecina supera a la actual en un margen H y se cambia de celda.
+- Margen de histéresis H: si se cambiara justo en el cruce, el móvil saltaría una y otra vez entre las dos celdas (efecto ping-pong). El margen lo evita.
+
+[BLOQUE 23] Arquitectura de la red celular: BTS, BSC y MSC
+- Arquitectura de la red celular: BTS, BSC y MSC (varias BTS → BSC → MSC).
+  - BTS · Base Transceiver Station: radio con los móviles. Moderno: NodeB, eNodeB, gNodeB (3G, 4G, 5G).
+  - BSC · Base Station Controller: controla varias BTS y sus traspasos. Moderno: no existe en 4G ni 5G.
+  - MSC · Mobile Switching Centre: conmuta llamadas y conecta con otras redes. Moderno: núcleo EPC (4G), 5G Core.
+- Los traspasos son automáticos y solo los necesarios: cada uno añade señalización y retardo.
+
+[BLOQUE 24] Tipos de traspaso
+- Tipos de traspaso, de menor a mayor alcance (Tipo · Qué cambia · Lo gestiona):
+  - Intra-celda · El canal, en la misma celda · BSC
+  - Inter-celda (intra-BSC) · De celda, dentro del mismo BSC · BSC
+  - Inter-BSC (intra-MSC) · De BSC, dentro del mismo MSC · MSC
+  - Inter-MSC · De MSC · Los dos MSC
+- Cuanto más arriba se decide, más cuesta: un traspaso entre MSC exige más señalización y tiempo que uno dentro de la misma celda.
+- Intra-celda: cambia el canal, no la celda.
+  - Se hace para equilibrar la carga de tráfico o mejorar la calidad de la conexión, cambiando la frecuencia de la portadora.
+  - Lo gestiona: BSC.
+- Inter-celda (intra-BSC): cambia la celda, mismo BSC.
+  - El móvil pasa a otra celda, pero sigue bajo el mismo controlador de estación base (BSC).
+  - Lo gestiona: BSC.
+- Inter-BSC (intra-MSC): cambia de BSC, mismo MSC.
+  - Un BSC solo controla un número limitado de celdas, así que a veces hay que pasar el móvil a otro BSC.
+  - Lo gestiona: MSC.
+- Inter-MSC: cambia de MSC.
+  - El móvil pasa de la región de un MSC a la de otro. Cada MSC cubre un área grande.
+  - Lo gestiona: los dos MSC.
+
+[BLOQUE 25] Quién decide el traspaso (NCHO, MAHO, MCHO)
+- Quién decide el traspaso:
+  - NCHO (controlado por la red): mide la red; decide la red. Uso: 1G. Límite: no sirve con mucha carga ni condiciones variables.
+  - MAHO (asistido por el móvil): mide el móvil; decide la red. Uso: GSM. Ventaja: control más distribuido que NCHO.
+  - MCHO (controlado por el móvil): mide el móvil; decide el móvil. Uso: DECT. Ventaja: máxima descentralización.
+- Se clasifican por quién mide y quién decide: en NCHO, la red; en MAHO, mide el móvil y decide la red; en MCHO, el móvil. En 4G y 5G se usa el esquema de MAHO.
+
+[BLOQUE 26] Hard frente a soft handover
+- Hard frente a soft handover: son las dos formas de ejecutar un traspaso: cómo se pasa la llamada de la celda A a la B. No dicen quién decide (NCHO, MAHO, MCHO), sino cuándo se corta el enlace con A.
+  - Hard handover: corta antes de conectar (break before make). Hueco entre A y B: microcorte.
+    - Cómo: se suelta la celda antigua y después se conecta la nueva.
+    - Uso: 2G, 4G y 5G.
+    - Ventaja: ocupa un solo canal.
+    - Riesgo: posible microcorte.
+  - Soft handover: conecta antes de cortar (make before break). Zona común: dos conexiones a la vez.
+    - Cómo: se conecta la celda nueva sin soltar la antigua, hasta que su señal es estable.
+    - Uso: 3G (CDMA).
+    - Ventaja: sin cortes.
+    - Coste: dos conexiones a la vez.
+- Entre tecnologías (inter-RAT): de 5G a 4G, o de 4G a 2G, cuando falta cobertura.
+
+[BLOQUE 27] Celda llena: bloqueo frente a pérdida de llamada
+- Celda llena: bloqueo frente a pérdida de llamada. Cuando una celda no tiene canales libres, alguien se queda sin servicio.
+  - Llamada nueva (aún no ha empezado) → Resultado: bloqueo. Se rechaza el intento y el usuario puede volver a probar. Molestia para el usuario: baja.
+  - Traspaso (la llamada ya está en curso) → Resultado: pérdida de la llamada. Si la celda nueva no tiene canal libre, la llamada se corta. Molestia para el usuario: alta.
+- Sin prioridad: el traspaso se trata como una llamada nueva, y la probabilidad de rechazarlo es igual a la de bloqueo.
+- Es más molesto perder una llamada que no poder iniciarla: por eso muchos sistemas dan prioridad a los traspasos.
+
+[BLOQUE 28] Formas de gestionar los traspasos
+- Tres formas de gestionar los traspasos:
+  - Sin prioridad (todos compiten por los canales):
+    - Cómo: traspasos y llamadas nuevas usan los mismos canales.
+    - Ventaja: es lo más sencillo.
+    - Coste: se pierden tantos traspasos como llamadas se bloquean.
+  - Canal de guarda (guard channel):
+    - Cómo: se reserva una parte de los canales solo para traspasos.
+    - Ventaja: se cortan menos llamadas.
+    - Coste: se bloquean más llamadas nuevas.
+  - Cola de traspasos (queuing of handoffs):
+    - Cómo: si no hay canal, la petición espera un tiempo.
+    - Ventaja: aprovecha que el móvil sigue un rato entre dos celdas.
+    - Coste: si la espera se agota, la llamada se pierde.
+- Se pueden combinar: el canal de guarda también se puede usar con gestión dinámica de recursos.
+- Canal de guarda: ejemplo con 10 canales y 2 de guarda.
+  - Canales de una celda: 1 a 8 = llamadas nuevas y traspasos (8 canales); 9 y 10 = solo traspasos (2 de guarda).
+  - Llamada nueva: puede usar los canales 1 a 8. Si están ocupados, se bloquea aunque queden libres los de guarda.
+  - Traspaso: puede usar los 10 canales, incluidos los 2 de guarda. Tiene más probabilidad de encontrar uno libre.
+- Se gana y se paga: se cortan menos llamadas en curso, pero las nuevas disponen de 8 canales en lugar de 10 y se bloquean más.
+
+[BLOQUE 29] Dimensionado de sistemas
+- Dimensionado: cuántos canales necesita una celda.
+  - Hasta ahora: la reutilización de frecuencias da K = T/N canales por celda. Falta saber cuántos usuarios atiende una celda con esos canales.
+  1. Tráfico: cuánto piden los usuarios: llamadas por hora por su duración media. Se mide en Erlangs.
+  2. Grado de servicio: qué porcentaje de llamadas bloqueadas se acepta, por ejemplo un 2 %.
+  3. Erlang B: con el tráfico y el bloqueo, da los canales necesarios. O el tráfico que admite una celda con K canales.
+- Los operadores buscan ofrecer a sus clientes un servicio adecuado de manera rentable.
+- No es razonable proporcionar capacidad atendiendo a demandas puntuales elevadas.
+- Ejemplo: se pretende dar servicio a una celda con 1000 usuarios.
+- Se usan pocos canales → La solución es muy rentable para el operador, pero el servicio es inaceptable para los usuarios (gran probabilidad de que no haya canal libre y la llamada se bloquee).
+- Se usan 1000 canales, uno por usuario → Los usuarios estarán muy satisfechos (servicio siempre disponible), pero la solución no es rentable para la compañía.
+- Escasez de recursos: el espectro es limitado y cada celda dispone de K = T/N canales.
+- Se suelen emplear modelos matemáticos para llevar a cabo este diseño
+- Modelo matemático: proceso de Poisson
+- Relación de Little
+- Teoría de colas.
+- Dimensionado de sistemas: evolución de las llamadas en curso en una celda durante un día (gráfico). Depende de varios factores:
+  - Localización: zona residencial, de oficinas, estación, estadio...
+  - Situación temporal: fin de semana, verano, eventos...
+  - Movilidad: los usuarios cambian de celda.
+- Hora cargada: la hora del día con más llamadas en curso (el pico del gráfico).
+- Cada celda se dimensiona para su hora cargada: si aguanta el pico, aguanta el resto del día.
+- Fuera del pico sobran canales: es el precio de no bloquear llamadas en el pico.
+- Se incentiva «un balanceo» de la carga (tarifas más baratas fuera del pico).
+
+[BLOQUE 30] Dimensionado: tráfico
+- Dimensionado de sistemas – Tráfico. ¿Qué es el tráfico?
+  - La intensidad de tráfico (o simplemente, tráfico) se define como el número medio de llamadas en curso en un sistema.
+  - También indica el grado de ocupación de los recursos.
+  - La unidad más empleada es el Erlang, que es una cantidad adimensional.
+  - El tráfico (en Erlangs) de un grupo de circuitos: A = C·h / T = λ·h
+    - C: número de llamadas en T.
+    - h: duración media (holding time).
+    - T: tiempo de observación.
+    - λ: tasa de llegadas.
+    - Depende del tiempo de observación.
+    - Para un único recurso, A ≤ 1.
+- Tráfico ofrecido (TO)
+- Es el volumen de tráfico que se le ofrece a un grupo de circuitos.
+- Tráfico cursado (TC)
+- Como es inviable dotar de recursos para todos los potenciales usuarios → hay llamadas que no pueden atenderse y se pierden.
+- El tráfico cursado viene dado por aquellas peticiones que sí pueden atenderse.
+- También se define como el número medio de recursos (circuitos) ocupados.
+- Tráfico perdido (TP)
+- Conjunto de llegadas que no pueden atenderse y se pierden.
+- Especialmente relevante en conmutación de circuitos.
+- TP = TO –TC .
+- Tráfico en demora/espera (TD)
+- En ciertos sistemas las llamadas que no pueden atenderse no se pierden, sino que esperan a que haya recursos libres.
+- Se suele emplear en el dimensionado de sistemas de conmutación de paquetes.
+- En caso de que la capacidad de almacenamiento sea infinita, no se perdería ninguna llamada (sistema de espera pura)
+- Dimensionado de sistemas – Cuantificación del tráfico:
+  - Volumen de tráfico: V_tráfico = Σᵢ Tᵢ
+  - Intensidad de tráfico (tráfico): I_tráfico = V_tráfico / T_obs = (Σᵢ Tᵢ) / T_obs
+  - En las 3 medidas el tráfico es el mismo → podríamos tener en cuenta la sobrecarga debida al mayor número de llamadas. (Las 3 medidas se mostraban en una figura.)
+
+[BLOQUE 31] Dimensionado: grado de servicio
+- Dimensionado de sistemas – Grado de servicio:
+  - El Grado de Servicio (Grade of Service, GoS) da idea de la «calidad» que perciben los usuarios.
+  - Depende fuertemente del tipo de sistema.
+  - En sistemas con pérdida, se define como la probabilidad de pérdida (o probabilidad de congestión).
+    - Coincide con la probabilidad de que un usuario, al realizar una llamada, se encuentre el sistema sin recursos.
+    - GoS = llamadas perdidas / llamadas ofrecidas
+    - GoS = TP / TO
+  - En sistemas de demora se suele relacionar con la probabilidad de esperar para disponer de un recurso.
+  - También se puede definir como el tiempo medio de espera antes de obtener un recurso para cursar la llamada.
+
+[BLOQUE 32] Dimensionado: Erlang B
+- Dimensionado de sistemas – Erlang B:
+  - Qué calcula: la probabilidad de que una llamada encuentre todos los canales de la celda ocupados.
+  - Cómo se usa: se fija el bloqueo máximo (p. ej. 2 %). Con m canales, la tabla da el tráfico máximo que admite la celda.
+  - Hipótesis: las llamadas llegan al azar y las bloqueadas se pierden, sin cola.
+  - Tráfico máximo con un 2 % de bloqueo (Canales · Tráfico admitido · Por canal):
+    - 10 · 5,1 Erlangs · 0,51
+    - 20 · 13,2 Erlangs · 0,66
+    - 30 · 21,9 Erlangs · 0,73
+    - 40 · 31,0 Erlangs · 0,78
+    - 50 · 40,3 Erlangs · 0,81
+- Con 40 canales y 2 % de bloqueo, la celda admite 31 Erlangs.
+- Cuantos más canales, más tráfico por canal: 40 canales admiten 6 veces el tráfico de 10 (31 frente a 5,1 Erlangs).
+
+[BLOQUE 33] Ejemplo: tráfico ofrecido, cursado y grado de servicio
+- Ejemplo: tráfico ofrecido, cursado y grado de servicio.
+  - Un grupo de circuitos recibe en la hora cargada 1200 llamadas de 3 min de duración media. 60 llamadas encuentran todos los circuitos ocupados y se pierden.
+  - Se pide: tráfico ofrecido, grado de servicio, tráfico cursado y tráfico perdido.
+  - Resolución (Apartado · Fórmula · Cálculo · Resultado):
+    - a) Tráfico ofrecido · TO = λ · h · 1200 llam/h × 3/60 h · 60 Erlangs
+    - b) Grado de servicio · GoS = TP / TO · 60 / 1200 · 5 %
+    - c) Tráfico cursado · TC = TO · (1 − GoS) · 60 × 0,95 · 57 Erlangs
+    - d) Tráfico perdido · TP = TO − TC · 60 − 57 · 3 Erlangs
+- Con un 5 % de pérdidas se cursan 57 de los 60 Erlangs.
+- El tráfico cursado es el número medio de circuitos ocupados, así que el grupo tiene más de 57 circuitos. Para bajar el 5 % de pérdidas hay que añadir circuitos.
+
+[BLOQUE 34] Ejercicios de tipos de tráfico
+  - Ejercicio 4.
+  - Un grupo de circuitos cursan en 3 horas 500 llamadas con un tiempo medio de duración de 4 minutos. Calcular:
+- a) Volumen de tráfico.
+- b) Intensidad de tráfico cursado.
+- Ejercicio 5.
+- Calcular para un grupo de circuitos el tráfico, teniendo en cuenta que el número de llamadas es de 600 y la duración media de las llamadas es de 3 minutos para un tiempo de observación de 3 horas.
+- Ejercicio 6.
+- Calcular el grado de servicio de un grupo de circuitos, teniendo en cuenta que el tráfico ofrecido es 25 Erlangs y el tráfico cursado es de 15 Erlangs.

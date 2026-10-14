@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Test · Tema 2 Infraestructuras Multimedia</title>
+<style>
+  :root{
+    --bg:#0b0f14;
+    --panel:#121821;
+    --panel2:#161e29;
+    --line:#22303f;
+    --text:#dbe4ec;
+    --muted:#7c93a8;
+    --a:#3ddc97;
+    --b:#4f9dde;
+    --wrong:#e2596b;
+    --amber:#e8b86d;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
+    padding:28px 16px 60px;
+  }
+  .wrap{max-width:720px;margin:0 auto;}
+  .eyebrow{
+    font-family:'Courier New',monospace;
+    font-size:12px;
+    letter-spacing:2px;
+    color:var(--muted);
+    text-transform:uppercase;
+  }
+  h1{
+    font-size:24px;
+    margin:6px 0 4px;
+    font-weight:700;
+    letter-spacing:-0.3px;
+  }
+  .sub{color:var(--muted);font-size:14px;margin-bottom:22px;}
+  .tag{
+    display:inline-block;
+    font-family:'Courier New',monospace;
+    font-size:11px;
+    padding:2px 8px;
+    border-radius:5px;
+    background:var(--panel2);
+    border:1px solid var(--line);
+    color:var(--amber);
+    margin-bottom:8px;
+  }
+  .progress-track{
+    height:6px;
+    background:var(--panel2);
+    border-radius:4px;
+    overflow:hidden;
+    margin-bottom:26px;
+    border:1px solid var(--line);
+  }
+  .progress-fill{
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg,var(--b),var(--a));
+    transition:width .35s ease;
+  }
+  .card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:22px 22px 18px;
+    margin-bottom:16px;
+  }
+  .qnum{
+    font-family:'Courier New',monospace;
+    font-size:12px;
+    color:var(--amber);
+    margin-bottom:8px;
+  }
+  .qtext{
+    font-size:16.5px;
+    line-height:1.45;
+    margin-bottom:18px;
+    font-weight:600;
+    white-space:pre-line;
+  }
+  .opt{
+    display:block;
+    width:100%;
+    text-align:left;
+    background:var(--panel2);
+    border:1px solid var(--line);
+    color:var(--text);
+    padding:12px 14px;
+    border-radius:8px;
+    margin-bottom:9px;
+    font-size:14.5px;
+    cursor:pointer;
+    transition:border-color .15s, background .15s;
+    font-family: inherit;
+  }
+  .opt:hover{border-color:var(--b);}
+  .opt.selected{border-color:var(--b);background:#152233;}
+  .opt.correct{border-color:var(--a);background:#0f2a22;color:#c8f5e2;}
+  .opt.incorrect{border-color:var(--wrong);background:#2a1216;color:#f6c7cd;}
+  .opt:disabled{cursor:default;}
+  .nav{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-top:8px;
+  }
+  button.action{
+    background:var(--a);
+    color:#04140e;
+    border:none;
+    padding:11px 20px;
+    border-radius:8px;
+    font-weight:700;
+    font-size:14px;
+    cursor:pointer;
+  }
+  button.action:disabled{background:#2a3540;color:var(--muted);cursor:not-allowed;}
+  button.ghost{
+    background:none;
+    border:1px solid var(--line);
+    color:var(--muted);
+    padding:11px 16px;
+    border-radius:8px;
+    font-size:13px;
+    cursor:pointer;
+  }
+  .feedback{
+    font-size:13px;
+    margin-top:4px;
+    color:var(--muted);
+    line-height:1.5;
+  }
+  .result{
+    text-align:center;
+    padding:40px 20px;
+  }
+  .score{
+    font-size:64px;
+    font-weight:800;
+    font-family:'Courier New',monospace;
+    margin:10px 0;
+  }
+  .score.pass{color:var(--a);}
+  .score.fail{color:var(--wrong);}
+  .breakdown{
+    display:flex;
+    justify-content:center;
+    gap:24px;
+    margin:18px 0 28px;
+    font-size:14px;
+    color:var(--muted);
+  }
+  .breakdown b{color:var(--text);font-size:18px;display:block;}
+  #startScreen{text-align:center;padding:30px 10px;}
+  #startScreen p{color:var(--muted);font-size:14px;max-width:480px;margin:12px auto 26px;line-height:1.6;}
+  .hidden{display:none !important;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">DAM · Tema 2</div>
+  <h1>Introducción a las infraestructuras multimedia</h1>
+  <div class="sub" id="subline">Test de repaso — sistemas multimedia, streaming, RAID, formatos y ejercicios</div>
+
+  <div id="startScreen">
+    <p>Test con preguntas de teoría y ejercicios numéricos/lógicos del tema (imágenes, audio, vídeo, RAID). Los ejercicios los puedes resolver aparte en papel y luego marcar la opción correcta aquí.<br><br>
+    Cada acierto suma 1 punto. Cada fallo resta 1/3 de punto. Las preguntas en blanco no puntúan ni penalizan. Nota final sobre 10.</p>
+    <button class="action" onclick="startQuiz()">Empezar test</button>
+  </div>
+
+  <div id="quizScreen" class="hidden">
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="card">
+      <div class="qnum" id="qnum"></div>
+      <div id="tagBox"></div>
+      <div class="qtext" id="qtext"></div>
+      <div id="options"></div>
+      <div class="feedback" id="feedback"></div>
+      <div class="nav">
+        <button class="ghost" onclick="skipQuestion()" id="skipBtn">Dejar en blanco →</button>
+        <button class="action" onclick="nextQuestion()" id="nextBtn" disabled>Siguiente</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="resultScreen" class="hidden">
+    <div class="card result">
+      <div class="eyebrow" id="resultLabel">RESULTADO</div>
+      <div class="score" id="finalScore">0.0</div>
+      <div class="breakdown">
+        <div><b id="rCorrect">0</b>aciertos</div>
+        <div><b id="rWrong">0</b>fallos</div>
+        <div><b id="rBlank">0</b>en blanco</div>
+      </div>
+      <button class="action" onclick="restartQuiz()">Repetir test</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const questions = [
+// --- SISTEMAS MULTIMEDIA ---
+{q:"¿Qué es 'multimedia' según el tema?", opts:["Un lenguaje de programación para crear webs","El campo que estudia la integración de diferentes medios en ordenadores","Un protocolo de red para vídeo","Un tipo de formato de compresión"], correct:1},
+{q:"¿Qué medios incluye principalmente el multimedia?", opts:["Solo texto e imágenes","Únicamente vídeo","Medios visuales y auditivos (texto, imagen, audio, vídeo)","Solo audio"], correct:2},
+{q:"¿Qué es un Sistema Multimedia (SM)?", opts:["Un formato de archivo de vídeo","Un dispositivo de almacenamiento externo","Aquel capaz de procesar tanto aplicaciones como datos multimedia","Un protocolo de streaming"], correct:2},
+{q:"En la clasificación multimedia, ¿qué tipo describe al cine, donde el usuario no controla el contenido?", opts:["Hipermedia","Hipermedia interactiva","Multimedia lineal","Vídeo bajo demanda"], correct:2},
+{q:"¿Qué tipo de multimedia da al usuario control mediante un sistema de navegación, con ejemplo en HTML?", opts:["Multimedia lineal","Hipermedia","Multimedia estática","Streaming en directo"], correct:1},
+{q:"¿Qué tipo de multimedia permite al usuario controlar elementos como la secuencia o la velocidad de la presentación?", opts:["Multimedia lineal","OTT","Hipermedia interactiva","SVOD"], correct:2},
+{q:"¿Cuál es la primera etapa de un proyecto multimedia?", opts:["Diseño y producción","Distribución","Pruebas de calidad y satisfacción","Planificación y evaluación de costes"], correct:3},
+{q:"¿Cuál de las siguientes es una característica deseable de un Sistema Multimedia?", opts:["Baja capacidad de procesamiento","Sistema de ficheros preparado para multimedia","Ausencia total de compresión","Entrada/salida de datos lenta"], correct:1},
+
+// --- STREAMING ---
+{q:"¿Qué es el streaming según el tema?", opts:["Un método de distribución de contenido consumido en tiempo real mientras se descarga","Una técnica de compresión de vídeo","Un tipo de RAID","Un protocolo de cifrado"], correct:0},
+{q:"¿Cuál es la principal diferencia entre streaming y descarga tradicional?", opts:["El streaming no permite pausar nunca","En la descarga tradicional el archivo debe estar completo para poder visualizarse","El streaming no usa red","La descarga tradicional siempre es más rápida"], correct:1},
+{q:"¿Qué elemento almacena temporalmente fragmentos del contenido en el dispositivo del usuario durante el streaming?", opts:["El proxy","El búfer de datos","El servidor OCA","El canal de control"], correct:1},
+{q:"¿Qué tipo de servicio de streaming es similar a la televisión o la radio, emitido en directo?", opts:["Vídeo bajo demanda","OTT genérico","Directo / Live","SVOD"], correct:2},
+{q:"En un servicio de streaming en directo, ¿qué control tiene el usuario sobre el contenido emitido?", opts:["Ninguno sobre el contenido, aunque puede pausar","Control total (avanzar y retroceder)","Puede elegir el orden de emisión","Puede descargarlo para verlo offline"], correct:0},
+{q:"¿Qué distingue principalmente al Vídeo Bajo Demanda frente al streaming en directo?", opts:["No requiere conexión a internet en ningún momento","El usuario puede pausar, avanzar o retroceder dentro del vídeo","Solo se puede visualizar una única vez","No tiene subcategorías de servicio"], correct:1},
+{q:"¿Qué modelo OTT es gratuito para el usuario y se financia mediante publicidad?", opts:["SVOD","TVOD","AVOD","PPV"], correct:2},
+{q:"¿Qué modelo OTT se basa en pagar una suscripción para acceder a contenido premium?", opts:["AVOD","SVOD","TVOD","PPV"], correct:1},
+{q:"¿Qué modelo OTT ofrece acceso al contenido mediante un pago único o alquiler?", opts:["SVOD","AVOD","TVOD","Streaming P2P"], correct:2},
+{q:"¿Cómo se denomina el pago por la visualización única de un evento deportivo o musical?", opts:["TVOD","PPV","SVOD","AVOD"], correct:1},
+{q:"Según el tema, ¿cuál es la arquitectura más simple y habitual usada en streaming?", opts:["Peer-to-peer (P2P)","Cliente-servidor (C/S)","Malla distribuida","Nube híbrida sin servidor"], correct:1},
+{q:"¿Qué protocolo de streaming usa UDP y no tiene en cuenta la pérdida de paquetes?", opts:["RTCP","RTP","RTSP","HLS"], correct:1},
+{q:"¿Qué protocolo de Apple, pensado para iOS, permite además que el usuario escoja la calidad del vídeo?", opts:["MPEG-DASH","HLS","HDS","RTSP"], correct:1},
+
+// --- CASO NETFLIX ---
+{q:"¿Qué servicio en la nube usa Netflix para almacenar todo su contenido?", opts:["Google Cloud","Microsoft Azure","Amazon Web Services (AWS)","IBM Cloud"], correct:2},
+{q:"¿Qué utiliza Netflix como CDN para acelerar la transmisión de sus contenidos?", opts:["CloudFront","Open Connect (OC)","Akamai","Fastly"], correct:1},
+{q:"¿Qué es un CDN, según se explica en el tema?", opts:["Un protocolo de cifrado de vídeo","Una red de servidores distribuidos geográficamente que acerca el contenido al usuario final","Un tipo de RAID para vídeo","Un formato de compresión de audio"], correct:1},
+{q:"¿Qué tipo de arquitectura usa el servidor backend de Netflix?", opts:["Monolítica","Microservicios","Peer-to-peer","Cliente único centralizado"], correct:1},
+{q:"¿Cómo se llaman los servidores especializados en transmitir grandes volúmenes de datos dentro de la red Open Connect de Netflix?", opts:["OCA (Open Connect Appliances)","STB","CDN-X","EC2"], correct:0},
+{q:"¿Cuál de estos es un objetivo general de Netflix mencionado en el tema?", opts:["Reducir el número de suscriptores","Diseñar un sistema con tolerancia a fallos o interrupciones","Eliminar por completo el uso de CDN","Aumentar deliberadamente la latencia"], correct:1},
+
+// --- RAID ---
+{q:"¿Cuál es la función principal de un RAID?", opts:["Cifrar los datos almacenados","Permitir la escalabilidad del almacenamiento combinando discos en una unidad lógica","Comprimir los archivos automáticamente","Sustituir por completo a la memoria RAM"], correct:1},
+{q:"¿Qué tipo de RAID no se considera realmente un RAID, pero se incluye en la clasificación por repartir los datos entre discos?", opts:["RAID 1","RAID 5","RAID 0","RAID 10"], correct:2},
+{q:"¿Qué ocurre en un RAID 0 si una de las unidades deja de funcionar?", opts:["No pasa nada, hay redundancia suficiente","Se pierden todos los datos almacenados","Solo se pierde la mitad de los datos","El sistema los reconstruye automáticamente"], correct:1},
+{q:"¿Qué tipo de RAID crea una copia exacta (espejo) de los datos en varios discos?", opts:["RAID 0","RAID 1","RAID 5","RAID 6"], correct:1},
+{q:"En un RAID 1, ¿qué ocurre con la capacidad lógica total al añadir más discos?", opts:["Aumenta proporcionalmente al número de discos","No existe un aumento de capacidad","Se duplica con cada disco añadido","Se cuadriplica siempre"], correct:1},
+{q:"¿Cuál es el número mínimo de discos necesario para montar un RAID 5?", opts:["2","3","4","5"], correct:1},
+{q:"¿Qué operación matemática se usa para generar el bloque de paridad en un RAID 5?", opts:["Suma binaria","Operación XOR","Multiplicación de matrices","Rotación de bits"], correct:1},
+{q:"¿Qué diferencia principal tiene el RAID 6 respecto al RAID 5?", opts:["Usa un único disco físico","Tiene paridad doble: aumenta la redundancia pero reduce el rendimiento de escritura","No necesita bloque de paridad","Solo admite 2 discos como máximo"], correct:1},
+{q:"¿Cuántos discos como mínimo se necesitan para montar un RAID 10?", opts:["2","3","4 (número par)","5"], correct:2},
+
+// --- FORMATEO Y COMPRESIÓN ---
+{q:"¿Qué codificación de texto usa 1 byte por carácter y se emplea principalmente en inglés?", opts:["UTF-16","ASCII","UTF-32","UTF-8"], correct:1},
+{q:"¿Qué codificación es compatible con ASCII y usa entre 1 y 4 bytes según el carácter?", opts:["UTF-32","UTF-16","UTF-8","ISO-8859"], correct:2},
+{q:"¿Qué técnica de compresión de texto asigna códigos más cortos a los símbolos más frecuentes?", opts:["LZW","Huffman / Shannon-Fano","RTP","Operación XOR"], correct:1},
+{q:"¿Qué técnica sustituye cadenas de caracteres repetitivos por códigos únicos y se usa en el formato GIF?", opts:["Huffman","LZW (Lempel-Ziv-Welch)","JPEG","MPEG-1"], correct:1},
+{q:"¿Qué formato de imagen no aplica ninguna compresión, ofreciendo alta calidad pero bajo rendimiento en recursos?", opts:["PNG","BMP","JPG","WEBP"], correct:1},
+{q:"¿Qué formato de imagen está limitado a 256 colores y admite animaciones?", opts:["PNG","GIF","TIFF","HEIF"], correct:1},
+{q:"¿Qué formato de imagen soporta colores ilimitados con compresión sin pérdida?", opts:["JPG","GIF","PNG","BMP"], correct:2},
+{q:"¿Qué formato de imagen aplica una compresión con pérdida ajustable, permitiendo balancear calidad y tamaño?", opts:["PNG","JPG","BMP","TIFF"], correct:1},
+{q:"¿Qué formatos de audio se consideran sin pérdida (lossless)?", opts:["MP3 y AAC","OGG y MP3","FLAC y ALAC","WAV comprimido"], correct:2},
+{q:"¿Qué estándar MPEG incluye el formato de audio MP3 y ofrece una calidad de vídeo similar a VHS?", opts:["MPEG-2","MPEG-1","MPEG-4","MPEG-7"], correct:1},
+{q:"¿Qué estándar MPEG es clave para la televisión digital, los DVD y el HDTV?", opts:["MPEG-1","MPEG-2","MPEG-4","MPEG-21"], correct:1},
+{q:"¿Qué estándar MPEG es el más flexible, soporta gráficos animados y es ideal para aplicaciones interactivas y web?", opts:["MPEG-2","MPEG-7","MPEG-4","MPEG-1"], correct:2},
+
+// --- RENDIMIENTO Y MMA ---
+{q:"¿En qué unidad se mide la complejidad del rendimiento de un procesador multimedia?", opts:["FPS","OPS (operaciones primitivas por segundo)","Mbps","Hz"], correct:1},
+{q:"En el esquema de QoS del tema, ¿qué tipo de tráfico tiene un retraso mucho menor que 1 segundo?", opts:["No crítico","Oportuno","Interactivo","Responsivo"], correct:2},
+{q:"¿Qué tipo de dato suelen procesar habitualmente las arquitecturas MMA para sus instrucciones?", opts:["Números en coma flotante de 64 bits","Enteros de 8 o 16 bits","Cadenas de texto largas","Matrices de gran tamaño"], correct:1},
+
+// --- ARQUITECTURAS DE PROCESADORES ---
+{q:"¿Qué tipo de procesador programable de propósito general tiene instrucciones reducidas y es súper escalable en paralelismo?", opts:["CISC","RISC","DSP","GPU"], correct:1},
+{q:"¿Qué tipo de procesador programable de propósito general tiene muchas operaciones, algunas muy complejas, y es típico de los PCs convencionales?", opts:["RISC","CISC","DSP","FPGA"], correct:1},
+{q:"¿Qué caracteriza a los procesadores dedicados frente a los reconfigurables?", opts:["Se pueden reconfigurar fácilmente para otros usos","Están creados específicamente para un sistema y no funcionan en otros","Tienen siempre instrucciones reducidas","Usan siempre arquitectura RISC"], correct:1},
+
+// --- EJERCICIOS ---
+{q:"EJERCICIO. Calcula el espacio necesario para almacenar sin comprimir una imagen de 320×240 píxeles con una profundidad de 24 bits/píxel.", opts:["112,5 KB","225 KB","450 KB","900 KB"], correct:1},
+{q:"EJERCICIO. Un vídeo Full HD (1920×1080) a 30 fps, con una profundidad de 12 bits/píxel, ¿cuántos MB ocupa aproximadamente cada segundo sin comprimir?", opts:["~45 MB/s","~89 MB/s","~178 MB/s","~22 MB/s"], correct:1},
+{q:"EJERCICIO. Un archivo de audio sin comprimir de calidad CD (44.1 kHz, 16 bits, estéreo) y 5 minutos de duración, ¿qué tamaño aproximado ocupa?", opts:["~25 MB","~50 MB","~100 MB","~10 MB"], correct:1},
+{q:"EJERCICIO. En un RAID 5 con tres discos de datos A, B y C, calcula el bloque de paridad P mediante XOR si A=1010, B=0101 y C=1100.", opts:["0011","1111","0110","1001"], correct:0},
+{q:"EJERCICIO. Se monta un RAID 10 con 6 discos de 2 TB cada uno. ¿Cuál es la capacidad lógica (usable) resultante?", opts:["12 TB","10 TB","6 TB","4 TB"], correct:2},
+{q:"EJERCICIO. Un vídeo tiene un bitrate constante de 4.000 kbps y una duración de 40 minutos. ¿Cuál es su tamaño aproximado en GB?", opts:["~0,56 GB","~1,12 GB","~2,24 GB","~4,48 GB"], correct:1}
+];
+
+let current = 0;
+let answers = new Array(questions.length).fill(null);
+let answered = false;
+
+function startQuiz(){
+  document.getElementById('startScreen').classList.add('hidden');
+  document.getElementById('quizScreen').classList.remove('hidden');
+  document.getElementById('subline').textContent = `Test de repaso — ${questions.length} preguntas`;
+  renderQuestion();
+}
+
+function renderQuestion(){
+  answered = false;
+  const q = questions[current];
+  document.getElementById('qnum').textContent = `Pregunta ${current+1} / ${questions.length}`;
+  const tagBox = document.getElementById('tagBox');
+  tagBox.innerHTML = '';
+  if(q.q.startsWith('EJERCICIO.')){
+    const tag = document.createElement('div');
+    tag.className = 'tag';
+    tag.textContent = 'EJERCICIO';
+    tagBox.appendChild(tag);
+  }
+  document.getElementById('qtext').textContent = q.q.replace('EJERCICIO. ', '');
+  document.getElementById('feedback').textContent = '';
+  document.getElementById('nextBtn').disabled = true;
+  document.getElementById('skipBtn').classList.remove('hidden');
+  document.getElementById('progressFill').style.width = `${(current/questions.length)*100}%`;
+
+  const optsDiv = document.getElementById('options');
+  optsDiv.innerHTML = '';
+  q.opts.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'opt';
+    btn.textContent = opt;
+    btn.onclick = () => selectOption(i);
+    optsDiv.appendChild(btn);
+  });
+}
+
+function selectOption(i){
+  if(answered) return;
+  answered = true;
+  answers[current] = i;
+  const q = questions[current];
+  const btns = document.querySelectorAll('.opt');
+  btns.forEach((b, idx) => {
+    b.disabled = true;
+    if(idx === q.correct) b.classList.add('correct');
+    else if(idx === i) b.classList.add('incorrect');
+  });
+  document.getElementById('feedback').textContent = (i === q.correct)
+    ? '✓ Correcto.'
+    : `✗ Incorrecto. La respuesta correcta era: "${q.opts[q.correct]}"`;
+  document.getElementById('nextBtn').disabled = false;
+  document.getElementById('skipBtn').classList.add('hidden');
+}
+
+function skipQuestion(){
+  if(answered) return;
+  answers[current] = null;
+  advance();
+}
+
+function nextQuestion(){
+  advance();
+}
+
+function advance(){
+  current++;
+  if(current >= questions.length){
+    showResult();
+  } else {
+    renderQuestion();
+  }
+}
+
+function showResult(){
+  document.getElementById('quizScreen').classList.add('hidden');
+  document.getElementById('resultScreen').classList.remove('hidden');
+
+  let correct = 0, wrong = 0, blank = 0;
+  questions.forEach((q, idx) => {
+    if(answers[idx] === null) blank++;
+    else if(answers[idx] === q.correct) correct++;
+    else wrong++;
+  });
+
+  const rawScore = correct - (wrong / 3);
+  const finalScore = Math.max(0, (rawScore / questions.length) * 10);
+
+  document.getElementById('rCorrect').textContent = correct;
+  document.getElementById('rWrong').textContent = wrong;
+  document.getElementById('rBlank').textContent = blank;
+  const scoreEl = document.getElementById('finalScore');
+  scoreEl.textContent = finalScore.toFixed(2);
+  scoreEl.className = 'score ' + (finalScore >= 5 ? 'pass' : 'fail');
+  document.getElementById('resultLabel').textContent = finalScore >= 5 ? 'APROBADO' : 'SUSPENSO';
+}
+
+function restartQuiz(){
+  current = 0;
+  answers = new Array(questions.length).fill(null);
+  document.getElementById('resultScreen').classList.add('hidden');
+  document.getElementById('startScreen').classList.remove('hidden');
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="success">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Registrar Fichaje</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div *ngIf="cargando" style="text-align: center; padding: 40px;">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Comprobando estado de fichajes en las últimas 12 horas...</p>
+  </div>
+
+  <div *ngIf="!cargando" style="max-width: 500px; margin: 0 auto;">
+
+    <!-- CASO A: TIENE FICHAJE PREVIO EN <12 HORAS (PERMITIR CERRAR FICHAJE) -->
+    <ion-card *ngIf="fichajeActivo" color="warning" style="margin-bottom: 25px;">
+      <ion-card-header>
+        <ion-card-subtitle>FICHAJE EN CURSO DETECTADO</ion-card-subtitle>
+        <ion-card-title>Fichaje Pendiente de Salida</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <p>Tienes un fichaje abierto en las últimas 12 horas:</p>
+        <div style="background: rgba(255,255,255,0.7); padding: 12px; border-radius: 8px; margin: 15px 0; color: black;">
+          <p>💼 <b>Trabajo:</b> {{ fichajeActivo.NombreTrabajo }}</p>
+          <p>🕒 <b>Hora de Entrada:</b> {{ fichajeActivo.FechaHoraEntrada }}</p>
+          <p>📍 <b>GPS Entrada:</b> [{{ fichajeActivo.GeolocalizacionLatitud }}, {{ fichajeActivo.GeolocalizacionLongitud }}]</p>
+        </div>
+        <ion-button expand="block" color="danger" (click)="registrarSalida()" [disabled]="procesandoFichaje">
+          <ion-icon slot="start" name="exit-outline"></ion-icon>
+          Finalizar Fichaje (Cerrar Salida)
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- CASO B: NO TIENE NINGÚN FICHAJE EN 12 HORAS (INICIAR NUEVO ASOCIANDO TRABAJO + GPS) -->
+    <ion-card *ngIf="!fichajeActivo">
+      <ion-card-header>
+        <ion-card-subtitle>NUEVA JORNADA</ion-card-subtitle>
+        <ion-card-title>Iniciar Fichaje de Entrada</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <p>No dispones de fichajes abiertos en las últimas 12 horas. Selecciona el trabajo a realizar:</p>
+
+        <ion-item lines="full" style="margin-top: 15px;">
+          <ion-label position="stacked">Seleccionar Trabajo</ion-label>
+          <ion-select [(ngModel)]="idTrabajoSeleccionado" interface="action-sheet" placeholder="Selecciona tarea">
+            <ion-select-option *ngFor="let t of trabajos" [value]="t.IdTrabajo">{{ t.Nombre }}</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <!-- Geolocalización detectada -->
+        <ion-item lines="full" style="margin-top: 15px;">
+          <ion-icon name="location-outline" slot="start" color="primary"></ion-icon>
+          <ion-label>
+            <h3>Ubicación GPS</h3>
+            <p *ngIf="latitud && longitud">Lat: {{ latitud.toFixed(5) }}, Lon: {{ longitud.toFixed(5) }}</p>
+            <p *ngIf="direccionGeorreferenciada" style="font-size: 12px; color: gray;">{{ direccionGeorreferenciada }}</p>
+            <p *ngIf="!latitud" style="color: orange;">Detectando satélites GPS...</p>
+          </ion-label>
+          <ion-button fill="clear" slot="end" (click)="obtenerUbicacionGPS()">
+            <ion-icon slot="icon-only" name="refresh-outline"></ion-icon>
+          </ion-button>
+        </ion-item>
+
+        <ion-button expand="block" color="success" (click)="registrarEntrada()" [disabled]="procesandoFichaje" style="margin-top: 25px;">
+          <ion-icon slot="start" name="enter-outline"></ion-icon>
+          Fichar Entrada
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+
+  </div>
+</ion-content>

@@ -5,6 +5,7 @@
 ---
 
 # 📑 Índice General
+0. [⭐ PROYECTO EVALUABLE: Sistema de Registro Horario y Fichajes (`SistemaRegistroHorario/`)](#-proyecto-evaluable-sistema-de-registro-horario-y-fichajes-sistemaregistrohorario)
 1. [Ejercicio 0: Instalación de Software y Proyecto Base (`DISM0`)](#-ejercicio-0-instalación-de-software-y-verificación-del-entorno-dism0)
 2. [Ejercicio 1: Componentes Visuales y Plantilla Tabs (`DISM1`)](#-ejercicio-1-desarrollo-de-aplicación-tabs-y-componentes-visuales-dism1)
 3. [Ejercicio 2: Navegación y Menú Lateral (`DISM2`)](#-ejercicio-2-desarrollo-de-aplicación-side-menú-lateral-dism2)
@@ -17,6 +18,70 @@
 10. [Ejercicio 9: Generación de Stub Node.js/Express con Swagger (`DISM9`)](#-ejercicio-9-generación-de-stub-express-con-openapi-generator-dism9)
 11. [Ejercicio 10: API REST con Acceso a Base de Datos MySQL (`DISM10`)](#-ejercicio-10-generación-de-api-rest-con-acceso-a-base-de-datos-mysql-dism10)
 12. [Anexo: Servicios Web REST con Node.js & Express (`Anexos/`)](#-anexo-servicios-web-rest-con-nodejs-express-y-mysql-anexos)
+
+---
+
+## ⭐ PROYECTO EVALUABLE: Sistema de Registro Horario y Fichajes (`SistemaRegistroHorario/`)
+
+### 🎯 Descripción y Objetivos
+Sistema integral de control horario y gestión de fichajes de trabajadores para una organización compuesto por tres subsistemas coordinados:
+1. **Base de Datos MySQL (`database/schema.sql`):** Estructura relacional completa para `Usuarios`, `Trabajos`, `Fichajes` y `ApiKey`.
+2. **Servicios Web REST Node.js/Express (`backend-api/`):** API REST diseñada bajo estándar **OpenAPI 3.0** (`openapi.yaml`), provista de Swagger UI interactivo en `http://localhost:8080/api-docs`, soporte de `x-api-key`, endpoints de autenticación (`/auth/login`), CRUDs completos y lógica de cálculo de horas y ventana temporal de 12 horas.
+3. **AppAdmin (Ionic / Angular):** Panel del administrador con autenticación de rol, gestión CRUD de Usuarios y Trabajos, listado de fichajes con filtros por fechas y usuario (`ion-searchbar`) y visualización cartográfica del punto de fichaje mediante mapas interactivos **Leaflet**.
+4. **AppUsuarios (Ionic / Angular):** Aplicación móvil para empleados con detección inteligente:
+   - Si no hay fichaje en <12h: Inicia nuevo fichaje asociando un trabajo del catálogo y capturando coordenadas GPS (`@capacitor/geolocation`) con georreferenciación inversa (Nominatim OpenStreetMap).
+   - Si existe fichaje abierto en <12h: Permite finalizar la jornada registrando la salida y computando las horas trabajadas.
+   - Consulta de fichajes realizados en el día o por rango de fechas.
+
+### 💻 Comandos Clave
+```bash
+# 1. Iniciar Backend API REST (Puerto 8080 + Swagger UI)
+cd SistemaRegistroHorario/backend-api
+npm install
+npm start
+
+# 2. Iniciar AppAdmin (Puerto 8100 o el asignado por Ionic)
+cd SistemaRegistroHorario/AppAdmin
+npm install
+ionic serve
+
+# 3. Iniciar AppUsuarios (Puerto 8101)
+cd SistemaRegistroHorario/AppUsuarios
+npm install
+ionic serve --port 8101
+```
+
+### 📂 Estructura del Workspace (`SistemaRegistroHorario/`)
+```text
+SistemaRegistroHorario/
+├── database/
+│   └── schema.sql                    # Script DDL MySQL (Usuarios, Trabajos, Fichajes, ApiKey)
+├── backend-api/
+│   ├── openapi.yaml                  # Contrato OpenAPI 3.0 del backend
+│   ├── server.js                     # Servidor Express, Swagger UI y rutas CRUD
+│   ├── db.js                         # Pool MySQL2 con fallback resiliente en memoria
+│   └── package.json
+├── AppAdmin/
+│   ├── src/app/login/                # Inicio de sesión de Administrador
+│   ├── src/app/home/                 # Menú con los 3 módulos principales
+│   ├── src/app/usuarios/             # CRUD completo de usuarios (crear, editar, borrar)
+│   ├── src/app/trabajos/             # CRUD de trabajos
+│   ├── src/app/fichajes/             # Filtros por empleado/fecha + Mapa Leaflet
+│   └── src/app/services/api.ts       # Servicio HTTP con x-api-key
+└── AppUsuarios/
+    ├── src/app/login/                # Inicio de sesión del Empleado
+    ├── src/app/home/                 # Menú: Registrar Fichaje y Consulta Fichajes
+    ├── src/app/registrar-fichaje/    # Entrada (asociar trabajo + GPS) o Salida (<12h)
+    ├── src/app/consulta-fichajes/    # Historial de fichajes + Georreferenciación Nominatim
+    └── src/app/services/api.ts       # Servicio HTTP con Capacitor Geolocation
+```
+
+### 📝 Archivos y Localización Exacta
+- `SistemaRegistroHorario/database/schema.sql`: DDL y datos de prueba de MySQL para `dism_registro`.
+- `SistemaRegistroHorario/backend-api/openapi.yaml`: Especificación OpenAPI 3.0 completa con esquemas y respuestas.
+- `SistemaRegistroHorario/backend-api/server.js`: Servidor Express con validación de `x-api-key`, endpoints de login, cálculo de horas y Swagger UI.
+- `SistemaRegistroHorario/AppAdmin/src/app/fichajes/fichajes.page.ts`: Lógica de filtrado y renderizado del mapa Leaflet en modal con marcador emergente.
+- `SistemaRegistroHorario/AppUsuarios/src/app/registrar-fichaje/registrar-fichaje.page.ts`: Lógica con `@capacitor/geolocation` que verifica si han transcurrido menos de 12 horas desde la última entrada.
 
 ---
 

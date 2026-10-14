@@ -1,0 +1,16 @@
+{
+  "name": "dism-registro-horario-api",
+  "version": "1.0.0",
+  "description": "API REST para Registro Horario y Fichajes DISM",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "mysql2": "^3.9.7",
+    "swagger-ui-express": "^5.0.0",
+    "yamljs": "^0.3.0"
+  }
+}

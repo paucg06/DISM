@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz · Tema 3.2 Infraestructura de la telefonía móvil</title>
+<style>
+  :root{
+    --bg:#0f1115;
+    --card:#171a21;
+    --card-border:#262b36;
+    --accent:#5b8def;
+    --accent-2:#7c5cff;
+    --good:#33c07d;
+    --bad:#e2524d;
+    --text:#e9ecf1;
+    --muted:#93a0b4;
+    --radius:16px;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Segoe UI',system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
+    background:radial-gradient(1200px 800px at 10% -10%, #1b2030 0%, var(--bg) 55%);
+    color:var(--text);
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    padding:32px 16px 60px;
+  }
+  .app{width:100%;max-width:780px;}
+  header{
+    text-align:center;
+    margin-bottom:24px;
+  }
+  header h1{
+    font-size:1.45rem;
+    margin:0 0 6px;
+    background:linear-gradient(90deg,var(--accent),var(--accent-2));
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+  }
+  header p{margin:0;color:var(--muted);font-size:0.92rem;}
+
+  .progress-wrap{
+    background:var(--card-border);
+    border-radius:999px;
+    height:8px;
+    margin:18px 0 28px;
+    overflow:hidden;
+  }
+  .progress-bar{
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg,var(--accent),var(--accent-2));
+    transition:width .35s ease;
+  }
+
+  .card{
+    background:var(--card);
+    border:1px solid var(--card-border);
+    border-radius:var(--radius);
+    padding:26px 24px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.35);
+  }
+
+  .qmeta{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    color:var(--muted);
+    font-size:0.85rem;
+    margin-bottom:10px;
+  }
+  .qmeta .score-live{
+    font-weight:600;
+    color:var(--accent);
+  }
+  .tag{
+    display:inline-block;
+    font-size:0.68rem;
+    font-weight:700;
+    letter-spacing:0.03em;
+    text-transform:uppercase;
+    padding:3px 8px;
+    border-radius:999px;
+    margin-bottom:10px;
+  }
+  .tag.calc{background:rgba(124,92,255,0.18);color:#b7a6ff;}
+  .tag.theory{background:rgba(91,141,239,0.18);color:#9dbdf6;}
+
+  .question-text{
+    font-size:1.1rem;
+    line-height:1.5;
+    margin:0 0 20px;
+    font-weight:600;
+    white-space:pre-line;
+  }
+
+  .options{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+  .option{
+    text-align:left;
+    background:#1e2330;
+    border:1px solid var(--card-border);
+    color:var(--text);
+    padding:13px 16px;
+    border-radius:12px;
+    cursor:pointer;
+    font-size:0.98rem;
+    line-height:1.4;
+    transition:border-color .15s ease, background .15s ease, transform .1s ease;
+  }
+  .option:hover:not(.disabled){
+    border-color:var(--accent);
+    background:#232a3a;
+  }
+  .option.selected-correct{
+    background:rgba(51,192,125,0.15);
+    border-color:var(--good);
+  }
+  .option.selected-wrong{
+    background:rgba(226,82,77,0.15);
+    border-color:var(--bad);
+  }
+  .option.reveal-correct{
+    border-color:var(--good);
+  }
+  .option.disabled{
+    cursor:default;
+  }
+
+  .feedback{
+    margin-top:16px;
+    font-size:0.9rem;
+    color:var(--muted);
+    min-height:1.2em;
+  }
+  .feedback.good{color:var(--good);}
+  .feedback.bad{color:var(--bad);}
+
+  .nav{
+    display:flex;
+    justify-content:flex-end;
+    margin-top:22px;
+  }
+  button.primary{
+    background:linear-gradient(90deg,var(--accent),var(--accent-2));
+    color:#fff;
+    border:none;
+    padding:11px 22px;
+    border-radius:10px;
+    font-size:0.95rem;
+    font-weight:600;
+    cursor:pointer;
+    opacity:0.4;
+    pointer-events:none;
+    transition:opacity .15s ease;
+  }
+  button.primary.active{
+    opacity:1;
+    pointer-events:auto;
+  }
+  button.primary:hover.active{
+    filter:brightness(1.08);
+  }
+
+  /* Results screen */
+  .results{
+    text-align:center;
+  }
+  .results h2{
+    font-size:1.3rem;
+    margin-bottom:4px;
+  }
+  .grade{
+    font-size:3.6rem;
+    font-weight:800;
+    margin:14px 0 6px;
+    background:linear-gradient(90deg,var(--accent),var(--accent-2));
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+  }
+  .grade-sub{color:var(--muted);margin-bottom:22px;font-size:0.95rem;}
+  .stats-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+    margin:20px 0 28px;
+  }
+  .stat{
+    background:#1e2330;
+    border:1px solid var(--card-border);
+    border-radius:12px;
+    padding:14px 8px;
+  }
+  .stat .num{font-size:1.4rem;font-weight:700;}
+  .stat.ok .num{color:var(--good);}
+  .stat.bad .num{color:var(--bad);}
+  .stat.skip .num{color:var(--muted);}
+  .stat .label{font-size:0.75rem;color:var(--muted);margin-top:2px;}
+
+  .actions{
+    display:flex;
+    gap:10px;
+    justify-content:center;
+    flex-wrap:wrap;
+  }
+  button.secondary{
+    background:transparent;
+    border:1px solid var(--card-border);
+    color:var(--text);
+    padding:11px 20px;
+    border-radius:10px;
+    cursor:pointer;
+    font-size:0.9rem;
+  }
+  button.secondary:hover{border-color:var(--accent);}
+
+  .review{
+    text-align:left;
+    margin-top:30px;
+    border-top:1px solid var(--card-border);
+    padding-top:20px;
+  }
+  .review h3{font-size:1rem;margin-bottom:14px;color:var(--muted);}
+  .review-item{
+    background:#1e2330;
+    border:1px solid var(--card-border);
+    border-radius:10px;
+    padding:12px 14px;
+    margin-bottom:10px;
+    font-size:0.88rem;
+  }
+  .review-item .rq{font-weight:600;margin-bottom:6px;white-space:pre-line;}
+  .review-item .ra-good{color:var(--good);}
+  .review-item .ra-bad{color:var(--bad);}
+
+  footer{
+    text-align:center;
+    color:var(--muted);
+    font-size:0.75rem;
+    margin-top:26px;
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <h1>Tema 3.2 · Infraestructura de la telefonía móvil</h1>
+    <p>Teoría + ejercicios de cálculo (clústeres, tráfico, GoS, generaciones)</p>
+  </header>
+
+  <div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
+
+  <div class="card" id="quizCard"></div>
+
+  <footer>Cada fallo resta 1/3 de una pregunta correcta · Nota final sobre 10 · Los ejercicios de cálculo debes resolverlos tú antes de elegir la opción</footer>
+</div>
+
+<script>
+const QUESTIONS = [
+  // ---- TEORÍA: elementos y sistemas ----
+  {tag:"theory", q:"¿Cuáles son los elementos principales de un sistema de telefonía móvil según el tema?",
+   options:["Terminales, estaciones base, central de conmutación y medio de transmisión",
+            "Solo terminales y antenas repetidoras",
+            "Central de conmutación, router inalámbrico y switch",
+            "Terminales, servidores en la nube y fibra óptica"], correct:0},
+  {tag:"theory", q:"¿Qué función cumple una estación base (BTS)?",
+   options:["Gestiona la facturación de las llamadas",
+            "Ofrece cobertura a los dispositivos de un área determinada",
+            "Almacena la lista de contactos del usuario",
+            "Cifra la comunicación entre dos móviles"], correct:1},
+  {tag:"theory", q:"¿Qué función realiza la central de conmutación (ej. MSC)?",
+   options:["Emitir y recibir directamente la señal telefónica del usuario",
+            "Manejar el uso de las estaciones base, el cambio entre estas y la comunicación con otras redes",
+            "Generar la cobertura física de una célula",
+            "Sustituir a las ondas de radio como medio de transmisión"], correct:1},
+  {tag:"theory", q:"¿Por qué los sistemas de telefonía 'sin hilo' resultaban poco eficientes?",
+   options:["Porque no permitían ningún tipo de movilidad",
+            "Porque solo se podían tener muy pocas llamadas simultáneas en una zona física determinada",
+            "Porque no podían transmitir voz, solo datos",
+            "Porque necesitaban cableado físico entre los teléfonos"], correct:1},
+  {tag:"theory", q:"¿Por qué se representan las células de un sistema celular como hexágonos?",
+   options:["Porque es la figura que mejor tesela el terreno",
+            "Porque las antenas solo pueden emitir en 6 direcciones",
+            "Porque así se reduce el número de estaciones base necesarias",
+            "Porque es una convención sin ninguna razón técnica"], correct:0},
+  {tag:"theory", q:"¿Qué es un cluster en un sistema celular?",
+   options:["Una única célula de gran tamaño",
+            "Un conjunto de células dentro del cual dos usuarios no pueden usar el mismo canal",
+            "El conjunto de todas las BTS de un país",
+            "Un tipo de subcélula usada solo en zonas rurales"], correct:1},
+
+  // ---- CÁLCULOS: clusters ----
+  {tag:"calc", q:"Un sistema de planificación celular tiene i=2 y j=1.\n¿Cuál es el tamaño del clúster N? (N = i² + j² + i·j)",
+   options:["5","7","9","4"], correct:1},
+  {tag:"calc", q:"Siguiendo el ejercicio anterior (i=2, j=1, N=7), ¿cuál es el factor de reutilización de frecuencia?",
+   options:["1/4","1/7","1/9","7"], correct:1},
+  {tag:"calc", q:"Un sistema de planificación celular tiene i=4 y j=0.\n¿Cuál es el tamaño del clúster N?",
+   options:["16","20","12","8"], correct:0},
+  {tag:"calc", q:"Un sistema de planificación celular tiene i=1 y j=3.\n¿Cuál es el tamaño del clúster N?",
+   options:["10","13","16","9"], correct:1},
+  {tag:"calc", q:"Si el factor de reutilización de un sistema celular es 1/9, ¿cuál es el tamaño de clúster N?",
+   options:["9","3","18","1/9"], correct:0},
+  {tag:"calc", q:"Un sistema tiene T=350 canales totales y un tamaño de clúster N=5.\n¿Cuántos canales por celda (K) hay? (K = T/N)",
+   options:["50","70","35","175"], correct:1},
+  {tag:"calc", q:"Siguiendo el ejercicio anterior (T=350, N=5, K=70), si el sistema se replica M=4 veces, ¿cuál es la capacidad total del sistema? (Capacidad = M·T)",
+   options:["1400","1750","700","2100"], correct:0},
+  {tag:"calc", q:"Un sistema celular tiene un ancho de banda total de 25 MHz, usando canales dúplex de 50 kHz cada uno (incluyendo subida y bajada).\n¿Cuántos canales totales (T) hay disponibles? (T = ancho de banda total / ancho de banda por canal)",
+   options:["500","250","1000","125"], correct:0},
+  {tag:"calc", q:"Siguiendo el ejercicio anterior (T=500), si el tamaño de clúster es N=7, ¿cuántos canales por célula corresponden aproximadamente? (K = T/N)",
+   options:["71","50","125","35"], correct:0},
+  {tag:"calc", q:"Un sistema tiene T=600 canales, N=12 y se replica M=5 veces.\n¿Cuántos canales por celda (K) hay?",
+   options:["50","60","120","30"], correct:0},
+  {tag:"calc", q:"Siguiendo el ejercicio anterior (T=600, N=12, M=5), ¿cuál es la capacidad total del sistema?",
+   options:["3000","2500","1500","5000"], correct:0},
+
+  // ---- TEORÍA: handover ----
+  {tag:"theory", q:"¿Qué es el handover (traspaso) en un sistema celular?",
+   options:["El proceso manual mediante el cual el usuario cambia de operadora",
+            "El proceso automático y transparente de traspasar una conexión de una célula a otra por el desplazamiento del móvil",
+            "El proceso de facturación de llamadas internacionales",
+            "El proceso de cifrado de los SMS"], correct:1},
+  {tag:"theory", q:"¿Qué tipo de handover se produce cuando se cambia de canal dentro de una misma celda para optimizar recursos?",
+   options:["Inter-Cell","Intra-Cell","Inter-BSC","Inter-MSC"], correct:1},
+  {tag:"theory", q:"¿Quién gestiona un handover Inter-Cell (de un BTS a otro)?",
+   options:["El propio terminal del usuario","El BSC","El MSC en solitario","Ambos MSC implicados"], correct:1},
+  {tag:"theory", q:"¿Quién gestiona un handover Inter-MSC?",
+   options:["Únicamente el BSC de origen","Únicamente el terminal del usuario","Ambos MSC implicados","Ninguno, es automático sin gestión"], correct:2},
+  {tag:"theory", q:"¿Cuál de los siguientes protocolos de handover corresponde a los sistemas analógicos del 1G, donde la red se encarga totalmente del traspaso?",
+   options:["MAHO","SHO","NCHO","MCHO"], correct:2},
+  {tag:"theory", q:"¿Qué caracteriza al protocolo de handover SHO frente al MAHO?",
+   options:["El móvil controla totalmente el traspaso sin ayuda de la red",
+            "Se mantiene el canal de origen abierto hasta que el canal de destino se asegura de ser estable, consumiendo más recursos",
+            "Solo puede usarse en redes 5G",
+            "No permite ningún tipo de traspaso entre celdas"], correct:1},
+  {tag:"theory", q:"¿Qué protocolo de handover es aquel en el que el móvil controla totalmente el traspaso?",
+   options:["NCHO","MAHO","SHO","MCHO"], correct:3},
+
+  // ---- TEORÍA: división de células ----
+  {tag:"theory", q:"¿Por qué se produce la división de células en un sistema celular?",
+   options:["Para reducir el número de estaciones base necesarias",
+            "Para proporcionar mejor servicio en zonas con muchos usuarios que precisan conexión",
+            "Porque las hexagonales no teselan correctamente el terreno",
+            "Para eliminar la necesidad de handover"], correct:1},
+  {tag:"theory", q:"¿Qué tipo de célula se usa típicamente en zonas rurales de baja densidad, con BS omnidireccionales en el centro?",
+   options:["Picocélula","Microcélula","Macrocélula","Minicélula"], correct:2},
+  {tag:"theory", q:"¿Qué característica distingue a la microcélula respecto a las demás?",
+   options:["Sus BS se sitúan en los vértices de las células, dando soporte a 3 células a la vez",
+            "Solo se usa en aeropuertos y grandes eventos",
+            "Tiene el radio más pequeño de todos los tipos de célula",
+            "No necesita estación base propia"], correct:0},
+  {tag:"theory", q:"¿Qué tipo de célula se usa en zonas muy concurridas con gran densidad, como aeropuertos, con radios inferiores a 250 metros?",
+   options:["Macrocélula","Minicélula","Microcélula","Picocélula"], correct:3},
+
+  // ---- CÁLCULOS: tráfico ----
+  {tag:"calc", q:"Un grupo de circuitos cursa 240 llamadas en 1 hora (3600s), con una duración media de 150 segundos cada una.\n¿Cuál es el tráfico A en Erlangs? (A = C·h/T)",
+   options:["10","15","24","6"], correct:0},
+  {tag:"calc", q:"En un periodo de observación de 3600s, la suma de duraciones de todas las llamadas atendidas (volumen de tráfico) es de 7200s.\n¿Cuál es la intensidad de tráfico? (I = Volumen / Tobs)",
+   options:["2","0.5","7200","3600"], correct:0},
+  {tag:"calc", q:"Si el tráfico ofrecido es de 40 Erlangs y el tráfico cursado es de 32 Erlangs,\n¿cuál es el Grado de Servicio (GoS)? (GoS = TP/TO, siendo TP = TO - TC)",
+   options:["0.2 (20%)","0.8 (80%)","8 Erlangs","1.25"], correct:0},
+  {tag:"calc", q:"Si el tráfico ofrecido es de 18 Erlangs y el Grado de Servicio es 0.25,\n¿cuál es el tráfico perdido (TP)? (TP = GoS · TO)",
+   options:["4.5","13.5","18","0.25"], correct:0},
+  {tag:"calc", q:"Siguiendo el ejercicio anterior (TO=18, TP=4.5), ¿cuál es el tráfico cursado (TC)?",
+   options:["13.5","4.5","18","9"], correct:0},
+  {tag:"calc", q:"Un grupo de circuitos cursa 400 llamadas en 2 horas (7200s), con duración media de 90 segundos.\n¿Cuál es el tráfico en Erlangs?",
+   options:["5","10","4","20"], correct:0},
+
+  // ---- TEORÍA: arquitectura 2G ----
+  {tag:"theory", q:"En la arquitectura 2G/GSM, ¿qué elementos componen el BSS?",
+   options:["MSC y HLR",
+            "Las estaciones base (BTS) y su controlador (BSC)",
+            "UE y RAN",
+            "AMF y SMF"], correct:1},
+  {tag:"theory", q:"¿Qué información almacena el HLR (Registro de ubicación base)?",
+   options:["La lista de contactos de cada abonado",
+            "El último MSC usado por un teléfono abonado a la línea",
+            "El historial de llamadas perdidas",
+            "Las claves de cifrado de todas las SIM del mundo"], correct:1},
+  {tag:"theory", q:"¿Para qué sirve el VLR frente al HLR?",
+   options:["Es una base de datos temporal que evita sobrecargar al HLR con los usuarios conectados en una zona",
+            "Sustituye por completo al HLR en todas sus funciones",
+            "Solo almacena las listas negras de móviles bloqueados",
+            "Gestiona el cifrado de la conexión mediante claves secretas"], correct:0},
+  {tag:"theory", q:"¿Qué función cumple el EIR dentro de la arquitectura 2G?",
+   options:["Autenticar al usuario mediante las claves secretas de la SIM",
+            "Almacenar las listas negras para denegar el servicio a ciertos móviles",
+            "Enrutar los SMS entre distintos GMSC",
+            "Dar cobertura radioeléctrica directa al usuario"], correct:1},
+  {tag:"theory", q:"¿Qué función cumple el GMSC (Gateway)?",
+   options:["Es una central de comunicación para enlazar diferentes redes MSC",
+            "Almacena la posición exacta de cada usuario en tiempo real",
+            "Sustituye a la BTS para dar cobertura directa",
+            "Cifra únicamente los mensajes de texto"], correct:0},
+  {tag:"theory", q:"¿Qué ocurre en el procedimiento 'Attach' de un dispositivo móvil?",
+   options:["El dispositivo se borra permanentemente del VLR",
+            "El dispositivo queda registrado en el MSC y el VLR al encenderse, desplazarse o cambiar de SIM",
+            "Se produce solo cuando el usuario apaga el teléfono",
+            "Se produce únicamente durante una llamada en curso"], correct:1},
+  {tag:"theory", q:"¿Qué caracteriza al procedimiento 'Detach'?",
+   options:["Es un procedimiento unidireccional que indica que el móvil pasa a estar inactivo para borrarse del VLR",
+            "Registra al móvil en un nuevo HLR permanentemente",
+            "Es el mismo proceso que el Location Update",
+            "Solo ocurre al recibir una llamada"], correct:0},
+  {tag:"theory", q:"¿Qué introdujo el GPRS como extensión del GSM en la 2G?",
+   options:["La facturación por tiempo de conexión en lugar de por datos",
+            "La transmisión de paquetes válida para multimedia, cobrando por volumen de datos transmitido",
+            "La eliminación completa del BSC",
+            "El uso exclusivo de canales analógicos"], correct:1},
+
+  // ---- TEORÍA: 3G, 4G, 5G, Wimax ----
+  {tag:"theory", q:"¿Cuál de los siguientes NO es una mejora que introdujo el UMTS (3G) respecto a la generación anterior?",
+   options:["Mayor cantidad de datos de transmisión y más velocidad",
+            "Uso del protocolo IP, por ejemplo para videollamadas",
+            "Reducción considerable de los costes económicos de la red",
+            "La eliminación total de las estaciones base"], correct:3},
+  {tag:"theory", q:"En la arquitectura 3G (UMTS), ¿qué elemento es el análogo al BSC de la 2G?",
+   options:["Node B","RNC","Core Network","UE"], correct:1},
+  {tag:"theory", q:"¿Por qué LTE no se consideraba '4G puro' según la ITU, aunque mejoraba mucho la velocidad?",
+   options:["Porque no era compatible con ninguna generación anterior",
+            "Porque no cumplía todos los requisitos de la ITU para considerarse 4G puro",
+            "Porque no reducía la latencia respecto al 3G",
+            "Porque eliminaba por completo la necesidad de handover"], correct:1},
+  {tag:"theory", q:"¿Qué cambio arquitectónico se introdujo en 4G respecto a la 3G?",
+   options:["Se añadió un nuevo nodo de control adicional al RNC",
+            "Se eliminó el nodo de control RNC y aparecieron el E-UTRAN y el eNB",
+            "Se eliminó por completo la estación base",
+            "Se sustituyó el UE por el MS de la 2G"], correct:1},
+  {tag:"theory", q:"¿Qué diferencia a LTE Advanced de LTE en cuanto a su consideración por la ITU?",
+   options:["LTE Advanced sí fue reconocido como 4G real, a diferencia del LTE original",
+            "LTE Advanced es en realidad una tecnología 3G mejorada",
+            "No existe ninguna diferencia entre ambos",
+            "LTE Advanced eliminó la compatibilidad con 2G y 3G"], correct:0},
+  {tag:"theory", q:"¿Qué variante de Wimax fue la única capaz de competir con LTE?",
+   options:["Acceso fijo","Movilidad completa","ambas por igual","ninguna, Wimax nunca compitió con LTE"], correct:1},
+  {tag:"theory", q:"¿Por qué Wimax terminó usándose sobre todo en países poco desarrollados y redes privadas industriales?",
+   options:["Porque era más caro que LTE pese a ser mejor técnicamente",
+            "Porque, aunque más barato que LTE, no era compatible con los sistemas 2G y 3G",
+            "Porque solo funcionaba con dispositivos Apple",
+            "Porque no permitía ningún tipo de movilidad"], correct:1},
+  {tag:"theory", q:"¿Qué tecnología utiliza el 5G para enviar más datos a la vez a más usuarios sin aumentar mucho los recursos?",
+   options:["Small cells únicamente","Antenas massive MIMO","El protocolo GPRS","El nodo RNC"], correct:1},
+  {tag:"theory", q:"¿Qué función cumple el AMF en la arquitectura 5G?",
+   options:["Transporta el tráfico de datos IP del usuario",
+            "Gestiona el acceso y la movilidad, siendo el punto de entrada de la conexión",
+            "Da acceso radioeléctrico directo al dispositivo",
+            "Autentica al usuario mediante claves de la SIM exclusivamente"], correct:1},
+  {tag:"theory", q:"¿Qué función cumple el UPF en la arquitectura 5G?",
+   options:["Gestiona la sesión del UE según lo que solicita",
+            "Transporta el tráfico de datos IP",
+            "Autentica al UE frente a la red",
+            "Da cobertura radioeléctrica como una BTS"], correct:1},
+  {tag:"theory", q:"¿Por qué se posicionan centros de datos en el borde de la red en los sistemas 5G?",
+   options:["Para reducir el número de antenas necesarias",
+            "Para aumentar la velocidad en puntos alejados y asegurar una velocidad homogénea en toda el área",
+            "Para eliminar la necesidad de autenticación",
+            "Para sustituir por completo a las small cells"], correct:1}
+];
+
+// Fisher-Yates shuffle
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+
+// Build runtime quiz with shuffled options per question
+const quiz = QUESTIONS.map(item=>{
+  const correctText = item.options[item.correct];
+  const shuffled = shuffle(item.options);
+  return {
+    tag:item.tag,
+    q:item.q,
+    options:shuffled,
+    correctText:correctText
+  };
+});
+
+let current = 0;
+let answered = [];
+let selectedOption = null;
+
+const card = document.getElementById('quizCard');
+const progressBar = document.getElementById('progressBar');
+
+function renderQuestion(){
+  const item = quiz[current];
+  progressBar.style.width = ((current)/quiz.length*100) + "%";
+
+  const correctSoFar = answered.filter(a=>a.isCorrect).length;
+  const wrongSoFar = answered.filter(a=>!a.isCorrect).length;
+  const liveScore = (correctSoFar - wrongSoFar/3).toFixed(2);
+
+  const tagLabel = item.tag === "calc" ? '<span class="tag calc">Ejercicio de cálculo</span>' : '<span class="tag theory">Teoría</span>';
+
+  card.innerHTML = `
+    <div class="qmeta">
+      <span>Pregunta ${current+1} / ${quiz.length}</span>
+      <span class="score-live">Puntos: ${liveScore}</span>
+    </div>
+    ${tagLabel}
+    <p class="question-text">${item.q}</p>
+    <div class="options" id="optionsWrap"></div>
+    <div class="feedback" id="feedback"></div>
+    <div class="nav"><button class="primary" id="nextBtn">Siguiente</button></div>
+  `;
+
+  const optionsWrap = document.getElementById('optionsWrap');
+  item.options.forEach(optText=>{
+    const btn = document.createElement('button');
+    btn.className = 'option';
+    btn.textContent = optText;
+    btn.addEventListener('click', ()=>selectOption(optText, btn));
+    optionsWrap.appendChild(btn);
+  });
+
+  document.getElementById('nextBtn').addEventListener('click', nextQuestion);
+  selectedOption = null;
+}
+
+function selectOption(optText, btnEl){
+  if(selectedOption !== null) return;
+  const item = quiz[current];
+  const isCorrect = optText === item.correctText;
+  selectedOption = optText;
+
+  const allBtns = document.querySelectorAll('#optionsWrap .option');
+  allBtns.forEach(b=>{
+    b.classList.add('disabled');
+    if(b.textContent === item.correctText){
+      b.classList.add('reveal-correct');
+    }
+    if(b === btnEl && !isCorrect){
+      b.classList.add('selected-wrong');
+    }
+    if(b === btnEl && isCorrect){
+      b.classList.add('selected-correct');
+    }
+  });
+
+  const feedback = document.getElementById('feedback');
+  if(isCorrect){
+    feedback.textContent = "✓ Correcto";
+    feedback.className = "feedback good";
+  } else {
+    feedback.textContent = "✗ Incorrecto — la respuesta correcta está resaltada en verde";
+    feedback.className = "feedback bad";
+  }
+
+  answered[current] = {
+    question:item.q,
+    chosen:optText,
+    correctText:item.correctText,
+    isCorrect:isCorrect
+  };
+
+  document.getElementById('nextBtn').classList.add('active');
+}
+
+function nextQuestion(){
+  if(selectedOption === null) return;
+  current++;
+  if(current < quiz.length){
+    renderQuestion();
+  } else {
+    renderResults();
+  }
+}
+
+function renderResults(){
+  progressBar.style.width = "100%";
+  const correctCount = answered.filter(a=>a && a.isCorrect).length;
+  const wrongCount = answered.filter(a=>a && !a.isCorrect).length;
+  const skipped = quiz.length - answered.length;
+
+  const rawScore = correctCount - (wrongCount/3);
+  const nota = Math.max(0, (rawScore/quiz.length)*10);
+  const notaStr = nota.toFixed(2);
+
+  let gradeMsg = "";
+  if(nota >= 9) gradeMsg = "¡Excelente dominio del tema!";
+  else if(nota >= 7) gradeMsg = "Muy buen resultado.";
+  else if(nota >= 5) gradeMsg = "Aprobado, pero repasa los fallos.";
+  else gradeMsg = "Conviene repasar el tema de nuevo.";
+
+  const reviewHTML = answered.map((a,i)=>{
+    if(!a) return "";
+    return `
+      <div class="review-item">
+        <div class="rq">${i+1}. ${a.question}</div>
+        <div class="${a.isCorrect ? 'ra-good' : 'ra-bad'}">Tu respuesta: ${a.chosen}</div>
+        ${!a.isCorrect ? `<div class="ra-good">Correcta: ${a.correctText}</div>` : ""}
+      </div>
+    `;
+  }).join("");
+
+  card.innerHTML = `
+    <div class="results">
+      <h2>Resultado final</h2>
+      <div class="grade">${notaStr}</div>
+      <div class="grade-sub">${gradeMsg}</div>
+      <div class="stats-grid">
+        <div class="stat ok"><div class="num">${correctCount}</div><div class="label">Correctas</div></div>
+        <div class="stat bad"><div class="num">${wrongCount}</div><div class="label">Falladas</div></div>
+        <div class="stat skip"><div class="num">${skipped}</div><div class="label">Sin responder</div></div>
+      </div>
+      <div class="actions">
+        <button class="secondary" onclick="location.reload()">Repetir test</button>
+      </div>
+      <div class="review">
+        <h3>Repaso de preguntas</h3>
+        ${reviewHTML}
+      </div>
+    </div>
+  `;
+}
+
+renderQuestion();
+</script>
+</body>
+</html>

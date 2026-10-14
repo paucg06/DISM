@@ -1,0 +1,32 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title>AppAdmin - Inicio de Sesión</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div style="max-width: 450px; margin: 40px auto; text-align: center;">
+    <ion-icon name="shield-checkmark-outline" style="font-size: 70px; color: var(--ion-color-primary);"></ion-icon>
+    <h2>Portal de Administración</h2>
+    <p style="color: gray;">Control Horario y Gestión DISM</p>
+
+    <ion-card style="margin-top: 25px; text-align: left;">
+      <ion-card-content>
+        <ion-item lines="full">
+          <ion-label position="stacked">Usuario Admin</ion-label>
+          <ion-input [(ngModel)]="usuario" placeholder="admin"></ion-input>
+        </ion-item>
+
+        <ion-item lines="full" style="margin-top: 15px;">
+          <ion-label position="stacked">Contraseña</ion-label>
+          <ion-input [(ngModel)]="clave" type="password" placeholder="admin123"></ion-input>
+        </ion-item>
+
+        <ion-button expand="block" color="primary" (click)="onLogin()" [disabled]="cargando" style="margin-top: 25px;">
+          <ion-spinner *ngIf="cargando" slot="start"></ion-spinner>
+          Entrar como Administrador
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>
