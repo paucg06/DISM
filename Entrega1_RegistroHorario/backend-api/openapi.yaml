@@ -1,0 +1,467 @@
+openapi: 3.0.0
+info:
+  title: API Registro Horario y Fichajes DISM
+  description: API REST para la gestión de usuarios, trabajos, fichajes y autenticación.
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080/api/v1
+    description: Servidor Local de Desarrollo
+paths:
+  /auth/login:
+    post:
+      summary: Login de usuario o admin
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - usuario
+                - clave
+              properties:
+                usuario:
+                  type: string
+                  example: admin
+                clave:
+                  type: string
+                  example: admin123
+      responses:
+        '200':
+          description: Login exitoso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Usuario'
+        '401':
+          description: Credenciales incorrectas
+
+  /usuarios:
+    get:
+      summary: Obtener todos los usuarios
+      tags:
+        - Usuarios
+      responses:
+        '200':
+          description: Lista de usuarios
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Usuario'
+    post:
+      summary: Crear nuevo usuario
+      tags:
+        - Usuarios
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UsuarioInput'
+      responses:
+        '201':
+          description: Usuario creado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Usuario'
+
+  /usuarios/{id}:
+    get:
+      summary: Obtener usuario por ID
+      tags:
+        - Usuarios
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Detalle de usuario
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Usuario'
+        '404':
+          description: Usuario no encontrado
+    put:
+      summary: Actualizar usuario
+      tags:
+        - Usuarios
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UsuarioInput'
+      responses:
+        '200':
+          description: Usuario actualizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Usuario'
+    delete:
+      summary: Eliminar usuario
+      tags:
+        - Usuarios
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Usuario eliminado correctamente
+
+  /trabajos:
+    get:
+      summary: Listar todos los trabajos
+      tags:
+        - Trabajos
+      responses:
+        '200':
+          description: Lista de trabajos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Trabajo'
+    post:
+      summary: Crear nuevo trabajo
+      tags:
+        - Trabajos
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TrabajoInput'
+      responses:
+        '201':
+          description: Trabajo creado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Trabajo'
+
+  /trabajos/{id}:
+    get:
+      summary: Obtener trabajo por ID
+      tags:
+        - Trabajos
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Detalle de trabajo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Trabajo'
+    put:
+      summary: Actualizar trabajo
+      tags:
+        - Trabajos
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TrabajoInput'
+      responses:
+        '200':
+          description: Trabajo actualizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Trabajo'
+    delete:
+      summary: Eliminar trabajo
+      tags:
+        - Trabajos
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Trabajo eliminado
+
+  /fichajes:
+    get:
+      summary: Listar fichajes con filtros opcionales (usuario, fecha inicio, fecha fin)
+      tags:
+        - Fichajes
+      parameters:
+        - name: idUsuario
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: fechaInicio
+          in: query
+          required: false
+          description: Formato YYYY-MM-DD
+          schema:
+            type: string
+        - name: fechaFin
+          in: query
+          required: false
+          description: Formato YYYY-MM-DD
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Lista de fichajes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FichajeDetalle'
+    post:
+      summary: Iniciar nuevo fichaje (Entrada)
+      tags:
+        - Fichajes
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FichajeEntradaInput'
+      responses:
+        '201':
+          description: Fichaje registrado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Fichaje'
+
+  /fichajes/ultimo-activo/{idUsuario}:
+    get:
+      summary: Consultar si el usuario tiene un fichaje abierto en las ultimas 12 horas
+      tags:
+        - Fichajes
+      parameters:
+        - name: idUsuario
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Ultimo fichaje si está abierto en <12h o null
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FichajeDetalle'
+
+  /fichajes/cerrar/{idFichaje}:
+    put:
+      summary: Finalizar fichaje (Salida y calculo de horas)
+      tags:
+        - Fichajes
+      parameters:
+        - name: idFichaje
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                fechaHoraSalida:
+                  type: string
+                  description: Opcional, si no se envía se toma la hora actual del servidor
+      responses:
+        '200':
+          description: Fichaje cerrado con éxito
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Fichaje'
+
+  /apikey:
+    get:
+      summary: Obtener o validar ApiKeys registradas
+      tags:
+        - ApiKey
+      responses:
+        '200':
+          description: Lista de ApiKeys
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApiKey'
+
+components:
+  schemas:
+    Usuario:
+      type: object
+      properties:
+        IdUsuario:
+          type: integer
+          example: 1
+        Nombre:
+          type: string
+          example: Administrador General
+        Usuario:
+          type: string
+          example: admin
+        Clave:
+          type: string
+          example: admin123
+        Rol:
+          type: string
+          example: admin
+
+    UsuarioInput:
+      type: object
+      required:
+        - IdUsuario
+        - Nombre
+        - Usuario
+        - Clave
+      properties:
+        IdUsuario:
+          type: integer
+        Nombre:
+          type: string
+        Usuario:
+          type: string
+        Clave:
+          type: string
+        Rol:
+          type: string
+          default: empleado
+
+    Trabajo:
+      type: object
+      properties:
+        IdTrabajo:
+          type: integer
+          example: 1
+        Nombre:
+          type: string
+          example: Desarrollo Frontend Ionic
+
+    TrabajoInput:
+      type: object
+      required:
+        - IdTrabajo
+        - Nombre
+      properties:
+        IdTrabajo:
+          type: integer
+        Nombre:
+          type: string
+
+    Fichaje:
+      type: object
+      properties:
+        IdFichaje:
+          type: integer
+        FechaHoraEntrada:
+          type: string
+        FechaHoraSalida:
+          type: string
+          nullable: true
+        HorasTrabajadas:
+          type: integer
+          nullable: true
+        IdTrabajo:
+          type: integer
+        IdUsuario:
+          type: integer
+        GeolocalizacionLatitud:
+          type: number
+          format: float
+        GeolocalizacionLongitud:
+          type: number
+          format: float
+
+    FichajeDetalle:
+      type: object
+      properties:
+        IdFichaje:
+          type: integer
+        FechaHoraEntrada:
+          type: string
+        FechaHoraSalida:
+          type: string
+          nullable: true
+        HorasTrabajadas:
+          type: integer
+          nullable: true
+        IdTrabajo:
+          type: integer
+        NombreTrabajo:
+          type: string
+        IdUsuario:
+          type: integer
+        NombreUsuario:
+          type: string
+        GeolocalizacionLatitud:
+          type: number
+        GeolocalizacionLongitud:
+          type: number
+
+    FichajeEntradaInput:
+      type: object
+      required:
+        - IdUsuario
+        - IdTrabajo
+        - GeolocalizacionLatitud
+        - GeolocalizacionLongitud
+      properties:
+        IdUsuario:
+          type: integer
+        IdTrabajo:
+          type: integer
+        GeolocalizacionLatitud:
+          type: number
+          format: float
+        GeolocalizacionLongitud:
+          type: number
+          format: float
+
+    ApiKey:
+      type: object
+      properties:
+        idKey:
+          type: integer
+        Key:
+          type: string

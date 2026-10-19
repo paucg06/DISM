@@ -1,0 +1,66 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Gestión de Trabajos</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="nuevoTrabajo()">
+        <ion-icon slot="icon-only" name="add-circle-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-list>
+    <ion-item *ngFor="let t of trabajos" button (click)="verDetalle(t)">
+      <ion-avatar slot="start">
+        <ion-icon name="briefcase-outline" style="font-size: 35px; color: var(--ion-color-secondary);"></ion-icon>
+      </ion-avatar>
+      <ion-label>
+        <h2>{{ t.Nombre }}</h2>
+        <p>Código Trabajo: #{{ t.IdTrabajo }}</p>
+      </ion-label>
+      <ion-button fill="clear" color="danger" slot="end" (click)="$event.stopPropagation(); confirmarEliminar(t.IdTrabajo)">
+        <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+      </ion-button>
+    </ion-item>
+  </ion-list>
+
+  <ion-button expand="block" color="secondary" (click)="nuevoTrabajo()" style="margin-top: 20px;">
+    <ion-icon slot="start" name="add-outline"></ion-icon>
+    Crear Nuevo Trabajo
+  </ion-button>
+
+  <!-- Modal Detalle / Edición / Creación -->
+  <ion-modal [isOpen]="mostrarModal" (didDismiss)="cerrarModal()">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar color="secondary">
+          <ion-title>{{ trabajoSeleccionado?.IdTrabajo ? 'Detalle Trabajo' : 'Nuevo Trabajo' }}</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="cerrarModal()">Cerrar</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding" *ngIf="trabajoSeleccionado">
+        <ion-item lines="full">
+          <ion-label position="stacked">ID de Trabajo</ion-label>
+          <ion-input [(ngModel)]="trabajoSeleccionado.IdTrabajo" type="number" placeholder="1"></ion-input>
+        </ion-item>
+        <ion-item lines="full" style="margin-top: 15px;">
+          <ion-label position="stacked">Nombre del Trabajo / Tarea</ion-label>
+          <ion-input [(ngModel)]="trabajoSeleccionado.Nombre" placeholder="Ej: Desarrollo Frontend Ionic"></ion-input>
+        </ion-item>
+
+        <ion-button expand="block" color="success" (click)="guardarTrabajo()" style="margin-top: 30px;">
+          Guardar Trabajo
+        </ion-button>
+        <ion-button expand="block" color="danger" fill="outline" (click)="confirmarEliminar(trabajoSeleccionado.IdTrabajo)" *ngIf="trabajoSeleccionado.IdTrabajo">
+          Eliminar Trabajo
+        </ion-button>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+</ion-content>

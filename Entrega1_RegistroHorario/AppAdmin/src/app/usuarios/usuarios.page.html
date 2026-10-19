@@ -1,0 +1,81 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Gestión de Usuarios</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="nuevoUsuario()">
+        <ion-icon slot="icon-only" name="add-circle-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-list>
+    <ion-item *ngFor="let u of usuarios" button (click)="verDetalle(u)">
+      <ion-avatar slot="start">
+        <ion-icon name="person-circle-outline" style="font-size: 40px; color: var(--ion-color-primary);"></ion-icon>
+      </ion-avatar>
+      <ion-label>
+        <h2>{{ u.Nombre }}</h2>
+        <p>Usuario: <b>{{ u.Usuario }}</b> | Rol: <ion-badge [color]="u.Rol === 'admin' ? 'danger' : 'success'">{{ u.Rol }}</ion-badge></p>
+      </ion-label>
+      <ion-button fill="clear" color="danger" slot="end" (click)="$event.stopPropagation(); confirmarEliminar(u.IdUsuario)">
+        <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+      </ion-button>
+    </ion-item>
+  </ion-list>
+
+  <ion-button expand="block" color="primary" (click)="nuevoUsuario()" style="margin-top: 20px;">
+    <ion-icon slot="start" name="person-add-outline"></ion-icon>
+    Añadir Nuevo Usuario
+  </ion-button>
+
+  <!-- Modal Detalle / Edición / Creación -->
+  <ion-modal [isOpen]="mostrarModal" (didDismiss)="cerrarModal()">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar color="primary">
+          <ion-title>{{ usuarioSeleccionado?.IdUsuario ? 'Detalle / Editar Usuario' : 'Nuevo Usuario' }}</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="cerrarModal()">Cerrar</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding" *ngIf="usuarioSeleccionado">
+        <ion-item lines="full">
+          <ion-label position="stacked">ID Usuario</ion-label>
+          <ion-input [(ngModel)]="usuarioSeleccionado.IdUsuario" type="number" placeholder="1"></ion-input>
+        </ion-item>
+        <ion-item lines="full" style="margin-top: 10px;">
+          <ion-label position="stacked">Nombre Completo</ion-label>
+          <ion-input [(ngModel)]="usuarioSeleccionado.Nombre" placeholder="Ej: Sergio García"></ion-input>
+        </ion-item>
+        <ion-item lines="full" style="margin-top: 10px;">
+          <ion-label position="stacked">Nombre de Usuario (Login)</ion-label>
+          <ion-input [(ngModel)]="usuarioSeleccionado.Usuario" placeholder="Ej: sergio"></ion-input>
+        </ion-item>
+        <ion-item lines="full" style="margin-top: 10px;">
+          <ion-label position="stacked">Contraseña / Clave</ion-label>
+          <ion-input [(ngModel)]="usuarioSeleccionado.Clave" placeholder="1234"></ion-input>
+        </ion-item>
+        <ion-item lines="full" style="margin-top: 10px;">
+          <ion-label position="stacked">Rol</ion-label>
+          <ion-select [(ngModel)]="usuarioSeleccionado.Rol">
+            <ion-select-option value="empleado">Empleado</ion-select-option>
+            <ion-select-option value="admin">Administrador</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-button expand="block" color="success" (click)="guardarUsuario()" style="margin-top: 30px;">
+          Guardar Cambios
+        </ion-button>
+        <ion-button expand="block" color="danger" fill="outline" (click)="confirmarEliminar(usuarioSeleccionado.IdUsuario)" *ngIf="usuarioSeleccionado.IdUsuario">
+          Eliminar Usuario
+        </ion-button>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+</ion-content>
