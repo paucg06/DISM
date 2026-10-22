@@ -54,14 +54,14 @@ echo ===================================================================
 echo [1/2] Instalando dependencias de backend-api...
 echo ===================================================================
 cd /d "%~dp0backend-api"
-call npm install --no-audit --no-fund
+call npm install --no-audit --no-fund --strict-ssl=false
 
 echo.
 echo ===================================================================
 echo [2/2] Instalando dependencias de AppAdmin...
 echo ===================================================================
 cd /d "%~dp0AppAdmin"
-call npm install --no-audit --no-fund
+call npm install --no-audit --no-fund --strict-ssl=false
 
 cd /d "%~dp0"
 echo.

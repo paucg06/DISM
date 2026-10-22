@@ -1,7 +1,0 @@
-{
-  "name": "DISM2",
-  "integrations": {
-    "capacitor": {}
-  },
-  "type": "angular-standalone"
-}
