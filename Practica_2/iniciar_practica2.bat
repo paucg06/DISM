@@ -38,6 +38,9 @@ if not exist "node_modules" (
     if exist "node_modules.tar.gz" (
         echo [INFO] Descomprimiendo dependencias offline de Backend...
         tar -xzf node_modules.tar.gz
+    ) else (
+        echo [INFO] Instalando dependencias de Backend con npm...
+        call npm install --no-audit --no-fund
     )
 )
 echo.
@@ -53,6 +56,9 @@ if not exist "node_modules" (
     if exist "node_modules.tar.gz" (
         echo [INFO] Descomprimiendo dependencias offline de AppAdmin...
         tar -xzf node_modules.tar.gz
+    ) else (
+        echo [INFO] Instalando dependencias de AppAdmin con npm...
+        call npm install --no-audit --no-fund
     )
 )
 echo.
@@ -72,7 +78,11 @@ if not exist "node_modules" (
     if exist "node_modules.tar.gz" (
         echo [INFO] Descomprimiendo dependencias offline de AppUsuarios...
         tar -xzf node_modules.tar.gz
+    ) else (
+        echo [INFO] Instalando dependencias de AppUsuarios con npm...
+        call npm install --no-audit --no-fund
     )
+)
 )
 echo.
 echo Arrancando aplicacion AppUsuarios en puerto 8101...
