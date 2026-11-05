@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8" />
-  <title>Registro Horario</title>
+  <title>Control Horario</title>
 
   <base href="/" />
 
@@ -11,6 +11,10 @@
   <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <meta name="format-detection" content="telephone=no" />
   <meta name="msapplication-tap-highlight" content="no" />
+
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
 
   <link rel="icon" type="image/png" href="icons/icon-192x192.png" />
   <link rel="manifest" href="manifest.webmanifest" />
@@ -20,17 +24,40 @@
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-  <meta name="apple-mobile-web-app-title" content="RegistroHorario" />
+  <meta name="apple-mobile-web-app-title" content="ControlHorario" />
   <link rel="apple-touch-icon" href="icons/icon-192x192.png" />
 
-  <!-- Registro del Service Worker PWA -->
+  <!-- Control de Caché y Service Worker PWA -->
   <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js', { scope: '/' })
-          .then(reg => console.log('[PWA] Service Worker registrado:', reg.scope))
-          .catch(err => console.warn('[PWA] Error Service Worker:', err));
+    // 1. Purga de cualquier caché de almacenamiento en navegador
+    if ('caches' in window) {
+      caches.keys().then(function(names) {
+        names.forEach(function(name) { caches.delete(name); });
       });
+    }
+
+    // 2. Registro del Service Worker con comprobación de actualización
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(function(registrations) {
+        registrations.forEach(function(r) { r.update(); });
+      });
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('/sw.js', { scope: '/' })
+          .then(function(reg) {
+            reg.update();
+            console.log('[PWA] Service Worker activo:', reg.scope);
+          })
+          .catch(function(err) { console.warn('[PWA] Service Worker:', err); });
+      });
+    }
+
+    // 3. Forzar actualización inmediata si el navegador conserva la versión anterior
+    var APP_BUILD_ID = 'build_20261105_v4_clean_grey';
+    if (localStorage.getItem('app_build_id') !== APP_BUILD_ID) {
+      localStorage.setItem('app_build_id', APP_BUILD_ID);
+      if (!window.location.search.includes('fresh=')) {
+        window.location.replace(window.location.pathname + '?fresh=' + Date.now());
+      }
     }
   </script>
 </head>

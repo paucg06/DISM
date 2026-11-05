@@ -51,11 +51,10 @@ function createSpaServer(port, staticDir, appName) {
       const ext = path.extname(filePath).toLowerCase();
       const contentType = mimeTypes[ext] || 'application/octet-stream';
 
-      if (filePath.endsWith('index.html') || filePath.endsWith('sw.js') || filePath.endsWith('ngsw-worker.js')) {
-        res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-        res.setHeader('Pragma', 'no-cache');
-        res.setHeader('Expires', '0');
-      }
+      // Forzar 0% de caché en todos los archivos para actualización en vivo garantizada
+      res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0');
+      res.setHeader('Pragma', 'no-cache');
+      res.setHeader('Expires', '0');
 
       if (filePath.endsWith('sw.js') || filePath.endsWith('ngsw-worker.js')) {
         res.setHeader('Service-Worker-Allowed', '/');
