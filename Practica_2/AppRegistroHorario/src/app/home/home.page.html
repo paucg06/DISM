@@ -1,8 +1,8 @@
 <ion-header [translucent]="true">
-  <ion-toolbar color="primary">
-    <ion-title>Control Horario</ion-title>
+  <ion-toolbar [color]="userRole === 'admin' ? 'success' : 'primary'">
+    <ion-title>{{ userRole === 'admin' ? 'Panel de Administración' : 'Control Horario' }}</ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="logout()" color="light" fill="outline" size="small" style="font-weight: 600; margin-right: 8px;">
+      <ion-button (click)="logout()" fill="clear" color="light" size="small" style="font-weight: 500;">
         <ion-icon slot="start" name="log-out-outline"></ion-icon>
         Cerrar sesión
       </ion-button>
@@ -10,76 +10,76 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding" style="--background: #f8fafc;">
+<ion-content class="ion-padding">
   <div style="max-width: 600px; margin: 20px auto; text-align: center;">
 
-    <!-- PANEL DEL ADMINISTRADOR -->
+    <!-- PANEL DEL ADMINISTRADOR (TEMA VERDE) -->
     <div *ngIf="userRole === 'admin'">
-      <div style="width: 80px; height: 80px; margin: 10px auto; background: #e0e7ff; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
-        <ion-icon name="shield-checkmark" color="primary" style="font-size: 44px;"></ion-icon>
+      <div style="width: 76px; height: 76px; margin: 10px auto; background: #e8f5e9; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+        <ion-icon name="shield-checkmark" color="success" style="font-size: 40px;"></ion-icon>
       </div>
-      <h2 style="font-weight: 700; color: #1e293b; margin-top: 10px;">Bienvenido, {{ userName }}</h2>
-      <p style="color: #64748b; font-size: 15px; margin-bottom: 25px;">Panel de Administración General</p>
+      <h2 style="font-weight: 700; margin-top: 10px;">Bienvenido, {{ userName }}</h2>
+      <p style="color: gray; font-size: 15px; margin-bottom: 25px;">Panel de Administración General</p>
 
-      <ion-card button [routerLink]="['/usuarios']" style="margin-top: 15px; text-align: left; box-shadow: 0 4px 12px rgba(0,0,0,0.06); border-radius: 12px;">
+      <ion-card button [routerLink]="['/usuarios']" style="margin-top: 15px; text-align: left; border-radius: 12px;">
         <ion-item lines="none" style="padding: 6px 0;">
-          <ion-icon name="people-outline" slot="start" color="primary" style="font-size: 32px; margin-right: 12px;"></ion-icon>
+          <ion-icon name="people-outline" slot="start" color="success" style="font-size: 32px; margin-right: 12px;"></ion-icon>
           <ion-label>
-            <h2 style="font-weight: 600; color: #1e293b;">Gestión de Usuarios</h2>
-            <p style="color: #64748b;">Consultar, crear, modificar y eliminar usuarios (CRUD)</p>
+            <h2 style="font-weight: 600;">Gestión de Usuarios</h2>
+            <p>Consultar, crear, modificar y eliminar usuarios (CRUD)</p>
           </ion-label>
           <ion-icon name="chevron-forward-outline" slot="end" color="medium"></ion-icon>
         </ion-item>
       </ion-card>
 
-      <ion-card button [routerLink]="['/trabajos']" style="margin-top: 15px; text-align: left; box-shadow: 0 4px 12px rgba(0,0,0,0.06); border-radius: 12px;">
+      <ion-card button [routerLink]="['/trabajos']" style="margin-top: 15px; text-align: left; border-radius: 12px;">
         <ion-item lines="none" style="padding: 6px 0;">
-          <ion-icon name="briefcase-outline" slot="start" color="secondary" style="font-size: 32px; margin-right: 12px;"></ion-icon>
+          <ion-icon name="briefcase-outline" slot="start" color="success" style="font-size: 32px; margin-right: 12px;"></ion-icon>
           <ion-label>
-            <h2 style="font-weight: 600; color: #1e293b;">Gestión de Trabajos</h2>
-            <p style="color: #64748b;">Catálogo de proyectos y tareas asignables</p>
+            <h2 style="font-weight: 600;">Gestión de Trabajos</h2>
+            <p>Catálogo de proyectos y tareas asignables</p>
           </ion-label>
           <ion-icon name="chevron-forward-outline" slot="end" color="medium"></ion-icon>
         </ion-item>
       </ion-card>
 
-      <ion-card button [routerLink]="['/fichajes']" style="margin-top: 15px; text-align: left; box-shadow: 0 4px 12px rgba(0,0,0,0.06); border-radius: 12px;">
+      <ion-card button [routerLink]="['/fichajes']" style="margin-top: 15px; text-align: left; border-radius: 12px;">
         <ion-item lines="none" style="padding: 6px 0;">
-          <ion-icon name="time-outline" slot="start" color="tertiary" style="font-size: 32px; margin-right: 12px;"></ion-icon>
+          <ion-icon name="time-outline" slot="start" color="success" style="font-size: 32px; margin-right: 12px;"></ion-icon>
           <ion-label>
-            <h2 style="font-weight: 600; color: #1e293b;">Gestión de Fichajes</h2>
-            <p style="color: #64748b;">Auditoría de fichajes, filtros por fecha y mapa de ubicaciones</p>
+            <h2 style="font-weight: 600;">Gestión de Fichajes</h2>
+            <p>Auditoría de fichajes, filtros por fecha y mapa de ubicaciones</p>
           </ion-label>
           <ion-icon name="chevron-forward-outline" slot="end" color="medium"></ion-icon>
         </ion-item>
       </ion-card>
     </div>
 
-    <!-- PANEL DEL EMPLEADO / USUARIO -->
+    <!-- PANEL DEL EMPLEADO / USUARIO (TEMA AZUL) -->
     <div *ngIf="userRole === 'empleado'">
-      <div style="width: 80px; height: 80px; margin: 10px auto; background: #e2e8f0; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
-        <ion-icon name="person" color="medium" style="font-size: 44px;"></ion-icon>
+      <div style="width: 76px; height: 76px; margin: 10px auto; background: #e3f2fd; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+        <ion-icon name="person" color="primary" style="font-size: 40px;"></ion-icon>
       </div>
-      <h2 style="font-weight: 700; color: #1e293b; margin-top: 10px;">Bienvenido, {{ userName }}</h2>
-      <p style="color: #64748b; font-size: 15px; margin-bottom: 25px;">Portal del Empleado</p>
+      <h2 style="font-weight: 700; margin-top: 10px;">Bienvenido, {{ userName }}</h2>
+      <p style="color: gray; font-size: 15px; margin-bottom: 25px;">Portal del Empleado</p>
 
-      <ion-card button [routerLink]="['/registrar-fichaje']" style="margin-top: 15px; text-align: left; box-shadow: 0 4px 12px rgba(0,0,0,0.06); border-radius: 12px;">
+      <ion-card button [routerLink]="['/registrar-fichaje']" style="margin-top: 15px; text-align: left; border-radius: 12px;">
         <ion-item lines="none" style="padding: 6px 0;">
           <ion-icon name="finger-print-outline" slot="start" color="primary" style="font-size: 34px; margin-right: 12px;"></ion-icon>
           <ion-label>
-            <h2 style="font-weight: 600; color: #1e293b;">Registrar Fichaje</h2>
-            <p style="color: #64748b;">Fichar entrada con GPS o registrar salida de turno</p>
+            <h2 style="font-weight: 600;">Registrar Fichaje</h2>
+            <p>Fichar entrada con GPS o registrar salida de turno</p>
           </ion-label>
           <ion-icon name="chevron-forward-outline" slot="end" color="medium"></ion-icon>
         </ion-item>
       </ion-card>
 
-      <ion-card button [routerLink]="['/consulta-fichajes']" style="margin-top: 15px; text-align: left; box-shadow: 0 4px 12px rgba(0,0,0,0.06); border-radius: 12px;">
+      <ion-card button [routerLink]="['/consulta-fichajes']" style="margin-top: 15px; text-align: left; border-radius: 12px;">
         <ion-item lines="none" style="padding: 6px 0;">
-          <ion-icon name="calendar-outline" slot="start" color="secondary" style="font-size: 34px; margin-right: 12px;"></ion-icon>
+          <ion-icon name="calendar-outline" slot="start" color="primary" style="font-size: 34px; margin-right: 12px;"></ion-icon>
           <ion-label>
-            <h2 style="font-weight: 600; color: #1e293b;">Consulta de Fichajes</h2>
-            <p style="color: #64748b;">Consultar fichajes del día y buscar entre fechas</p>
+            <h2 style="font-weight: 600;">Consulta de Fichajes</h2>
+            <p>Consultar historial de fichajes y buscar entre fechas</p>
           </ion-label>
           <ion-icon name="chevron-forward-outline" slot="end" color="medium"></ion-icon>
         </ion-item>

@@ -6,10 +6,10 @@ const dbConfig = {
   user: process.env.DB_USER || 'root',
   password: process.env.DB_PASSWORD || 'password',
   database: process.env.DB_NAME || 'dism_registro',
-  waitForConnections: true,
-  connectionLimit: 10,
+  waitForConnections: false,
+  connectionLimit: 5,
   queueLimit: 0,
-  connectTimeout: 1000
+  connectTimeout: 800
 };
 
 // Datos en memoria como fallback automático instantáneo
@@ -32,12 +32,17 @@ let mockUsuarios = [
   { IdUsuario: 7, Nombre: 'Maria Lopez', Usuario: 'maria.lopez', Clave: 'user123', Rol: 'empleado' }
 ];
 
+// Generar fecha hoy en formato YYYY-MM-DD
+const pad = (n) => String(n).padStart(2, '0');
+const dHoy = new Date();
+const strHoy = `${dHoy.getFullYear()}-${pad(dHoy.getMonth() + 1)}-${pad(dHoy.getDate())}`;
+
 let mockFichajes = [
   {
     IdFichaje: 1,
-    FechaHoraEntrada: '2026-10-14 08:30:00',
-    FechaHoraSalida: '2026-10-14 16:30:00',
-    HorasTrabajadas: 8,
+    FechaHoraEntrada: `${strHoy} 08:30:00`,
+    FechaHoraSalida: `${strHoy} 14:30:00`,
+    HorasTrabajadas: 6,
     IdTrabajo: 1,
     IdUsuario: 2,
     GeolocalizacionLatitud: 38.38735,
@@ -45,13 +50,33 @@ let mockFichajes = [
   },
   {
     IdFichaje: 2,
-    FechaHoraEntrada: '2026-10-14 09:00:00',
-    FechaHoraSalida: '2026-10-14 17:00:00',
+    FechaHoraEntrada: '2026-11-04 09:00:00',
+    FechaHoraSalida: '2026-11-04 17:00:00',
     HorasTrabajadas: 8,
     IdTrabajo: 2,
+    IdUsuario: 2,
+    GeolocalizacionLatitud: 38.38735,
+    GeolocalizacionLongitud: -0.51238
+  },
+  {
+    IdFichaje: 3,
+    FechaHoraEntrada: `${strHoy} 09:00:00`,
+    FechaHoraSalida: `${strHoy} 17:00:00`,
+    HorasTrabajadas: 8,
+    IdTrabajo: 3,
     IdUsuario: 3,
     GeolocalizacionLatitud: 38.34599,
     GeolocalizacionLongitud: -0.49068
+  },
+  {
+    IdFichaje: 4,
+    FechaHoraEntrada: '2026-10-14 08:30:00',
+    FechaHoraSalida: '2026-10-14 16:30:00',
+    HorasTrabajadas: 8,
+    IdTrabajo: 1,
+    IdUsuario: 2,
+    GeolocalizacionLatitud: 38.38735,
+    GeolocalizacionLongitud: -0.51238
   }
 ];
 

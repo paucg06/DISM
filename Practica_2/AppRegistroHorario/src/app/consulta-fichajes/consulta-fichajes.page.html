@@ -1,11 +1,11 @@
 <ion-header [translucent]="true">
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/home" text="Volver"></ion-back-button>
+      <ion-back-button defaultHref="/home" text=""></ion-back-button>
     </ion-buttons>
     <ion-title>Consulta de Fichajes</ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="logout()" color="light" fill="outline" size="small" style="font-weight: 600; margin-right: 8px;">
+      <ion-button (click)="logout()" fill="clear" color="light" size="small" style="font-weight: 500;">
         <ion-icon slot="start" name="log-out-outline"></ion-icon>
         Cerrar sesión
       </ion-button>
@@ -13,13 +13,13 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding" style="--background: #f8fafc;">
+<ion-content class="ion-padding">
   <div style="max-width: 680px; margin: 0 auto;">
 
     <!-- Filtro de fechas -->
-    <ion-card style="margin-bottom: 20px; border-radius: 12px; box-shadow: 0 4px 14px rgba(0,0,0,0.06);">
+    <ion-card style="margin-bottom: 20px; border-radius: 12px;">
       <ion-card-header>
-        <ion-card-subtitle style="color: #2563eb; font-weight: 700;">FILTRAR POR INTERVALO DE FECHAS</ion-card-subtitle>
+        <ion-card-subtitle color="primary" style="font-weight: 700;">FILTRAR POR RANGO DE FECHAS</ion-card-subtitle>
       </ion-card-header>
       <ion-card-content>
         <ion-grid style="padding: 0;">
@@ -50,17 +50,17 @@
       </ion-card-content>
     </ion-card>
 
-    <!-- Indicador de carga -->
-    <div *ngIf="cargando" style="text-align: center; padding: 30px;">
+    <!-- Indicador de carga temporal (no bloqueante) -->
+    <div *ngIf="cargando" style="text-align: center; padding: 20px;">
       <ion-spinner name="crescent" color="primary"></ion-spinner>
-      <p style="color: #64748b; margin-top: 10px;">Cargando tus fichajes...</p>
+      <p style="color: gray; margin-top: 8px;">Cargando fichajes...</p>
     </div>
 
     <!-- Sin resultados -->
     <ion-card *ngIf="!cargando && fichajes.length === 0" style="text-align: center; padding: 25px 15px; border-radius: 12px;">
       <ion-icon name="calendar-outline" color="medium" style="font-size: 48px;"></ion-icon>
-      <h3 style="margin-top: 10px; color: #1e293b;">No hay fichajes registrados en esta fecha</h3>
-      <p style="color: #64748b; font-size: 14px;">Prueba a seleccionar otro rango o haz clic en "Ver Todos".</p>
+      <h3 style="margin-top: 10px;">No hay fichajes registrados en esta fecha</h3>
+      <p style="color: gray; font-size: 14px;">Prueba a seleccionar otro rango o haz clic en "Ver Todos".</p>
       <ion-button fill="outline" color="primary" (click)="limpiarFiltros()" style="margin-top: 10px;">
         Ver Todos los Fichajes
       </ion-button>
@@ -68,14 +68,14 @@
 
     <!-- Listado de fichajes -->
     <div *ngIf="!cargando && fichajes.length > 0">
-      <h3 style="font-size: 16px; font-weight: 700; color: #1e293b; margin: 15px 5px;">
-        Fichajes Encontrados ({{ fichajes.length }})
+      <h3 style="font-size: 16px; font-weight: 700; margin: 15px 5px;">
+        Fichajes Registrados ({{ fichajes.length }})
       </h3>
 
-      <ion-card *ngFor="let f of fichajes" style="margin-bottom: 15px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+      <ion-card *ngFor="let f of fichajes" style="margin-bottom: 15px; border-radius: 12px;">
         <ion-card-header>
           <div style="display: flex; justify-content: space-between; align-items: center;">
-            <ion-card-subtitle style="color: #2563eb; font-weight: 700;">{{ f.NombreTrabajo || 'Trabajo #' + f.IdTrabajo }}</ion-card-subtitle>
+            <ion-card-subtitle color="primary" style="font-weight: 700;">{{ f.NombreTrabajo || 'Trabajo #' + f.IdTrabajo }}</ion-card-subtitle>
             <ion-badge [color]="f.FechaHoraSalida ? 'success' : 'warning'">
               {{ f.FechaHoraSalida ? (f.HorasTrabajadas || 0) + 'h trabajadas' : 'En Curso' }}
             </ion-badge>
@@ -83,22 +83,15 @@
           <ion-card-title style="font-size: 17px; margin-top: 4px;">{{ f.FechaHoraEntrada }}</ion-card-title>
         </ion-card-header>
         <ion-card-content>
-          <p style="margin: 3px 0;">🚪 <b>Salida:</b> {{ f.FechaHoraSalida || 'Pendiente de registrar salida' }}</p>
+          <p style="margin: 3px 0;"><b>Salida:</b> {{ f.FechaHoraSalida || 'Pendiente de registrar salida' }}</p>
           <p style="margin: 3px 0;" *ngIf="f.GeolocalizacionLatitud">
-            📍 <b>Coordenadas:</b> {{ f.GeolocalizacionLatitud }}, {{ f.GeolocalizacionLongitud }}
+            <b>Coordenadas:</b> {{ f.GeolocalizacionLatitud }}, {{ f.GeolocalizacionLongitud }}
           </p>
-          <p style="margin: 3px 0; color: #475569;" *ngIf="f.direccionPostal">
-            🏠 <b>Dirección:</b> {{ f.direccionPostal }}
+          <p style="margin: 3px 0; color: gray;" *ngIf="f.direccionPostal">
+            <b>Dirección:</b> {{ f.direccionPostal }}
           </p>
         </ion-card-content>
       </ion-card>
-    </div>
-
-    <div style="text-align: center; margin: 25px 0;">
-      <ion-button fill="clear" color="medium" [routerLink]="['/home']">
-        <ion-icon slot="start" name="arrow-back-outline"></ion-icon>
-        Volver al Panel Principal
-      </ion-button>
     </div>
 
   </div>

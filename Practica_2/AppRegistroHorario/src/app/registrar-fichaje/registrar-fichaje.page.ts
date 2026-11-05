@@ -14,13 +14,13 @@ export class RegistrarFichajePage implements OnInit {
   trabajos: Trabajo[] = [];
   fichajeActivo: Fichaje | null = null;
 
-  idTrabajoSeleccionado: number | null = null;
-  latitud: number | null = null;
-  longitud: number | null = null;
-  direccionGeorreferenciada = '';
+  idTrabajoSeleccionado: number = 1;
+  latitud: number = 38.38735;
+  longitud: number = -0.51238;
+  direccionGeorreferenciada: string = 'Universidad de Alicante, San Vicente del Raspeig';
 
-  cargando = true;
-  procesandoFichaje = false;
+  cargando: boolean = false;
+  procesandoFichaje: boolean = false;
 
   constructor(
     private api: ApiService,
@@ -48,20 +48,15 @@ export class RegistrarFichajePage implements OnInit {
 
   cargarDatos() {
     if (!this.cargarUsuario()) return;
-    this.cargando = true;
-
-    // Timeout de seguridad de 2 segundos para evitar bloqueo en la interfaz
-    const safetyTimeout = setTimeout(() => {
-      this.cargando = false;
-      this.obtenerUbicacionGPS();
-    }, 2000);
 
     // Cargar trabajos
     this.api.getTrabajos().subscribe({
       next: (t) => {
-        this.trabajos = t;
-        if (t.length > 0 && !this.idTrabajoSeleccionado) {
-          this.idTrabajoSeleccionado = t[0].IdTrabajo;
+        if (t && t.length > 0) {
+          this.trabajos = t;
+          if (!this.idTrabajoSeleccionado) {
+            this.idTrabajoSeleccionado = t[0].IdTrabajo;
+          }
         }
       },
       error: () => {}
@@ -70,24 +65,18 @@ export class RegistrarFichajePage implements OnInit {
     // Comprobar si hay fichaje activo en < 12 horas
     this.api.getUltimoFichajeActivo(this.usuarioActual!.IdUsuario).subscribe({
       next: (f) => {
-        clearTimeout(safetyTimeout);
         this.fichajeActivo = f;
-        this.cargando = false;
-        if (!f) {
-          this.obtenerUbicacionGPS();
-        }
       },
       error: () => {
-        clearTimeout(safetyTimeout);
-        this.cargando = false;
-        this.obtenerUbicacionGPS();
+        this.fichajeActivo = null;
       }
     });
+
+    // Intentar geolocalización en segundo plano sin bloquear
+    this.obtenerUbicacionGPS();
   }
 
   obtenerUbicacionGPS() {
-    if (this.latitud && this.longitud) return;
-
     if (navigator && navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (pos) => {
@@ -96,30 +85,22 @@ export class RegistrarFichajePage implements OnInit {
           this.resolverDireccionNominatim();
         },
         () => {
-          this.asignarCoordenadasFallback();
+          // Si falla o no hay permiso, se mantienen las coordenadas predeterminadas de la UA
         },
-        { enableHighAccuracy: false, timeout: 3500 }
+        { enableHighAccuracy: false, timeout: 2500 }
       );
-    } else {
-      this.asignarCoordenadasFallback();
     }
-  }
-
-  asignarCoordenadasFallback() {
-    this.latitud = 38.38735;
-    this.longitud = -0.51238;
-    this.direccionGeorreferenciada = 'Universidad de Alicante, San Vicente del Raspeig';
   }
 
   resolverDireccionNominatim() {
     if (!this.latitud || !this.longitud) return;
     this.api.getDireccionNominatim(this.latitud, this.longitud).subscribe({
       next: (res) => {
-        this.direccionGeorreferenciada = res.display_name || `Lat: ${this.latitud}, Lon: ${this.longitud}`;
+        if (res && res.display_name) {
+          this.direccionGeorreferenciada = res.display_name;
+        }
       },
-      error: () => {
-        this.direccionGeorreferenciada = `Lat: ${this.latitud}, Lon: ${this.longitud}`;
-      }
+      error: () => {}
     });
   }
 
@@ -137,9 +118,9 @@ export class RegistrarFichajePage implements OnInit {
     this.procesandoFichaje = true;
     const datos = {
       IdUsuario: this.usuarioActual.IdUsuario,
-      IdTrabajo: this.idTrabajoSeleccionado,
-      GeolocalizacionLatitud: this.latitud || 38.38735,
-      GeolocalizacionLongitud: this.longitud || -0.51238
+      IdTrabajo: Number(this.idTrabajoSeleccionado),
+      GeolocalizacionLatitud: this.latitud,
+      GeolocalizacionLongitud: this.longitud
     };
 
     this.api.iniciarFichaje(datos).subscribe({
@@ -152,7 +133,6 @@ export class RegistrarFichajePage implements OnInit {
           color: 'success'
         });
         await toast.present();
-        this.cargarDatos();
       },
       error: async (err) => {
         this.procesandoFichaje = false;
@@ -180,7 +160,6 @@ export class RegistrarFichajePage implements OnInit {
           color: 'success'
         });
         await toast.present();
-        this.cargarDatos();
       },
       error: async (err) => {
         this.procesandoFichaje = false;

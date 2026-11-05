@@ -1,11 +1,11 @@
 <ion-header [translucent]="true">
-  <ion-toolbar color="primary">
+  <ion-toolbar color="success">
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/home" text="Volver"></ion-back-button>
+      <ion-back-button defaultHref="/home" text=""></ion-back-button>
     </ion-buttons>
     <ion-title>Gestión de Fichajes</ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="logout()" color="light" fill="outline" size="small" style="font-weight: 600; margin-right: 8px;">
+      <ion-button (click)="logout()" fill="clear" color="light" size="small" style="font-weight: 500;">
         <ion-icon slot="start" name="log-out-outline"></ion-icon>
         Cerrar sesión
       </ion-button>
@@ -17,11 +17,11 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding" style="--background: #f8fafc;">
+<ion-content class="ion-padding">
   <!-- Filtros avanzados por fechas y usuario -->
-  <ion-card style="margin-bottom: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+  <ion-card style="margin-bottom: 20px; border-radius: 12px;">
     <ion-card-header>
-      <ion-card-subtitle style="color: #2563eb; font-weight: 700;">FILTROS AVANZADOS</ion-card-subtitle>
+      <ion-card-subtitle color="success" style="font-weight: 700;">FILTROS AVANZADOS</ion-card-subtitle>
     </ion-card-header>
     <ion-card-content>
       <ion-grid style="padding: 0;">
@@ -50,7 +50,7 @@
         </ion-row>
       </ion-grid>
       <div style="display: flex; gap: 10px; margin-top: 15px;">
-        <ion-button expand="block" color="primary" (click)="aplicarFiltros()" style="flex: 1; height: 44px; font-weight: 600;">
+        <ion-button expand="block" color="success" (click)="aplicarFiltros()" style="flex: 1; height: 44px; font-weight: 600;">
           <ion-icon slot="start" name="filter-outline"></ion-icon>
           Aplicar Filtros
         </ion-button>
@@ -63,7 +63,7 @@
 
   <!-- Listado de Fichajes -->
   <ion-list style="background: transparent;">
-    <ion-card *ngFor="let f of fichajesFiltrados" style="margin-bottom: 15px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+    <ion-card *ngFor="let f of fichajesFiltrados" style="margin-bottom: 15px; border-radius: 12px;">
       <ion-card-header>
         <ion-card-title style="font-size: 18px; display: flex; justify-content: space-between; align-items: center;">
           <span>{{ f.NombreUsuario }}</span>
@@ -74,13 +74,13 @@
         <ion-card-subtitle>Trabajo: <b>{{ f.NombreTrabajo }}</b></ion-card-subtitle>
       </ion-card-header>
       <ion-card-content>
-        <p style="margin: 3px 0;">🕒 <b>Entrada:</b> {{ f.FechaHoraEntrada }}</p>
-        <p style="margin: 3px 0;" *ngIf="f.FechaHoraSalida">🚪 <b>Salida:</b> {{ f.FechaHoraSalida }}</p>
-        <p style="margin: 3px 0;" *ngIf="f.HorasTrabajadas">⏱️ <b>Horas:</b> {{ f.HorasTrabajadas }} h</p>
-        <p style="margin: 3px 0;">📍 <b>GPS:</b> [{{ f.GeolocalizacionLatitud }}, {{ f.GeolocalizacionLongitud }}]</p>
+        <p style="margin: 3px 0;"><b>Entrada:</b> {{ f.FechaHoraEntrada }}</p>
+        <p style="margin: 3px 0;" *ngIf="f.FechaHoraSalida"><b>Salida:</b> {{ f.FechaHoraSalida }}</p>
+        <p style="margin: 3px 0;" *ngIf="f.HorasTrabajadas"><b>Horas:</b> {{ f.HorasTrabajadas }} h</p>
+        <p style="margin: 3px 0;"><b>GPS:</b> [{{ f.GeolocalizacionLatitud }}, {{ f.GeolocalizacionLongitud }}]</p>
 
         <!-- Botón para ver el mapa interactivo con Leaflet -->
-        <ion-button expand="block" color="tertiary" size="small" (click)="abrirMapa(f)" style="margin-top: 15px; height: 40px; font-weight: 600;">
+        <ion-button expand="block" color="success" fill="outline" size="small" (click)="abrirMapa(f)" style="margin-top: 15px; height: 40px; font-weight: 600;">
           <ion-icon slot="start" name="map-outline"></ion-icon>
           Ver Mapa de Fichaje (Leaflet)
         </ion-button>
@@ -93,26 +93,19 @@
     </div>
   </ion-list>
 
-  <div style="text-align: center; margin: 25px 0;">
-    <ion-button fill="clear" color="medium" [routerLink]="['/home']">
-      <ion-icon slot="start" name="arrow-back-outline"></ion-icon>
-      Volver al Panel Principal
-    </ion-button>
-  </div>
-
   <!-- Modal con Mapa Leaflet -->
   <ion-modal [isOpen]="mostrarModalMapa" (didDismiss)="cerrarModalMapa()">
     <ng-template>
       <ion-header>
-        <ion-toolbar color="primary">
+        <ion-toolbar color="success">
           <ion-title>Ubicación del Fichaje</ion-title>
           <ion-buttons slot="end">
-            <ion-button (click)="cerrarModalMapa()">Cerrar</ion-button>
+            <ion-button (click)="cerrarModalMapa()" fill="clear" color="light">Cerrar</ion-button>
           </ion-buttons>
         </ion-toolbar>
       </ion-header>
       <ion-content>
-        <div style="padding: 12px; background: #f1f5f9;" *ngIf="fichajeModalMapa">
+        <div style="padding: 12px; background: rgba(0,0,0,0.04);" *ngIf="fichajeModalMapa">
           <b>Empleado:</b> {{ fichajeModalMapa.NombreUsuario }} | <b>Hora:</b> {{ fichajeModalMapa.FechaHoraEntrada }}
         </div>
         <div id="mapAdminId" style="width: 100%; height: 85%;"></div>

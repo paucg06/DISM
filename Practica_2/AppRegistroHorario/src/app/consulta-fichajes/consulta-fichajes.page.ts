@@ -15,7 +15,7 @@ interface FichajeConDireccion extends Fichaje {
 export class ConsultaFichajesPage implements OnInit {
   usuarioActual: Usuario | null = null;
   fichajes: FichajeConDireccion[] = [];
-  cargando = false;
+  cargando: boolean = false;
 
   filtroFechaInicio = '';
   filtroFechaFin = '';
@@ -27,7 +27,7 @@ export class ConsultaFichajesPage implements OnInit {
 
   ngOnInit() {
     this.cargarUsuario();
-    this.cargarFichajesDeHoy();
+    this.consultar();
   }
 
   ionViewWillEnter() {
@@ -46,25 +46,13 @@ export class ConsultaFichajesPage implements OnInit {
     return true;
   }
 
-  cargarFichajesDeHoy() {
-    if (!this.usuarioActual) return;
-    const pad = (n: number) => String(n).padStart(2, '0');
-    const d = new Date();
-    const hoyStr = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
-
-    this.filtroFechaInicio = hoyStr;
-    this.filtroFechaFin = hoyStr;
-    this.consultar();
-  }
-
   consultar() {
     if (!this.cargarUsuario()) return;
     this.cargando = true;
 
-    // Timeout de seguridad de 2 segundos para no bloquear la interfaz
     const safetyTimeout = setTimeout(() => {
       this.cargando = false;
-    }, 2000);
+    }, 1500);
 
     this.api.getFichajesUsuario(this.usuarioActual!.IdUsuario, this.filtroFechaInicio, this.filtroFechaFin).subscribe({
       next: (data) => {
@@ -92,11 +80,11 @@ export class ConsultaFichajesPage implements OnInit {
       if (f.GeolocalizacionLatitud && f.GeolocalizacionLongitud) {
         this.api.getDireccionNominatim(f.GeolocalizacionLatitud, f.GeolocalizacionLongitud).subscribe({
           next: (res) => {
-            f.direccionPostal = res.display_name || `Lat: ${f.GeolocalizacionLatitud}, Lon: ${f.GeolocalizacionLongitud}`;
+            if (res && res.display_name) {
+              f.direccionPostal = res.display_name;
+            }
           },
-          error: () => {
-            f.direccionPostal = `Lat: ${f.GeolocalizacionLatitud}, Lon: ${f.GeolocalizacionLongitud}`;
-          }
+          error: () => {}
         });
       }
     }

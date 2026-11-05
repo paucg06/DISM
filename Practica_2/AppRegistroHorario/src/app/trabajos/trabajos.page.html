@@ -1,14 +1,14 @@
 <ion-header [translucent]="true">
-  <ion-toolbar color="primary">
+  <ion-toolbar color="success">
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/home" text="Volver"></ion-back-button>
+      <ion-back-button defaultHref="/home" text=""></ion-back-button>
     </ion-buttons>
     <ion-title>Gestión de Trabajos</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="nuevoTrabajo()" title="Añadir Trabajo">
         <ion-icon slot="icon-only" name="add-circle-outline"></ion-icon>
       </ion-button>
-      <ion-button (click)="logout()" color="light" fill="outline" size="small" style="font-weight: 600; margin-right: 8px;">
+      <ion-button (click)="logout()" fill="clear" color="light" size="small" style="font-weight: 500;">
         <ion-icon slot="start" name="log-out-outline"></ion-icon>
         Cerrar sesión
       </ion-button>
@@ -16,11 +16,11 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding" style="--background: #f8fafc;">
-  <ion-list style="border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+<ion-content class="ion-padding">
+  <ion-list style="border-radius: 12px; overflow: hidden;">
     <ion-item *ngFor="let t of trabajos" button (click)="verDetalle(t)">
       <ion-avatar slot="start">
-        <ion-icon name="briefcase-outline" style="font-size: 35px; color: var(--ion-color-secondary);"></ion-icon>
+        <ion-icon name="briefcase-outline" style="font-size: 35px; color: var(--ion-color-success);"></ion-icon>
       </ion-avatar>
       <ion-label>
         <h2>{{ t.Nombre }}</h2>
@@ -32,26 +32,19 @@
     </ion-item>
   </ion-list>
 
-  <ion-button expand="block" color="secondary" (click)="nuevoTrabajo()" style="margin-top: 20px; height: 46px; font-weight: 600;">
+  <ion-button expand="block" color="success" (click)="nuevoTrabajo()" style="margin-top: 20px; height: 46px; font-weight: 600;">
     <ion-icon slot="start" name="add-outline"></ion-icon>
     Crear Nuevo Trabajo
   </ion-button>
-
-  <div style="text-align: center; margin-top: 20px;">
-    <ion-button fill="clear" color="medium" [routerLink]="['/home']">
-      <ion-icon slot="start" name="arrow-back-outline"></ion-icon>
-      Volver al Panel Principal
-    </ion-button>
-  </div>
 
   <!-- Modal Detalle / Edición / Creación -->
   <ion-modal [isOpen]="mostrarModal" (didDismiss)="cerrarModal()">
     <ng-template>
       <ion-header>
-        <ion-toolbar color="secondary">
+        <ion-toolbar color="success">
           <ion-title>{{ trabajoSeleccionado?.IdTrabajo ? 'Detalle Trabajo' : 'Nuevo Trabajo' }}</ion-title>
           <ion-buttons slot="end">
-            <ion-button (click)="cerrarModal()">Cerrar</ion-button>
+            <ion-button (click)="cerrarModal()" fill="clear" color="light">Cerrar</ion-button>
           </ion-buttons>
         </ion-toolbar>
       </ion-header>
@@ -66,7 +59,7 @@
           <ion-input [(ngModel)]="trabajoSeleccionado.Nombre" placeholder="Ej: Auditoría de Sistemas"></ion-input>
         </ion-item>
 
-        <ion-button expand="block" color="secondary" (click)="guardarTrabajo()" style="margin-top: 25px; height: 46px; font-weight: 600;">
+        <ion-button expand="block" color="success" (click)="guardarTrabajo()" style="margin-top: 25px; height: 46px; font-weight: 600;">
           Guardar Trabajo
         </ion-button>
       </ion-content>
