@@ -1,0 +1,128 @@
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs';
+
+export interface Usuario {
+  IdUsuario: number;
+  Nombre: string;
+  Usuario: string;
+  Clave?: string;
+  Rol?: string;
+}
+
+export interface Trabajo {
+  IdTrabajo: number;
+  Nombre: string;
+}
+
+export interface Fichaje {
+  IdFichaje: number;
+  FechaHoraEntrada: string;
+  FechaHoraSalida?: string | null;
+  HorasTrabajadas?: number | null;
+  IdTrabajo: number;
+  NombreTrabajo?: string;
+  IdUsuario: number;
+  NombreUsuario?: string;
+  GeolocalizacionLatitud: number;
+  GeolocalizacionLongitud: number;
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+export class ApiService {
+  private basePath = 'http://localhost:8080/api/v1/';
+  private httpOptions = {
+    headers: new HttpHeaders({
+      'Content-Type': 'application/json',
+      'x-api-key': 'dism-secret-key-2026'
+    })
+  };
+
+  constructor(private http: HttpClient) {}
+
+  // Autenticación (Login)
+  login(usuario: string, clave: string): Observable<Usuario> {
+    return this.http.post<Usuario>(`${this.basePath}auth/login`, { usuario, clave }, this.httpOptions);
+  }
+
+  // CRUD Usuarios
+  getUsuarios(): Observable<Usuario[]> {
+    return this.http.get<Usuario[]>(`${this.basePath}usuarios`, this.httpOptions);
+  }
+
+  getUsuario(id: number): Observable<Usuario> {
+    return this.http.get<Usuario>(`${this.basePath}usuarios/${id}`, this.httpOptions);
+  }
+
+  crearUsuario(usuario: Usuario): Observable<Usuario> {
+    return this.http.post<Usuario>(`${this.basePath}usuarios`, usuario, this.httpOptions);
+  }
+
+  actualizarUsuario(id: number, usuario: Usuario): Observable<Usuario> {
+    return this.http.put<Usuario>(`${this.basePath}usuarios/${id}`, usuario, this.httpOptions);
+  }
+
+  eliminarUsuario(id: number): Observable<any> {
+    return this.http.delete(`${this.basePath}usuarios/${id}`, this.httpOptions);
+  }
+
+  // CRUD Trabajos
+  getTrabajos(): Observable<Trabajo[]> {
+    return this.http.get<Trabajo[]>(`${this.basePath}trabajos`, this.httpOptions);
+  }
+
+  getTrabajo(id: number): Observable<Trabajo> {
+    return this.http.get<Trabajo>(`${this.basePath}trabajos/${id}`, this.httpOptions);
+  }
+
+  crearTrabajo(trabajo: Trabajo): Observable<Trabajo> {
+    return this.http.post<Trabajo>(`${this.basePath}trabajos`, trabajo, this.httpOptions);
+  }
+
+  actualizarTrabajo(id: number, trabajo: Trabajo): Observable<Trabajo> {
+    return this.http.put<Trabajo>(`${this.basePath}trabajos/${id}`, trabajo, this.httpOptions);
+  }
+
+  eliminarTrabajo(id: number): Observable<any> {
+    return this.http.delete(`${this.basePath}trabajos/${id}`, this.httpOptions);
+  }
+
+  // Fichajes (Admin / Filtros generales)
+  getFichajes(filtros?: { idUsuario?: number; fechaInicio?: string; fechaFin?: string }): Observable<Fichaje[]> {
+    let url = `${this.basePath}fichajes?`;
+    if (filtros) {
+      if (filtros.idUsuario) url += `idUsuario=${filtros.idUsuario}&`;
+      if (filtros.fechaInicio) url += `fechaInicio=${filtros.fechaInicio}&`;
+      if (filtros.fechaFin) url += `fechaFin=${filtros.fechaFin}&`;
+    }
+    return this.http.get<Fichaje[]>(url, this.httpOptions);
+  }
+
+  // Métodos de Empleado (Fichajes <12h y registro)
+  getUltimoFichajeActivo(idUsuario: number): Observable<Fichaje | null> {
+    return this.http.get<Fichaje | null>(`${this.basePath}fichajes/ultimo-activo/${idUsuario}`, this.httpOptions);
+  }
+
+  iniciarFichaje(datos: { IdUsuario: number; IdTrabajo: number; GeolocalizacionLatitud: number; GeolocalizacionLongitud: number }): Observable<Fichaje> {
+    return this.http.post<Fichaje>(`${this.basePath}fichajes`, datos, this.httpOptions);
+  }
+
+  cerrarFichaje(idFichaje: number): Observable<Fichaje> {
+    return this.http.put<Fichaje>(`${this.basePath}fichajes/cerrar/${idFichaje}`, {}, this.httpOptions);
+  }
+
+  getFichajesUsuario(idUsuario: number, fechaInicio?: string, fechaFin?: string): Observable<Fichaje[]> {
+    let url = `${this.basePath}fichajes?idUsuario=${idUsuario}`;
+    if (fechaInicio) url += `&fechaInicio=${fechaInicio}`;
+    if (fechaFin) url += `&fechaFin=${fechaFin}`;
+    return this.http.get<Fichaje[]>(url, this.httpOptions);
+  }
+
+  // Geocodificación inversa con OpenStreetMap Nominatim
+  getDireccionNominatim(lat: number, lon: number): Observable<any> {
+    const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&addressdetails=1`;
+    return this.http.get(url);
+  }
+}

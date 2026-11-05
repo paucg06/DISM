@@ -1,4 +1,4 @@
-// Servidor estatico ligero de cero dependencias para servir AppAdmin y AppUsuarios compilados
+// Servidor estatico nativo Node.js para servir la aplicacion PWA unificada de Registro Horario
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
@@ -9,6 +9,7 @@ const mimeTypes = {
   '.mjs': 'application/javascript; charset=utf-8',
   '.css': 'text/css; charset=utf-8',
   '.json': 'application/json; charset=utf-8',
+  '.webmanifest': 'application/manifest+json; charset=utf-8',
   '.png': 'image/png',
   '.jpg': 'image/jpeg',
   '.jpeg': 'image/jpeg',
@@ -24,7 +25,6 @@ const mimeTypes = {
 
 function createSpaServer(port, staticDir, appName) {
   const server = http.createServer((req, res) => {
-    // Permitir CORS por si fuera necesario
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', '*');
@@ -43,7 +43,7 @@ function createSpaServer(port, staticDir, appName) {
     let filePath = path.join(staticDir, reqPath);
 
     fs.stat(filePath, (err, stats) => {
-      // Si el archivo no existe o es una ruta de Angular/Ionic SPA, devolver index.html
+      // Si el archivo no existe o es una ruta Angular SPA, servir index.html
       if (err || !stats.isFile()) {
         filePath = path.join(staticDir, 'index.html');
       }
@@ -54,7 +54,7 @@ function createSpaServer(port, staticDir, appName) {
       fs.readFile(filePath, (readErr, content) => {
         if (readErr) {
           res.writeHead(500, { 'Content-Type': 'text/plain; charset=utf-8' });
-          res.end(`Error 500: No se pudo cargar el archivo.`);
+          res.end('Error 500: No se pudo cargar el archivo.');
           return;
         }
         res.writeHead(200, { 'Content-Type': contentType });
@@ -70,13 +70,21 @@ function createSpaServer(port, staticDir, appName) {
   return server;
 }
 
-const adminDir = path.join(__dirname, 'AppAdmin', 'www');
-const usuariosDir = path.join(__dirname, 'AppUsuarios', 'www');
+const appDir = path.join(__dirname, 'AppRegistroHorario', 'www');
 
 console.log('===================================================================');
-console.log('   SERVIDOR ESTATICO - APLICACIONES COMPILADAS IONIC / ANGULAR   ');
+console.log('    SERVIDOR WEB PWA - SISTEMA UNIFICADO DE REGISTRO HORARIO       ');
 console.log('===================================================================');
-createSpaServer(8100, adminDir, 'AppAdmin (Administrador)');
-createSpaServer(8101, usuariosDir, 'AppUsuarios (Empleados)');
-console.log('Presiona Ctrl+C para detener los servidores web.');
+createSpaServer(8100, appDir, 'AppRegistroHorario (PWA)');
+
+// Puerto secundario 8101 redirige al 8100 para compatibilidad
+const redirectServer = http.createServer((req, res) => {
+  res.writeHead(302, { Location: 'http://localhost:8100' + req.url });
+  res.end();
+});
+redirectServer.listen(8101, () => {
+  console.log('[OK] Redireccion de compatibilidad activa en: http://localhost:8101 -> 8100');
+});
+
+console.log('Presiona Ctrl+C para detener el servidor.');
 console.log('-------------------------------------------------------------------');

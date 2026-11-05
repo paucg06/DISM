@@ -1,0 +1,72 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title>Control Horario - Inicio de Sesión</ion-title>
+    <ion-buttons slot="end">
+      <ion-button *ngIf="showInstallBtn" (click)="installPwa()" fill="outline" color="light" size="small">
+        <ion-icon slot="start" name="download-outline"></ion-icon>
+        Instalar PWA
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div style="max-width: 480px; margin: 25px auto; text-align: center;">
+
+    <ion-icon name="time-outline" style="font-size: 72px; color: var(--ion-color-primary);"></ion-icon>
+    <h2 style="font-weight: 700; margin-top: 10px;">Sistema de Registro Horario</h2>
+    <p style="color: gray; font-size: 14px;">Aplicación Multiplataforma PWA (DISM)</p>
+
+    <!-- Indicador de Temas segun el Rol -->
+    <div style="display: flex; justify-content: center; gap: 10px; margin: 15px 0;">
+      <ion-badge color="primary" style="padding: 6px 12px; font-size: 12px;">Admin: TEMA AZUL</ion-badge>
+      <ion-badge color="success" style="padding: 6px 12px; font-size: 12px;">Empleado: TEMA VERDE</ion-badge>
+    </div>
+
+    <ion-card style="margin-top: 20px; text-align: left; box-shadow: 0 4px 14px rgba(0,0,0,0.08); border-radius: 12px;">
+      <ion-card-content>
+        <ion-item lines="full">
+          <ion-icon name="person-outline" slot="start" color="medium"></ion-icon>
+          <ion-label position="stacked">Usuario</ion-label>
+          <ion-input [(ngModel)]="usuario" placeholder="Ej: admin, sergio o juan.perez"></ion-input>
+        </ion-item>
+
+        <ion-item lines="full" style="margin-top: 15px;">
+          <ion-icon name="lock-closed-outline" slot="start" color="medium"></ion-icon>
+          <ion-label position="stacked">Contraseña</ion-label>
+          <ion-input [(ngModel)]="clave" type="password" placeholder="Introduce tu clave"></ion-input>
+        </ion-item>
+
+        <ion-button expand="block" color="primary" (click)="onLogin()" [disabled]="cargando" style="margin-top: 25px; height: 48px; font-weight: bold;">
+          <ion-spinner *ngIf="cargando" slot="start"></ion-spinner>
+          Iniciar Sesión
+        </ion-button>
+
+        <!-- Accesos rápidos de demostración para el evaluador / profesor -->
+        <div style="margin-top: 25px; border-top: 1px dashed #e2e8f0; padding-top: 15px; text-align: center;">
+          <p style="font-size: 13px; color: gray; margin-bottom: 10px;"><b>Accesos rápidos de demostración:</b></p>
+          <div style="display: flex; gap: 8px;">
+            <ion-button expand="block" fill="outline" color="primary" size="small" style="flex: 1;" (click)="fillAdmin()">
+              <ion-icon slot="start" name="shield-outline"></ion-icon>
+              Admin (Azul)
+            </ion-button>
+            <ion-button expand="block" fill="outline" color="success" size="small" style="flex: 1;" (click)="fillEmpleado()">
+              <ion-icon slot="start" name="person-outline"></ion-icon>
+              Empleado (Verde)
+            </ion-button>
+          </div>
+        </div>
+
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Boton para instalar como PWA -->
+    <div *ngIf="showInstallBtn" style="margin-top: 20px;">
+      <ion-button expand="block" color="dark" (click)="installPwa()">
+        <ion-icon slot="start" name="download-outline"></ion-icon>
+        Instalar como Aplicación PWA
+      </ion-button>
+    </div>
+
+  </div>
+</ion-content>

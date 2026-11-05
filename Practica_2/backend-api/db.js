@@ -26,7 +26,9 @@ let mockUsuarios = [
   { IdUsuario: 2, Nombre: 'Sergio Garcia', Usuario: 'sergio', Clave: '1234', Rol: 'empleado' },
   { IdUsuario: 3, Nombre: 'Estela Martinez', Usuario: 'estela', Clave: '1234', Rol: 'empleado' },
   { IdUsuario: 4, Nombre: 'Susana Gomez', Usuario: 'susana', Clave: '1234', Rol: 'empleado' },
-  { IdUsuario: 5, Nombre: 'Hugo Lopez', Usuario: 'hugo', Clave: '1234', Rol: 'empleado' }
+  { IdUsuario: 5, Nombre: 'Hugo Lopez', Usuario: 'hugo', Clave: '1234', Rol: 'empleado' },
+  { IdUsuario: 6, Nombre: 'Juan Perez', Usuario: 'juan.perez', Clave: 'user123', Rol: 'empleado' },
+  { IdUsuario: 7, Nombre: 'Maria Lopez', Usuario: 'maria.lopez', Clave: 'user123', Rol: 'empleado' }
 ];
 
 let mockFichajes = [

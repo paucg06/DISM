@@ -1,12 +1,32 @@
-# Práctica 2 (Entrega 2) - Sistema Integral de Registro Horario
+# Práctica 2 (Entrega 2) - Sistema Integral de Registro Horario Unificado (PWA)
 
-Este directorio contiene la solución completa para la **Entrega 2 (Práctica 2)** de la asignatura **DISM (Desarrollo de Interfaces para Sistemas Móviles)**.
+Este directorio contiene la solución completa de la **Entrega 2 (Práctica 2)** de la asignatura **DISM (Desarrollo de Interfaces para Sistemas Móviles)**.
 
-El sistema comprende una arquitectura cliente-servidor desacoplada para el control horario y gestión de partes de trabajo, compuesta por:
-1. **Base de Datos Relacional (`MySQL`)**: Persistencia de usuarios, trabajos y registros de fichajes con geolocalización.
-2. **Servicios REST Backend (`Node.js + Express`)**: Diseñados formalmente con **OpenAPI 3.0 / Swagger**, documentados interactivamente con **Swagger UI** y securizados con API-Key y control CORS.
-3. **App Administrador (`AppAdmin` - Ionic / Angular)**: Panel de control para altas, bajas, modificaciones y consultas (CRUD) de usuarios y trabajos, así como auditoría de fichajes sobre mapa interactivo Leaflet.
-4. **App Empleados (`AppUsuarios` - Ionic / Angular)**: Aplicación móvil para los trabajadores con registro de fichaje (entrada/salida), detección automática de turnos en curso (<12h), geoposicionamiento GPS con Capacitor y consulta de histórico con filtros por fecha.
+Se han unificado todas las funcionalidades en una **única aplicación Ionic Progresiva (PWA)** con soporte multiplataforma, control de acceso basado en roles con **tematización dinámica por colores**, control de turnos en menos de 12 horas, geolocalización GPS y persistencia en base de datos MySQL mediante servicios REST OpenAPI 3.0.
+
+---
+
+## 🎨 Tematización Dinámica según Rol de Usuario
+
+La aplicación unificada detecta automáticamente el perfil del usuario autenticado y transforma su aspecto visual y navegación:
+
+| Perfil | Color Corporativo | Pestañas Disponibles (Tabs) | Funcionalidades Principales |
+| :--- | :--- | :--- | :--- |
+| **Administrador** | **TEMA AZUL** (`#2563eb`) | `Usuarios`, `Trabajos`, `Fichajes`, `Panel` | CRUD de usuarios y trabajos, auditoría de fichajes de toda la plantilla y visualización en **mapa interactivo Leaflet**. |
+| **Empleado** | **TEMA VERDE** (`#16a34a`) | `Fichar`, `Mis Fichajes`, `Mi Perfil` | **Fichaje de entrada con GPS** (Capacitor + HTML5) y geocodificación inversa (**Nominatim**). Detección de turno abierto (<12h) para **fichaje de salida**. Histórico con filtros por fecha. |
+
+---
+
+## 📱 Características de la Progressive Web App (PWA)
+
+Siguiendo el procedimiento oficial de Ionic y Angular PWA:
+1. **Manifiesto Web (`manifest.webmanifest`)**:
+   - Nombre de la aplicación, colores temáticos (`theme_color: #2563eb`), iconos adaptativos (192x192 y 512x512) y modo de visualización `standalone` (sin barra de navegador).
+2. **Service Worker (`sw.js`)**:
+   - Cacheo del shell de la aplicación (HTML, CSS, JS, assets) para garantizar carga instantánea y funcionamiento offline.
+3. **Instalación como App Nativa**:
+   - El navegador muestra el botón de instalación en la barra de direcciones.
+   - La propia aplicación incorpora un botón interactivo **"Instalar PWA"** en la barra superior.
 
 ---
 
@@ -14,108 +34,59 @@ El sistema comprende una arquitectura cliente-servidor desacoplada para el contr
 
 ```text
 Practica_2/
-├── backend-api/                  # Servidor REST Node.js / Express
-│   ├── openapi.yaml              # Especificación OpenAPI 3.0 del sistema completo
-│   ├── server.js                 # Servidor Express, endpoints y lógica de negocio
-│   ├── db.js                     # Pool de conexiones MySQL con promesas
-│   ├── package.json              # Configuración y dependencias del backend
-│   └── node_modules.tar.gz       # Dependencias empaquetadas para ejecución offline
-├── database/                     # Scripts SQL
-│   └── schema.sql                # DDL de tablas (usuarios, trabajos, fichajes) y datos demo
-├── AppAdmin/                     # Aplicación Ionic/Angular para Administradores (puerto 8100)
-│   ├── src/                      # Código fuente (usuarios, trabajos, fichajes con mapas)
-│   ├── package.json              # Configuración de dependencias
-│   └── node_modules.tar.gz       # Dependencias empaquetadas offline para AppAdmin
-├── AppUsuarios/                  # Aplicación Ionic/Angular para Empleados (puerto 8101)
-│   ├── src/                      # Código fuente (fichajes, geolocalización Capacitor, historial)
-│   ├── package.json              # Configuración de dependencias
-│   └── node_modules.tar.gz       # Dependencias empaquetadas offline para AppUsuarios
-├── iniciar_practica2.bat          # Lanzador interactivo con soporte offline instantáneo
-└── README.md                     # Este documento explicativo
+├── backend-api/              # Servidor REST Node.js / Express
+│   ├── openapi.yaml          # Especificacion formal OpenAPI 3.0
+│   ├── server.js             # Endpoints CRUD, logica de negocio, CORS y API-Key
+│   ├── db.js                 # Pool de conexiones MySQL y datos de fallback
+│   ├── package.json          # Dependencias del backend
+│   └── node_modules/         # Librerias preinstaladas para arranque inmediato
+├── database/                 # Scripts SQL
+│   └── schema.sql            # Tablas (Usuarios, Trabajos, Fichajes, ApiKey) y datos demo
+├── AppRegistroHorario/       # Aplicacion Unificada Ionic / Angular PWA
+│   ├── src/                  # Codigo fuente (login, tabs, usuarios, trabajos, fichajes)
+│   ├── www/                  # Bundle compilado de produccion con Service Worker y Manifest
+│   ├── manifest.webmanifest  # Manifiesto PWA
+│   └── sw.js                 # Service Worker PWA
+├── servidor_estatico.js      # Servidor HTTP nativo Node.js para servir la PWA al instante
+├── iniciar_practica2.bat      # Lanzador en 1 clic
+└── README.md                 # Esta documentacion tecnica
 ```
 
 ---
 
-## 🚀 Inicio Rápido (Lanzador Automatizado)
+## 🚀 Inicio Rápido (1 Solo Clic)
 
-Para arrancar cualquier parte del sistema sin complicaciones, ejecuta el script interactivo:
-
+Ejecuta el archivo:
 ```cmd
 iniciar_practica2.bat
 ```
-
-### Menú de opciones disponible:
-- **[1] Arrancar Backend REST API**: Inicia el servidor Node.js en `http://localhost:8080` y abre automáticamente Swagger UI.
-- **[2] Arrancar AppAdmin**: Inicia la aplicación de administración en `http://localhost:8100`.
-- **[3] Arrancar AppUsuarios**: Inicia la aplicación del empleado en `http://localhost:8101`.
-- **[4] Abrir Swagger UI**: Abre directamente la documentación interactiva en el navegador.
-- **[5] Descomprimir librerías offline**: Si estás en un aula o entorno sin internet o con restricciones en `npm`, este comando extrae de inmediato los paquetes `.tar.gz` locales en segundos.
-- **[6] Instalar / Actualizar dependencias con npm**: Para instalaciones online tradicionales.
+Selecciona la opción **`[1] ARRANCAR TODO`**:
+- Inicia el Backend en el puerto `8080`.
+- Inicia la aplicación web PWA en el puerto `8100`.
+- Abre automáticamente en el navegador:
+  - **Swagger UI**: [http://localhost:8080/api-docs/](http://localhost:8080/api-docs/)
+  - **App PWA**: [http://localhost:8100](http://localhost:8100)
 
 ---
 
-## 🛠️ Requisitos e Instalación Manual
+## 🔑 Credenciales de Acceso para Demostración
 
-### 1. Base de Datos MySQL
-1. Arranca tu servidor MySQL local (XAMPP, WAMP o servicio MySQL).
-2. Importa el archivo SQL:
-   ```cmd
-   mysql -u root -p < database/schema.sql
-   ```
-   *Se creará la base de datos `DISM` con las tablas `usuarios`, `trabajos` y `fichajes`, además de datos de prueba precargados.*
+| Usuario | Contraseña | Rol Asignado | Color de la Interfaz |
+| :--- | :--- | :--- | :--- |
+| `admin` | `admin123` | Administrador | **AZUL** |
+| `sergio` | `1234` | Empleado | **VERDE** |
+| `estela` | `1234` | Empleado | **VERDE** |
+| `juan.perez` | `user123` | Empleado | **VERDE** |
 
-### 2. Backend REST API
-```cmd
-cd backend-api
-node server.js
-```
-El servidor escucha en el puerto `8080`. Documentación y pruebas:
-- **Swagger UI**: [http://localhost:8080/api-docs](http://localhost:8080/api-docs)
-
-### 3. AppAdmin (Administración)
-```cmd
-cd AppAdmin
-ionic serve --port 8100
-```
-- Acceso: [http://localhost:8100](http://localhost:8100)
-- Credenciales demo: Administrador (`admin` / `admin123`)
-
-### 4. AppUsuarios (Empleados)
-```cmd
-cd AppUsuarios
-ionic serve --port 8101
-```
-- Acceso: [http://localhost:8101](http://localhost:8101)
-- Credenciales demo: Empleados (`juan.perez` / `user123`, `maria.lopez` / `user123`)
+*La pantalla de login incluye botones de acceso rápido para probar ambos roles con un solo clic.*
 
 ---
 
-## 📱 Funcionalidades Implementadas
+## ⚙️ Cumplimiento de la Rúbrica y Aspectos Optativos
 
-### A. AppUsuarios (Entrega 2)
-1. **Fichaje de Entrada**:
-   - Selección del trabajo asignado mediante selector dinámico conectado a la BD.
-   - Captura de coordenadas GPS exactas (latitud y longitud) con `@capacitor/geolocation`.
-   - Geocodificación inversa automática mediante OpenStreetMap Nominatim para registrar la dirección física del fichaje.
-2. **Detección Automática de Turno Abierto (< 12 horas)**:
-   - Al entrar en la pantalla de fichaje, la app consulta si el usuario tiene un fichaje de entrada sin hora de salida en un intervalo menor a 12 horas.
-   - Si existe, bloquea un nuevo inicio y muestra los datos del turno en curso (trabajo, hora de entrada, ubicación), ofreciendo el botón para **Cerrar Fichaje (Salida)**.
-3. **Consulta de Fichajes**:
-   - Listado cronológico de fichajes del empleado autenticado.
-   - Filtro reactivo por rango de fechas (Fecha Inicio - Fecha Fin).
-   - Indicador de estado (fichaje abierto vs. cerrado con duración total calculada).
-
-### B. AppAdmin (Entrega 1 + Gestión Global)
-1. **CRUD Completo de Usuarios**: Listado, inserción, edición y eliminación de trabajadores y administradores.
-2. **CRUD Completo de Trabajos**: Gestión de obras, proyectos y tareas asignables.
-3. **Auditoría de Fichajes**:
-   - Filtros por usuario y rango de fechas.
-   - Visualización de marcadores de posición sobre mapa Leaflet.
-   - Detalle de horas trabajadas y geolocalizaciones de entrada y salida.
-
----
-
-## 🔐 Seguridad y Aspectos Optativos
-- **API Key**: Validación mediante cabecera `x-api-key: dism-secret-key-2026`.
-- **CORS Configurado**: Permite peticiones cruzadas seguras desde Ionic en los puertos 8100 y 8101.
-- **Validaciones OpenAPI**: Control estricto de esquemas y tipos de datos en todas las operaciones.
+- **CRUD de Usuarios y Trabajos**: Implementado en las pestañas de administración.
+- **Detección de Turno previo (< 12 horas)**: Si existe un fichaje sin salida en menos de 12 horas, la pantalla de fichaje muestra los detalles y permite cerrar la salida.
+- **Geolocalización GPS y Georreferenciación Inversa**: Captura coordenadas y resuelve la dirección postal física con OpenStreetMap Nominatim.
+- **Mapa Leaflet**: Visualización de puntos geográficos de fichaje en la auditoría del administrador.
+- **Seguridad**: Cabecera `x-api-key: dism-secret-key-2026` y validación de credenciales en base de datos.
+- **PWA**: Manifiesto web, Service Worker e instalabilidad en escritorio y móvil.

@@ -1,0 +1,62 @@
+<ion-header>
+  <ion-toolbar [color]="role === 'admin' ? 'primary' : 'success'">
+    <ion-title>
+      Registro Horario
+      <ion-badge color="light" style="margin-left: 8px; font-weight: bold; font-size: 11px;">
+        {{ role === 'admin' ? 'ADMINISTRADOR (AZUL)' : 'EMPLEADO (VERDE)' }}
+      </ion-badge>
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button *ngIf="showInstallBtn" (click)="installPwa()" fill="outline" color="light" size="small" style="margin-right: 5px;">
+        <ion-icon slot="start" name="download-outline"></ion-icon>
+        Instalar PWA
+      </ion-button>
+      <ion-button (click)="logout()" title="Cerrar Sesión">
+        <ion-icon slot="icon-only" name="log-out-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-tabs>
+  <!-- Barra de pestañas para ADMINISTRADOR (Tema Azul) -->
+  <ion-tab-bar slot="bottom" *ngIf="role === 'admin'" color="primary">
+    <ion-tab-button tab="usuarios">
+      <ion-icon name="people-outline"></ion-icon>
+      <ion-label>Usuarios</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="trabajos">
+      <ion-icon name="briefcase-outline"></ion-icon>
+      <ion-label>Trabajos</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="fichajes">
+      <ion-icon name="time-outline"></ion-icon>
+      <ion-label>Fichajes</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="home">
+      <ion-icon name="home-outline"></ion-icon>
+      <ion-label>Panel</ion-label>
+    </ion-tab-button>
+  </ion-tab-bar>
+
+  <!-- Barra de pestañas para EMPLEADO (Tema Verde) -->
+  <ion-tab-bar slot="bottom" *ngIf="role === 'empleado'" color="success">
+    <ion-tab-button tab="registrar-fichaje">
+      <ion-icon name="finger-print-outline"></ion-icon>
+      <ion-label>Fichar</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="consulta-fichajes">
+      <ion-icon name="calendar-outline"></ion-icon>
+      <ion-label>Mis Fichajes</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="home">
+      <ion-icon name="person-outline"></ion-icon>
+      <ion-label>Mi Perfil</ion-label>
+    </ion-tab-button>
+  </ion-tab-bar>
+</ion-tabs>
