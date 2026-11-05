@@ -1,4 +1,4 @@
-const CACHE_NAME = 'dism-registro-horario-v3';
+const CACHE_NAME = 'dism-registro-horario-v4';
 
 self.addEventListener('install', (event) => {
   self.skipWaiting();
@@ -12,12 +12,20 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-  // Siempre intentar red primero para ver los cambios instantáneos
+  // Solo interceptar peticiones GET dentro del mismo origen (archivos locales de la PWA)
+  if (event.request.method !== 'GET' || !event.request.url.startsWith(self.location.origin)) {
+    return;
+  }
+
   event.respondWith(
-    fetch(event.request)
-      .then((networkResponse) => {
-        return networkResponse;
-      })
-      .catch(() => caches.match(event.request))
+    fetch(event.request).catch(async () => {
+      const match = await caches.match(event.request);
+      if (match) return match;
+      return new Response('Recurso no disponible offline', {
+        status: 503,
+        statusText: 'Service Unavailable',
+        headers: { 'Content-Type': 'text/plain' }
+      });
+    })
   );
 });

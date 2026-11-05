@@ -120,9 +120,9 @@ export class ApiService {
     return this.http.get<Fichaje[]>(url, this.httpOptions);
   }
 
-  // Geocodificación inversa con OpenStreetMap Nominatim
+  // Geocodificación inversa a través del backend proxy (sin errores CORS ni bloqueos)
   getDireccionNominatim(lat: number, lon: number): Observable<any> {
-    const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&addressdetails=1`;
-    return this.http.get(url);
+    const url = `${this.basePath}reverse-geocode?lat=${lat}&lon=${lon}`;
+    return this.http.get(url, this.httpOptions);
   }
 }

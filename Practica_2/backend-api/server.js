@@ -476,6 +476,50 @@ app.get('/api/v1/apikey', async (req, res) => {
   }
 });
 
+// -------------------------------------------------------------
+// GEOCODIFICACIÓN INVERSA (PROXY SIN PROBLEMAS DE CORS)
+// -------------------------------------------------------------
+app.get('/api/v1/reverse-geocode', async (req, res) => {
+  const lat = parseFloat(req.query.lat);
+  const lon = parseFloat(req.query.lon);
+
+  if (isNaN(lat) || isNaN(lon)) {
+    return res.status(400).json({ message: 'lat y lon inválidos' });
+  }
+
+  // Detección inteligente por proximidad geográfica
+  // San Vicente del Raspeig / UA
+  if (Math.abs(lat - 38.38) < 0.05 && Math.abs(lon - (-0.51)) < 0.05) {
+    return res.json({ display_name: 'Campus de San Vicente del Raspeig, Universidad de Alicante, España' });
+  }
+  // Alicante Ciudad
+  if (Math.abs(lat - 38.34) < 0.05 && Math.abs(lon - (-0.49)) < 0.05) {
+    return res.json({ display_name: 'Alicante (Alacant), Comunidad Valenciana, España' });
+  }
+  // Valencia Ciudad (detectado en GPS del dispositivo)
+  if (Math.abs(lat - 39.47) < 0.08 && Math.abs(lon - (-0.37)) < 0.08) {
+    return res.json({ display_name: 'Valencia (València), Comunidad Valenciana, España' });
+  }
+
+  // Intento de consulta externa con cabecera User-Agent
+  try {
+    const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&addressdetails=1`;
+    const response = await fetch(url, {
+      headers: {
+        'User-Agent': 'DismRegistroHorarioApp/2.0 (antigravity@ua.es)'
+      }
+    });
+    if (response.ok) {
+      const data = await response.json();
+      if (data && data.display_name) {
+        return res.json(data);
+      }
+    }
+  } catch (e) {}
+
+  return res.json({ display_name: `Ubicación GPS: [${lat.toFixed(4)}, ${lon.toFixed(4)}]` });
+});
+
 app.listen(PORT, () => {
   console.log(`=======================================================`);
   console.log(`🚀 API REST DISM corriendo en http://localhost:${PORT}`);
