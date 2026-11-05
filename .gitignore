@@ -1,5 +1,10 @@
+# Dependencias pesadas de Node.js (se distribuyen empaquetadas offline en node_modules.tar.gz)
 **/node_modules/
-**/.angular/cache/
+
+# Pero nos aseguramos de que el archivo empaquetado SI se incluya en el repositorio
+!**/node_modules.tar.gz
+
+# Caches y compilaciones temporales de Angular e Ionic
 **/.angular/
 **/www/
 **/dist/
