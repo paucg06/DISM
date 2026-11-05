@@ -10,8 +10,8 @@ import { ToastController } from '@ionic/angular';
   standalone: false
 })
 export class LoginPage implements OnInit {
-  usuario = 'admin';
-  clave = 'admin123';
+  usuario = '';
+  clave = '';
   cargando = false;
   showInstallBtn = false;
   deferredPrompt: any = null;
@@ -30,22 +30,10 @@ export class LoginPage implements OnInit {
     });
   }
 
-  fillAdmin() {
-    this.usuario = 'admin';
-    this.clave = 'admin123';
-    this.onLogin();
-  }
-
-  fillEmpleado() {
-    this.usuario = 'sergio';
-    this.clave = '1234';
-    this.onLogin();
-  }
-
   async onLogin() {
     if (!this.usuario || !this.clave) {
       const toast = await this.toastCtrl.create({
-        message: 'Por favor, introduce usuario y contraseña',
+        message: 'Por favor, introduce tu usuario y contraseña',
         duration: 2500,
         color: 'warning'
       });
@@ -63,26 +51,16 @@ export class LoginPage implements OnInit {
 
         const role = user.Rol || (user.Usuario === 'admin' ? 'admin' : 'empleado');
 
-        // Aplicar el tema dinamico: Azul para Admin, Verde para Empleado
+        const toast = await this.toastCtrl.create({
+          message: `Bienvenido, ${user.Nombre}`,
+          duration: 2000,
+          color: 'success'
+        });
+        await toast.present();
+
         if (role === 'admin') {
-          document.body.classList.remove('theme-empleado');
-          document.body.classList.add('theme-admin');
-          const toast = await this.toastCtrl.create({
-            message: `Bienvenido Administrador ${user.Nombre}. Modo Azul activado.`,
-            duration: 2500,
-            color: 'primary'
-          });
-          await toast.present();
           this.router.navigate(['/tabs/usuarios']);
         } else {
-          document.body.classList.remove('theme-admin');
-          document.body.classList.add('theme-empleado');
-          const toast = await this.toastCtrl.create({
-            message: `Bienvenido Empleado ${user.Nombre}. Modo Verde activado.`,
-            duration: 2500,
-            color: 'success'
-          });
-          await toast.present();
           this.router.navigate(['/tabs/registrar-fichaje']);
         }
       },
@@ -98,13 +76,14 @@ export class LoginPage implements OnInit {
     });
   }
 
-  installPwa() {
+  async installPwa() {
     if (this.deferredPrompt) {
       this.deferredPrompt.prompt();
-      this.deferredPrompt.userChoice.then(() => {
-        this.deferredPrompt = null;
+      const choiceResult = await this.deferredPrompt.userChoice;
+      if (choiceResult.outcome === 'accepted') {
         this.showInstallBtn = false;
-      });
+      }
+      this.deferredPrompt = null;
     }
   }
 }

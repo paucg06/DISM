@@ -51,6 +51,10 @@ function createSpaServer(port, staticDir, appName) {
       const ext = path.extname(filePath).toLowerCase();
       const contentType = mimeTypes[ext] || 'application/octet-stream';
 
+      if (filePath.endsWith('sw.js') || filePath.endsWith('ngsw-worker.js')) {
+        res.setHeader('Service-Worker-Allowed', '/');
+      }
+
       fs.readFile(filePath, (readErr, content) => {
         if (readErr) {
           res.writeHead(500, { 'Content-Type': 'text/plain; charset=utf-8' });

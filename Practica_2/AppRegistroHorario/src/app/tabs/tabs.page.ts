@@ -36,24 +36,12 @@ export class TabsPage implements OnInit {
     }
     this.currentUser = JSON.parse(raw);
     this.role = (this.currentUser.Rol === 'admin' || this.currentUser.Usuario === 'admin') ? 'admin' : 'empleado';
-    this.applyTheme(this.role);
-  }
-
-  applyTheme(role: 'admin' | 'empleado') {
-    if (role === 'admin') {
-      document.body.classList.remove('theme-empleado');
-      document.body.classList.add('theme-admin');
-    } else {
-      document.body.classList.remove('theme-admin');
-      document.body.classList.add('theme-empleado');
-    }
   }
 
   logout() {
     localStorage.removeItem('auth_user');
     localStorage.removeItem('admin_user');
     localStorage.removeItem('empleado_user');
-    document.body.classList.remove('theme-admin', 'theme-empleado');
     this.router.navigate(['/login']);
   }
 

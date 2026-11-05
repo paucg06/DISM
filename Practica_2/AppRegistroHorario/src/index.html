@@ -3,33 +3,33 @@
 
 <head>
   <meta charset="utf-8" />
-  <title>DISM - Sistema de Registro Horario PWA</title>
+  <title>Registro Horario</title>
 
   <base href="/" />
 
-  <meta name="color-scheme" content="light dark" />
+  <meta name="color-scheme" content="light" />
   <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <meta name="format-detection" content="telephone=no" />
   <meta name="msapplication-tap-highlight" content="no" />
 
-  <link rel="icon" type="image/png" href="assets/icon/favicon.png" />
+  <link rel="icon" type="image/png" href="icons/icon-192x192.png" />
   <link rel="manifest" href="manifest.webmanifest" />
-  <meta name="theme-color" content="#2563eb" />
+  <meta name="theme-color" content="#475569" />
 
-  <!-- Compatibilidad PWA para iOS y Android -->
+  <!-- Compatibilidad PWA -->
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="RegistroHorario" />
-  <link rel="apple-touch-icon" href="assets/icon/icon-192.png" />
+  <link rel="apple-touch-icon" href="icons/icon-192x192.png" />
 
   <!-- Registro del Service Worker PWA -->
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('sw.js')
-          .then(reg => console.log('[PWA] Service Worker registrado con éxito:', reg.scope))
-          .catch(err => console.warn('[PWA] Fallo al registrar Service Worker:', err));
+        navigator.serviceWorker.register('/sw.js', { scope: '/' })
+          .then(reg => console.log('[PWA] Service Worker registrado:', reg.scope))
+          .catch(err => console.warn('[PWA] Error Service Worker:', err));
       });
     }
   </script>

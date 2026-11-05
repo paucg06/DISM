@@ -47,6 +47,21 @@
                 "glob": "sw.js",
                 "input": "src",
                 "output": "/"
+              },
+              {
+                "glob": "**/*",
+                "input": "src/icons",
+                "output": "icons"
+              },
+              {
+                "glob": "manifest.json",
+                "input": "src",
+                "output": "/"
+              },
+              {
+                "glob": "ngsw-worker.js",
+                "input": "src",
+                "output": "/"
               }
             ],
             "styles": [

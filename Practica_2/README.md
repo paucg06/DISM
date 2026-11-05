@@ -1,92 +1,81 @@
-# Práctica 2 (Entrega 2) - Sistema Integral de Registro Horario Unificado (PWA)
+# Práctica 2 (Entrega 2) - Sistema Unificado de Registro Horario (PWA)
 
-Este directorio contiene la solución completa de la **Entrega 2 (Práctica 2)** de la asignatura **DISM (Desarrollo de Interfaces para Sistemas Móviles)**.
+Solución completa de la **Entrega 2 (Práctica 2)** de la asignatura **DISM (Desarrollo de Interfaces para Sistemas Móviles)**.
 
-Se han unificado todas las funcionalidades en una **única aplicación Ionic Progresiva (PWA)** con soporte multiplataforma, control de acceso basado en roles con **tematización dinámica por colores**, control de turnos en menos de 12 horas, geolocalización GPS y persistencia en base de datos MySQL mediante servicios REST OpenAPI 3.0.
-
----
-
-## 🎨 Tematización Dinámica según Rol de Usuario
-
-La aplicación unificada detecta automáticamente el perfil del usuario autenticado y transforma su aspecto visual y navegación:
-
-| Perfil | Color Corporativo | Pestañas Disponibles (Tabs) | Funcionalidades Principales |
-| :--- | :--- | :--- | :--- |
-| **Administrador** | **TEMA AZUL** (`#2563eb`) | `Usuarios`, `Trabajos`, `Fichajes`, `Panel` | CRUD de usuarios y trabajos, auditoría de fichajes de toda la plantilla y visualización en **mapa interactivo Leaflet**. |
-| **Empleado** | **TEMA VERDE** (`#16a34a`) | `Fichar`, `Mis Fichajes`, `Mi Perfil` | **Fichaje de entrada con GPS** (Capacitor + HTML5) y geocodificación inversa (**Nominatim**). Detección de turno abierto (<12h) para **fichaje de salida**. Histórico con filtros por fecha. |
+Se han unificado todas las funcionalidades en una **única aplicación Ionic Progresiva (PWA)** multiplataforma, con control de acceso por roles (Administrador y Empleado), control de turnos en menos de 12 horas, geolocalización GPS y persistencia en base de datos MySQL mediante servicios REST OpenAPI 3.0.
 
 ---
 
-## 📱 Características de la Progressive Web App (PWA)
+## 🚀 Puesta en Marcha Inmediata (Sin Instalaciones)
 
-Siguiendo el procedimiento oficial de Ionic y Angular PWA:
-1. **Manifiesto Web (`manifest.webmanifest`)**:
-   - Nombre de la aplicación, colores temáticos (`theme_color: #2563eb`), iconos adaptativos (192x192 y 512x512) y modo de visualización `standalone` (sin barra de navegador).
-2. **Service Worker (`sw.js`)**:
-   - Cacheo del shell de la aplicación (HTML, CSS, JS, assets) para garantizar carga instantánea y funcionamiento offline.
-3. **Instalación como App Nativa**:
-   - El navegador muestra el botón de instalación en la barra de direcciones.
-   - La propia aplicación incorpora un botón interactivo **"Instalar PWA"** en la barra superior.
+Esta carpeta está completamente compilada y preparada con todas las dependencias locales incluidas, por lo que **no es necesario ejecutar ningún comando de instalación (`npm install`)**:
+
+1. Haz doble clic en el archivo **`iniciar_todo.bat`** (o `iniciar_practica2.bat`).
+2. Automáticamente se levantarán:
+   - **Backend REST API**: en el puerto `8080` (con documentación interactiva en `http://localhost:8080/api-docs/`).
+   - **Servidor Web PWA**: en el puerto `8100` (`http://localhost:8100`).
+3. El navegador predeterminado se abrirá automáticamente en ambas direcciones.
+4. Para abrir la aplicación en modo ventana nativa PWA (sin barra de navegador), puedes hacer doble clic en **`Abrir_PWA.bat`**.
 
 ---
 
-## 📁 Estructura del Proyecto
+## 📱 Dónde está la PWA Compilada (Para Enseñar a la Profesora)
+
+Siguiendo al pie de la letra la guía oficial de la asignatura (*Procedimiento para crear una App PWA desde Ionic*):
+
+La PWA compilada se encuentra directamente en la carpeta:
+👉 **`PWA_Compilada/`** (y en `AppRegistroHorario/www/`)
+
+Dentro de esta carpeta se encuentran todos los artefactos exigidos:
+- **`manifest.webmanifest`** y **`manifest.json`**: Manifiesto web con el nombre de la app, modo de pantalla `standalone`, color de fondo `#f1f5f9` y definición de iconos.
+- **`sw.js`** y **`ngsw-worker.js`**: Service Worker registrado para el control de ciclo de vida, soporte offline y cacheo inteligente de recursos.
+- **`icons/`**: Carpeta con los iconos oficiales en todas las resoluciones estándar (`72x72`, `96x96`, `128x128`, `144x144`, `152x152`, `192x192`, `384x384`, `512x512`).
+- **`index.html`**: Punto de entrada con las etiquetas `<link rel="manifest">`, meta tags de compatibilidad móvil y script de registro del Service Worker.
+- **Bundles JS y CSS**: Todos los módulos Angular e Ionic compilados para producción.
+
+### Icono de Instalación PWA en el Navegador
+Al abrir `http://localhost:8100` en Google Chrome o Microsoft Edge:
+- En el extremo derecho de la barra de direcciones (omnibox) aparece el icono nativo de **"Instalar aplicación"** (un monitor con flecha de descarga o símbolo de suma).
+- Al pulsar dicho icono, el sistema operativo instala la app y crea el acceso directo nativo en tu ordenador.
+- También se incluye en la barra superior de la app el botón **"Instalar PWA"** que lanza el prompt de instalación directamente.
+
+---
+
+## 🔐 Control de Acceso y Funcionalidades por Rol
+
+La pantalla de acceso cuenta con un diseño limpio, profesional y neutro en **estilo gris**:
+
+### Credenciales Disponibles:
+- **Administrador**:
+  - Usuario: `admin` | Contraseña: `admin123`
+  - Al iniciar sesión accede al panel de administración:
+    - **Usuarios**: Consulta, inserción, actualización y borrado (CRUD).
+    - **Trabajos**: Catálogo de proyectos y tareas asignables (CRUD).
+    - **Fichajes**: Auditoría global de fichajes con filtros por usuario y rango de fechas, y botón para visualizar la ubicación del fichaje en un **mapa interactivo**.
+- **Empleado / Trabajador**:
+  - Usuario: `sergio` | Contraseña: `1234`
+  - Usuario: `lucia`  | Contraseña: `1234`
+  - Al iniciar sesión accede al portal del trabajador:
+    - **Fichar**: Detección automática de turno en las últimas 12 horas. Si no hay turno abierto, permite seleccionar trabajo e iniciar jornada capturando coordenadas GPS y dirección física. Si hay un turno abierto (<12h), permite cerrar el fichaje calculando las horas trabajadas.
+    - **Mis Fichajes**: Listado de fichajes del día y consulta histórica con filtro de fechas.
+    - **Mi Perfil**: Resumen de datos y cierre de sesión seguro.
+
+---
+
+## 📁 Estructura de la Carpeta
 
 ```text
 Practica_2/
-├── backend-api/              # Servidor REST Node.js / Express
-│   ├── openapi.yaml          # Especificacion formal OpenAPI 3.0
-│   ├── server.js             # Endpoints CRUD, logica de negocio, CORS y API-Key
-│   ├── db.js                 # Pool de conexiones MySQL y datos de fallback
-│   ├── package.json          # Dependencias del backend
-│   └── node_modules/         # Librerias preinstaladas para arranque inmediato
-├── database/                 # Scripts SQL
-│   └── schema.sql            # Tablas (Usuarios, Trabajos, Fichajes, ApiKey) y datos demo
-├── AppRegistroHorario/       # Aplicacion Unificada Ionic / Angular PWA
-│   ├── src/                  # Codigo fuente (login, tabs, usuarios, trabajos, fichajes)
-│   ├── www/                  # Bundle compilado de produccion con Service Worker y Manifest
-│   ├── manifest.webmanifest  # Manifiesto PWA
-│   └── sw.js                 # Service Worker PWA
-├── servidor_estatico.js      # Servidor HTTP nativo Node.js para servir la PWA al instante
-├── iniciar_practica2.bat      # Lanzador en 1 clic
-└── README.md                 # Esta documentacion tecnica
+├── iniciar_practica2.bat     # Script interactivo de arranque
+├── Abrir_PWA.bat             # Abre la app directamente en ventana PWA nativa
+├── servidor_estatico.js      # Servidor HTTP Node.js para servir la PWA al instante
+├── README.md                 # Esta documentacion
+├── backend-api/              # Servidor REST Node.js con OpenAPI y dependencias preinstaladas
+│   ├── openapi.yaml
+│   ├── server.js
+│   └── node_modules/
+├── database/                 # Script SQL con estructura y datos demo
+│   └── schema.sql
+└── AppRegistroHorario/       # Proyecto fuente Ionic con su bundle www/
+    └── www/                  # Compilacion de produccion
 ```
-
----
-
-## 🚀 Inicio Rápido (1 Solo Clic)
-
-Ejecuta el archivo:
-```cmd
-iniciar_practica2.bat
-```
-Selecciona la opción **`[1] ARRANCAR TODO`**:
-- Inicia el Backend en el puerto `8080`.
-- Inicia la aplicación web PWA en el puerto `8100`.
-- Abre automáticamente en el navegador:
-  - **Swagger UI**: [http://localhost:8080/api-docs/](http://localhost:8080/api-docs/)
-  - **App PWA**: [http://localhost:8100](http://localhost:8100)
-
----
-
-## 🔑 Credenciales de Acceso para Demostración
-
-| Usuario | Contraseña | Rol Asignado | Color de la Interfaz |
-| :--- | :--- | :--- | :--- |
-| `admin` | `admin123` | Administrador | **AZUL** |
-| `sergio` | `1234` | Empleado | **VERDE** |
-| `estela` | `1234` | Empleado | **VERDE** |
-| `juan.perez` | `user123` | Empleado | **VERDE** |
-
-*La pantalla de login incluye botones de acceso rápido para probar ambos roles con un solo clic.*
-
----
-
-## ⚙️ Cumplimiento de la Rúbrica y Aspectos Optativos
-
-- **CRUD de Usuarios y Trabajos**: Implementado en las pestañas de administración.
-- **Detección de Turno previo (< 12 horas)**: Si existe un fichaje sin salida en menos de 12 horas, la pantalla de fichaje muestra los detalles y permite cerrar la salida.
-- **Geolocalización GPS y Georreferenciación Inversa**: Captura coordenadas y resuelve la dirección postal física con OpenStreetMap Nominatim.
-- **Mapa Leaflet**: Visualización de puntos geográficos de fichaje en la auditoría del administrador.
-- **Seguridad**: Cabecera `x-api-key: dism-secret-key-2026` y validación de credenciales en base de datos.
-- **PWA**: Manifiesto web, Service Worker e instalabilidad en escritorio y móvil.
