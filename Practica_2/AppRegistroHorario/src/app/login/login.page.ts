@@ -13,8 +13,6 @@ export class LoginPage implements OnInit {
   usuario = '';
   clave = '';
   cargando = false;
-  showInstallBtn = false;
-  deferredPrompt: any = null;
 
   constructor(
     private api: ApiService,
@@ -22,13 +20,7 @@ export class LoginPage implements OnInit {
     private toastCtrl: ToastController
   ) {}
 
-  ngOnInit() {
-    window.addEventListener('beforeinstallprompt', (e: any) => {
-      e.preventDefault();
-      this.deferredPrompt = e;
-      this.showInstallBtn = true;
-    });
-  }
+  ngOnInit() {}
 
   async onLogin() {
     if (!this.usuario || !this.clave) {
@@ -74,16 +66,5 @@ export class LoginPage implements OnInit {
         await toast.present();
       }
     });
-  }
-
-  async installPwa() {
-    if (this.deferredPrompt) {
-      this.deferredPrompt.prompt();
-      const choiceResult = await this.deferredPrompt.userChoice;
-      if (choiceResult.outcome === 'accepted') {
-        this.showInstallBtn = false;
-      }
-      this.deferredPrompt = null;
-    }
   }
 }

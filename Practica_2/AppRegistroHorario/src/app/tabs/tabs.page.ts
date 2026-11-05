@@ -10,18 +10,11 @@ import { Router } from '@angular/router';
 export class TabsPage implements OnInit {
   currentUser: any = null;
   role: 'admin' | 'empleado' = 'admin';
-  showInstallBtn = false;
-  deferredPrompt: any = null;
 
   constructor(private router: Router) {}
 
   ngOnInit() {
     this.checkAuth();
-    window.addEventListener('beforeinstallprompt', (e: any) => {
-      e.preventDefault();
-      this.deferredPrompt = e;
-      this.showInstallBtn = true;
-    });
   }
 
   ionViewWillEnter() {
@@ -43,15 +36,5 @@ export class TabsPage implements OnInit {
     localStorage.removeItem('admin_user');
     localStorage.removeItem('empleado_user');
     this.router.navigate(['/login']);
-  }
-
-  installPwa() {
-    if (this.deferredPrompt) {
-      this.deferredPrompt.prompt();
-      this.deferredPrompt.userChoice.then(() => {
-        this.deferredPrompt = null;
-        this.showInstallBtn = false;
-      });
-    }
   }
 }
