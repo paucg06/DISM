@@ -12,39 +12,28 @@ const routes: Routes = [
     loadChildren: () => import('./login/login.module').then(m => m.LoginPageModule)
   },
   {
-    path: 'tabs',
-    loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsPageModule)
-  },
-  // Redirecciones directas hacia las pestañas unificadas
-  {
     path: 'home',
-    redirectTo: 'tabs/home',
-    pathMatch: 'full'
+    loadChildren: () => import('./home/home.module').then(m => m.HomePageModule)
   },
   {
     path: 'usuarios',
-    redirectTo: 'tabs/usuarios',
-    pathMatch: 'full'
+    loadChildren: () => import('./usuarios/usuarios.module').then(m => m.UsuariosPageModule)
   },
   {
     path: 'trabajos',
-    redirectTo: 'tabs/trabajos',
-    pathMatch: 'full'
+    loadChildren: () => import('./trabajos/trabajos.module').then(m => m.TrabajosPageModule)
   },
   {
     path: 'fichajes',
-    redirectTo: 'tabs/fichajes',
-    pathMatch: 'full'
+    loadChildren: () => import('./fichajes/fichajes.module').then(m => m.FichajesPageModule)
   },
   {
     path: 'registrar-fichaje',
-    redirectTo: 'tabs/registrar-fichaje',
-    pathMatch: 'full'
+    loadChildren: () => import('./registrar-fichaje/registrar-fichaje.module').then(m => m.RegistrarFichajePageModule)
   },
   {
     path: 'consulta-fichajes',
-    redirectTo: 'tabs/consulta-fichajes',
-    pathMatch: 'full'
+    loadChildren: () => import('./consulta-fichajes/consulta-fichajes.module').then(m => m.ConsultaFichajesPageModule)
   },
   {
     path: '**',
@@ -58,4 +47,4 @@ const routes: Routes = [
   ],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

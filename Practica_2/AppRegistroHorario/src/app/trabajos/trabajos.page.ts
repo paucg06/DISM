@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService, Trabajo } from '../services/api';
 import { AlertController, ToastController } from '@ionic/angular';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-trabajos',
@@ -17,10 +18,15 @@ export class TrabajosPage implements OnInit {
   constructor(
     private api: ApiService,
     private alertCtrl: AlertController,
-    private toastCtrl: ToastController
+    private toastCtrl: ToastController,
+    private router: Router
   ) {}
 
   ngOnInit() {
+    this.cargarTrabajos();
+  }
+
+  ionViewWillEnter() {
     this.cargarTrabajos();
   }
 
@@ -28,7 +34,7 @@ export class TrabajosPage implements OnInit {
     this.cargando = true;
     this.api.getTrabajos().subscribe({
       next: (data) => {
-        this.trabajos = data;
+        this.trabajos = data || [];
         this.cargando = false;
       },
       error: () => {
@@ -56,16 +62,29 @@ export class TrabajosPage implements OnInit {
     this.trabajoSeleccionado = null;
   }
 
-  guardarTrabajo() {
-    if (!this.trabajoSeleccionado || !this.trabajoSeleccionado.Nombre) return;
+  async guardarTrabajo() {
+    if (!this.trabajoSeleccionado || !this.trabajoSeleccionado.Nombre || !this.trabajoSeleccionado.IdTrabajo) {
+      const toast = await this.toastCtrl.create({
+        message: 'El ID y el Nombre del trabajo son obligatorios',
+        duration: 2500,
+        color: 'warning'
+      });
+      await toast.present();
+      return;
+    }
+
     const existe = this.trabajos.some(t => t.IdTrabajo === this.trabajoSeleccionado!.IdTrabajo);
     if (existe) {
       this.api.actualizarTrabajo(this.trabajoSeleccionado.IdTrabajo, this.trabajoSeleccionado).subscribe({
         next: async () => {
           this.cerrarModal();
           this.cargarTrabajos();
-          const t = await this.toastCtrl.create({ message: 'Trabajo actualizado correctamente', duration: 2000, color: 'success' });
-          t.present();
+          const t = await this.toastCtrl.create({ message: 'Trabajo actualizado', duration: 2000, color: 'success' });
+          await t.present();
+        },
+        error: async (err) => {
+          const t = await this.toastCtrl.create({ message: err.error?.message || 'Error al actualizar', duration: 3000, color: 'danger' });
+          await t.present();
         }
       });
     } else {
@@ -73,8 +92,12 @@ export class TrabajosPage implements OnInit {
         next: async () => {
           this.cerrarModal();
           this.cargarTrabajos();
-          const t = await this.toastCtrl.create({ message: 'Trabajo creado exitosamente', duration: 2000, color: 'success' });
-          t.present();
+          const t = await this.toastCtrl.create({ message: 'Trabajo creado', duration: 2000, color: 'success' });
+          await t.present();
+        },
+        error: async (err) => {
+          const t = await this.toastCtrl.create({ message: err.error?.message || 'Error al crear trabajo', duration: 3000, color: 'danger' });
+          await t.present();
         }
       });
     }
@@ -82,17 +105,23 @@ export class TrabajosPage implements OnInit {
 
   async confirmarEliminar(id: number) {
     const alert = await this.alertCtrl.create({
-      header: 'Confirmar eliminación',
+      header: 'Confirmar Eliminación',
       message: '¿Estás seguro de que deseas eliminar este trabajo?',
       buttons: [
         { text: 'Cancelar', role: 'cancel' },
         {
           text: 'Eliminar',
+          role: 'destructive',
           handler: () => {
             this.api.eliminarTrabajo(id).subscribe({
-              next: () => {
-                this.cerrarModal();
+              next: async () => {
                 this.cargarTrabajos();
+                const t = await this.toastCtrl.create({ message: 'Trabajo eliminado', duration: 2000, color: 'success' });
+                await t.present();
+              },
+              error: async (err) => {
+                const t = await this.toastCtrl.create({ message: err.error?.message || 'Error al eliminar', duration: 3000, color: 'danger' });
+                await t.present();
               }
             });
           }
@@ -100,5 +129,11 @@ export class TrabajosPage implements OnInit {
       ]
     });
     await alert.present();
+  }
+
+  logout() {
+    localStorage.clear();
+    sessionStorage.clear();
+    this.router.navigate(['/login'], { replaceUrl: true });
   }
 }

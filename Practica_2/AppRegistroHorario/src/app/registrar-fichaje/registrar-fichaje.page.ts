@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService, Fichaje, Trabajo, Usuario } from '../services/api';
-import { Geolocation } from '@capacitor/geolocation';
 import { ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
 
@@ -30,29 +29,34 @@ export class RegistrarFichajePage implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.cargarUsuario();
     this.cargarDatos();
   }
 
   ionViewWillEnter() {
-    this.cargarUsuario();
     this.cargarDatos();
   }
 
-  cargarUsuario() {
-    const raw = localStorage.getItem('auth_user') || localStorage.getItem('empleado_user');
+  cargarUsuario(): boolean {
+    const raw = localStorage.getItem('auth_user');
     if (!raw) {
-      this.router.navigate(['/login']);
-      return;
+      this.router.navigate(['/login'], { replaceUrl: true });
+      return false;
     }
     this.usuarioActual = JSON.parse(raw);
+    return true;
   }
 
-  async cargarDatos() {
-    if (!this.usuarioActual) return;
+  cargarDatos() {
+    if (!this.cargarUsuario()) return;
     this.cargando = true;
 
-    // Cargar trabajos disponibles (creados en AppAdmin)
+    // Timeout de seguridad de 2 segundos para evitar bloqueo en la interfaz
+    const safetyTimeout = setTimeout(() => {
+      this.cargando = false;
+      this.obtenerUbicacionGPS();
+    }, 2000);
+
+    // Cargar trabajos
     this.api.getTrabajos().subscribe({
       next: (t) => {
         this.trabajos = t;
@@ -60,62 +64,54 @@ export class RegistrarFichajePage implements OnInit {
           this.idTrabajoSeleccionado = t[0].IdTrabajo;
         }
       },
-      error: (e) => console.warn('Error al cargar trabajos:', e)
+      error: () => {}
     });
 
-    // Comprobar si hay fichaje abierto en las ultimas 12 horas
-    this.api.getUltimoFichajeActivo(this.usuarioActual.IdUsuario).subscribe({
-      next: async (f) => {
+    // Comprobar si hay fichaje activo en < 12 horas
+    this.api.getUltimoFichajeActivo(this.usuarioActual!.IdUsuario).subscribe({
+      next: (f) => {
+        clearTimeout(safetyTimeout);
         this.fichajeActivo = f;
         this.cargando = false;
         if (!f) {
-          await this.obtenerUbicacionGPS();
+          this.obtenerUbicacionGPS();
         }
       },
       error: () => {
+        clearTimeout(safetyTimeout);
         this.cargando = false;
+        this.obtenerUbicacionGPS();
       }
     });
   }
 
-  async obtenerUbicacionGPS(): Promise<void> {
-    return new Promise((resolve) => {
-      // Intento 1: API de Geolocalizacion HTML5 nativa del navegador / PWA
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          (pos) => {
-            this.latitud = pos.coords.latitude;
-            this.longitud = pos.coords.longitude;
-            this.resolverDireccionNominatim();
-            resolve();
-          },
-          async () => {
-            await this.fallbackCapacitorGps(resolve);
-          },
-          { enableHighAccuracy: true, timeout: 6000 }
-        );
-      } else {
-        this.fallbackCapacitorGps(resolve);
-      }
-    });
-  }
+  obtenerUbicacionGPS() {
+    if (this.latitud && this.longitud) return;
 
-  private async fallbackCapacitorGps(resolve: () => void) {
-    try {
-      const pos = await Geolocation.getCurrentPosition({ enableHighAccuracy: true, timeout: 6000 });
-      this.latitud = pos.coords.latitude;
-      this.longitud = pos.coords.longitude;
-      this.resolverDireccionNominatim();
-    } catch {
-      // Coordenadas fijas de demostracion (Campus Universidad de Alicante)
-      this.latitud = 38.38735;
-      this.longitud = -0.51238;
-      this.direccionGeorreferenciada = 'Universidad de Alicante, San Vicente del Raspeig';
+    if (navigator && navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          this.latitud = pos.coords.latitude;
+          this.longitud = pos.coords.longitude;
+          this.resolverDireccionNominatim();
+        },
+        () => {
+          this.asignarCoordenadasFallback();
+        },
+        { enableHighAccuracy: false, timeout: 3500 }
+      );
+    } else {
+      this.asignarCoordenadasFallback();
     }
-    resolve();
   }
 
-  private resolverDireccionNominatim() {
+  asignarCoordenadasFallback() {
+    this.latitud = 38.38735;
+    this.longitud = -0.51238;
+    this.direccionGeorreferenciada = 'Universidad de Alicante, San Vicente del Raspeig';
+  }
+
+  resolverDireccionNominatim() {
     if (!this.latitud || !this.longitud) return;
     this.api.getDireccionNominatim(this.latitud, this.longitud).subscribe({
       next: (res) => {
@@ -134,27 +130,24 @@ export class RegistrarFichajePage implements OnInit {
         duration: 2500,
         color: 'warning'
       });
-      t.present();
+      await t.present();
       return;
     }
+
     this.procesandoFichaje = true;
-
-    if (!this.latitud || !this.longitud) {
-      await this.obtenerUbicacionGPS();
-    }
-
-    const payload = {
+    const datos = {
       IdUsuario: this.usuarioActual.IdUsuario,
       IdTrabajo: this.idTrabajoSeleccionado,
       GeolocalizacionLatitud: this.latitud || 38.38735,
       GeolocalizacionLongitud: this.longitud || -0.51238
     };
 
-    this.api.iniciarFichaje(payload).subscribe({
-      next: async (res) => {
+    this.api.iniciarFichaje(datos).subscribe({
+      next: async (nuevo) => {
         this.procesandoFichaje = false;
+        this.fichajeActivo = nuevo;
         const toast = await this.toastCtrl.create({
-          message: 'Fichaje de entrada registrado correctamente',
+          message: 'Entrada registrada exitosamente.',
           duration: 3000,
           color: 'success'
         });
@@ -164,8 +157,8 @@ export class RegistrarFichajePage implements OnInit {
       error: async (err) => {
         this.procesandoFichaje = false;
         const toast = await this.toastCtrl.create({
-          message: err.error?.message || 'Error al registrar el fichaje de entrada',
-          duration: 3500,
+          message: err.error?.message || 'Error al registrar la entrada.',
+          duration: 3000,
           color: 'danger'
         });
         await toast.present();
@@ -175,30 +168,35 @@ export class RegistrarFichajePage implements OnInit {
 
   async registrarSalida() {
     if (!this.fichajeActivo) return;
-    this.procesandoFichaje = true;
 
+    this.procesandoFichaje = true;
     this.api.cerrarFichaje(this.fichajeActivo.IdFichaje).subscribe({
-      next: async (fichajeCerrado) => {
+      next: async (cerrado) => {
         this.procesandoFichaje = false;
-        const horas = fichajeCerrado.HorasTrabajadas || 0;
+        this.fichajeActivo = null;
         const toast = await this.toastCtrl.create({
-          message: `Fichaje finalizado con exito. Total horas computadas: ${horas}h`,
-          duration: 4000,
+          message: `Salida registrada. Horas trabajadas: ${cerrado.HorasTrabajadas || 0}h`,
+          duration: 3500,
           color: 'success'
         });
         await toast.present();
-        this.fichajeActivo = null;
         this.cargarDatos();
       },
       error: async (err) => {
         this.procesandoFichaje = false;
         const toast = await this.toastCtrl.create({
-          message: err.error?.message || 'Error al cerrar el fichaje',
-          duration: 3500,
+          message: err.error?.message || 'Error al registrar la salida.',
+          duration: 3000,
           color: 'danger'
         });
         await toast.present();
       }
     });
+  }
+
+  logout() {
+    localStorage.clear();
+    sessionStorage.clear();
+    this.router.navigate(['/login'], { replaceUrl: true });
   }
 }

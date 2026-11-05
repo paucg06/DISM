@@ -4,14 +4,15 @@ const mysql = require('mysql2/promise');
 const dbConfig = {
   host: process.env.DB_HOST || 'localhost',
   user: process.env.DB_USER || 'root',
-  password: process.env.DB_PASSWORD || 'password', // o 'root' o '' segun instalacion
+  password: process.env.DB_PASSWORD || 'password',
   database: process.env.DB_NAME || 'dism_registro',
   waitForConnections: true,
   connectionLimit: 10,
-  queueLimit: 0
+  queueLimit: 0,
+  connectTimeout: 1000
 };
 
-// Datos en memoria como fallback automático si MySQL no está levantado en el equipo del alumno
+// Datos en memoria como fallback automático instantáneo
 let mockApiKey = [{ idKey: 1, Key: 'dism-secret-key-2026' }];
 
 let mockTrabajos = [
@@ -54,12 +55,32 @@ let mockFichajes = [
   }
 ];
 
-let pool;
+let rawPool = null;
+let isConnected = false;
+
 try {
-  pool = mysql.createPool(dbConfig);
-} catch (e) {
-  console.warn('[DB] Fallback a memoria activado:', e.message);
+  const p = mysql.createPool(dbConfig);
+  p.getConnection().then((conn) => {
+    conn.release();
+    rawPool = p;
+    isConnected = true;
+    console.log('[DB] Conectado exitosamente a MySQL (dism_registro).');
+  }).catch(() => {
+    isConnected = false;
+    console.log('[DB] MySQL local no disponible. Modo en memoria (Fallback instantaneo) activado.');
+  });
+} catch {
+  isConnected = false;
 }
+
+const pool = {
+  async query(sql, params) {
+    if (!isConnected || !rawPool) {
+      throw new Error('MySQL offline');
+    }
+    return rawPool.query(sql, params);
+  }
+};
 
 module.exports = {
   pool,

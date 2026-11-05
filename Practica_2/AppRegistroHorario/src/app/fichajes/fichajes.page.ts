@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService, Fichaje, Usuario } from '../services/api';
+import { Router } from '@angular/router';
 import * as Leaflet from 'leaflet';
 
 @Component({
@@ -22,14 +23,21 @@ export class FichajesPage implements OnInit {
   mostrarModalMapa = false;
   mapaLeaflet?: Leaflet.Map;
 
-  constructor(private api: ApiService) {}
+  constructor(
+    private api: ApiService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.cargarDatos();
   }
 
+  ionViewWillEnter() {
+    this.cargarDatos();
+  }
+
   cargarDatos() {
-    this.api.getUsuarios().subscribe(u => this.usuarios = u);
+    this.api.getUsuarios().subscribe(u => this.usuarios = u || []);
     this.aplicarFiltros();
   }
 
@@ -39,9 +47,15 @@ export class FichajesPage implements OnInit {
     if (this.filtroFechaInicio) filtros.fechaInicio = this.filtroFechaInicio;
     if (this.filtroFechaFin) filtros.fechaFin = this.filtroFechaFin;
 
-    this.api.getFichajes(filtros).subscribe(data => {
-      this.fichajes = data;
-      this.filtrarPorTexto();
+    this.api.getFichajes(filtros).subscribe({
+      next: (data) => {
+        this.fichajes = data || [];
+        this.filtrarPorTexto();
+      },
+      error: () => {
+        this.fichajes = [];
+        this.fichajesFiltrados = [];
+      }
     });
   }
 
@@ -66,11 +80,11 @@ export class FichajesPage implements OnInit {
     this.aplicarFiltros();
   }
 
-  abrirMapa(f: Fichaje) {
-    this.fichajeModalMapa = f;
+  abrirMapa(fichaje: Fichaje) {
+    this.fichajeModalMapa = fichaje;
     this.mostrarModalMapa = true;
     setTimeout(() => {
-      this.inicializarMapa(f.GeolocalizacionLatitud, f.GeolocalizacionLongitud, f.NombreUsuario || 'Empleado', f.FechaHoraEntrada);
+      this.iniciarMapaLeaflet(fichaje.GeolocalizacionLatitud, fichaje.GeolocalizacionLongitud);
     }, 400);
   }
 
@@ -83,32 +97,37 @@ export class FichajesPage implements OnInit {
     this.fichajeModalMapa = null;
   }
 
-  inicializarMapa(lat: number, lon: number, usuario: string, fecha: string) {
-    const iconRetinaUrl = 'assets/marker-icon-2x.png';
-    const iconUrl = 'assets/marker-icon.png';
-    const shadowUrl = 'assets/marker-shadow.png';
-    const iconDefault = Leaflet.icon({
-      iconRetinaUrl,
-      iconUrl,
-      shadowUrl,
-      iconSize: [25, 41],
-      iconAnchor: [12, 41],
-      popupAnchor: [1, -34],
-      shadowSize: [41, 41]
-    });
-    Leaflet.Marker.prototype.options.icon = iconDefault;
+  iniciarMapaLeaflet(lat: number, lon: number) {
+    const contenedor = document.getElementById('mapAdminId');
+    if (!contenedor) return;
 
-    const mapContainer = document.getElementById('mapAdminId');
-    if (!mapContainer) return;
+    if (this.mapaLeaflet) {
+      this.mapaLeaflet.remove();
+    }
 
-    this.mapaLeaflet = Leaflet.map('mapAdminId').setView([lat, lon], 15);
+    this.mapaLeaflet = Leaflet.map('mapAdminId').setView([lat, lon], 16);
+
     Leaflet.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: 'DISM Fichajes © OpenStreetMap'
+      attribution: '© OpenStreetMap contributors'
     }).addTo(this.mapaLeaflet);
 
-    Leaflet.marker([lat, lon])
+    const iconoFichaje = Leaflet.icon({
+      iconUrl: 'assets/marker-icon.png',
+      shadowUrl: 'assets/marker-shadow.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34]
+    });
+
+    Leaflet.marker([lat, lon], { icon: iconoFichaje })
       .addTo(this.mapaLeaflet)
-      .bindPopup(`<b>${usuario}</b><br>Fichaje: ${fecha}<br>Coord: ${lat.toFixed(5)}, ${lon.toFixed(5)}`)
+      .bindPopup(`<b>${this.fichajeModalMapa?.NombreUsuario || 'Fichaje'}</b><br>${this.fichajeModalMapa?.FechaHoraEntrada}`)
       .openPopup();
+  }
+
+  logout() {
+    localStorage.clear();
+    sessionStorage.clear();
+    this.router.navigate(['/login'], { replaceUrl: true });
   }
 }

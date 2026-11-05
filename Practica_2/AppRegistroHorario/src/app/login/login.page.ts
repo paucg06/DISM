@@ -22,6 +22,11 @@ export class LoginPage implements OnInit {
 
   ngOnInit() {}
 
+  ionViewWillEnter() {
+    this.usuario = '';
+    this.clave = '';
+  }
+
   async onLogin() {
     if (!this.usuario || !this.clave) {
       const toast = await this.toastCtrl.create({
@@ -37,11 +42,10 @@ export class LoginPage implements OnInit {
     this.api.login(this.usuario, this.clave).subscribe({
       next: async (user: Usuario) => {
         this.cargando = false;
+        // Limpiar cualquier sesión anterior antes de guardar la nueva
+        localStorage.clear();
+        sessionStorage.clear();
         localStorage.setItem('auth_user', JSON.stringify(user));
-        localStorage.setItem('admin_user', JSON.stringify(user));
-        localStorage.setItem('empleado_user', JSON.stringify(user));
-
-        const role = user.Rol || (user.Usuario === 'admin' ? 'admin' : 'empleado');
 
         const toast = await this.toastCtrl.create({
           message: `Bienvenido, ${user.Nombre}`,
@@ -50,11 +54,7 @@ export class LoginPage implements OnInit {
         });
         await toast.present();
 
-        if (role === 'admin') {
-          this.router.navigate(['/tabs/usuarios']);
-        } else {
-          this.router.navigate(['/tabs/registrar-fichaje']);
-        }
+        this.router.navigate(['/home'], { replaceUrl: true });
       },
       error: async (err) => {
         this.cargando = false;

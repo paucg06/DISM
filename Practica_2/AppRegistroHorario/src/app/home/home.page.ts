@@ -23,21 +23,20 @@ export class HomePage implements OnInit {
   }
 
   cargarDatos() {
-    const raw = localStorage.getItem('auth_user') || localStorage.getItem('admin_user') || localStorage.getItem('empleado_user');
+    const raw = localStorage.getItem('auth_user');
     if (!raw) {
-      this.router.navigate(['/login']);
+      this.router.navigate(['/login'], { replaceUrl: true });
       return;
     }
     this.userObj = JSON.parse(raw);
     this.userName = this.userObj.Nombre || 'Usuario';
-    this.userRole = this.userObj.Rol || (this.userObj.Usuario === 'admin' ? 'admin' : 'empleado');
+    this.userRole = (this.userObj.Rol === 'admin' || this.userObj.Usuario === 'admin') ? 'admin' : 'empleado';
   }
 
   logout() {
-    localStorage.removeItem('auth_user');
-    localStorage.removeItem('admin_user');
-    localStorage.removeItem('empleado_user');
-    document.body.classList.remove('theme-admin', 'theme-empleado');
-    this.router.navigate(['/login']);
+    localStorage.clear();
+    sessionStorage.clear();
+    this.userObj = null;
+    this.router.navigate(['/login'], { replaceUrl: true });
   }
 }

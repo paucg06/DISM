@@ -31,17 +31,19 @@ export class ConsultaFichajesPage implements OnInit {
   }
 
   ionViewWillEnter() {
-    this.cargarUsuario();
-    this.consultar();
+    if (this.cargarUsuario()) {
+      this.consultar();
+    }
   }
 
-  cargarUsuario() {
-    const raw = localStorage.getItem('auth_user') || localStorage.getItem('empleado_user');
+  cargarUsuario(): boolean {
+    const raw = localStorage.getItem('auth_user');
     if (!raw) {
-      this.router.navigate(['/login']);
-      return;
+      this.router.navigate(['/login'], { replaceUrl: true });
+      return false;
     }
     this.usuarioActual = JSON.parse(raw);
+    return true;
   }
 
   cargarFichajesDeHoy() {
@@ -56,19 +58,33 @@ export class ConsultaFichajesPage implements OnInit {
   }
 
   consultar() {
-    if (!this.usuarioActual) return;
+    if (!this.cargarUsuario()) return;
     this.cargando = true;
 
-    this.api.getFichajesUsuario(this.usuarioActual.IdUsuario, this.filtroFechaInicio, this.filtroFechaFin).subscribe({
+    // Timeout de seguridad de 2 segundos para no bloquear la interfaz
+    const safetyTimeout = setTimeout(() => {
+      this.cargando = false;
+    }, 2000);
+
+    this.api.getFichajesUsuario(this.usuarioActual!.IdUsuario, this.filtroFechaInicio, this.filtroFechaFin).subscribe({
       next: (data) => {
-        this.fichajes = data;
+        clearTimeout(safetyTimeout);
+        this.fichajes = data || [];
         this.cargando = false;
         this.geocodificarFichajes();
       },
       error: () => {
+        clearTimeout(safetyTimeout);
+        this.fichajes = [];
         this.cargando = false;
       }
     });
+  }
+
+  limpiarFiltros() {
+    this.filtroFechaInicio = '';
+    this.filtroFechaFin = '';
+    this.consultar();
   }
 
   geocodificarFichajes() {
@@ -76,19 +92,19 @@ export class ConsultaFichajesPage implements OnInit {
       if (f.GeolocalizacionLatitud && f.GeolocalizacionLongitud) {
         this.api.getDireccionNominatim(f.GeolocalizacionLatitud, f.GeolocalizacionLongitud).subscribe({
           next: (res) => {
-            f.direccionPostal = res.display_name || 'Direccion no disponible';
+            f.direccionPostal = res.display_name || `Lat: ${f.GeolocalizacionLatitud}, Lon: ${f.GeolocalizacionLongitud}`;
           },
           error: () => {
-            f.direccionPostal = `Coordenadas: [${f.GeolocalizacionLatitud}, ${f.GeolocalizacionLongitud}]`;
+            f.direccionPostal = `Lat: ${f.GeolocalizacionLatitud}, Lon: ${f.GeolocalizacionLongitud}`;
           }
         });
       }
     }
   }
 
-  limpiarFiltros() {
-    this.filtroFechaInicio = '';
-    this.filtroFechaFin = '';
-    this.consultar();
+  logout() {
+    localStorage.clear();
+    sessionStorage.clear();
+    this.router.navigate(['/login'], { replaceUrl: true });
   }
 }

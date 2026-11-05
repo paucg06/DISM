@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService, Usuario } from '../services/api';
 import { AlertController, ToastController } from '@ionic/angular';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-usuarios',
@@ -13,14 +14,20 @@ export class UsuariosPage implements OnInit {
   cargando = false;
   usuarioSeleccionado: Usuario | null = null;
   mostrarModal = false;
+  modoEdicion = false;
 
   constructor(
     private api: ApiService,
     private alertCtrl: AlertController,
-    private toastCtrl: ToastController
+    private toastCtrl: ToastController,
+    private router: Router
   ) {}
 
   ngOnInit() {
+    this.cargarUsuarios();
+  }
+
+  ionViewWillEnter() {
     this.cargarUsuarios();
   }
 
@@ -28,7 +35,7 @@ export class UsuariosPage implements OnInit {
     this.cargando = true;
     this.api.getUsuarios().subscribe({
       next: (data) => {
-        this.usuarios = data;
+        this.usuarios = data || [];
         this.cargando = false;
       },
       error: () => {
@@ -39,6 +46,7 @@ export class UsuariosPage implements OnInit {
 
   verDetalle(usuario: Usuario) {
     this.usuarioSeleccionado = { ...usuario };
+    this.modoEdicion = true;
     this.mostrarModal = true;
   }
 
@@ -48,9 +56,10 @@ export class UsuariosPage implements OnInit {
       IdUsuario: nextId,
       Nombre: '',
       Usuario: '',
-      Clave: '1234',
+      Clave: '',
       Rol: 'empleado'
     };
+    this.modoEdicion = false;
     this.mostrarModal = true;
   }
 
@@ -59,18 +68,28 @@ export class UsuariosPage implements OnInit {
     this.usuarioSeleccionado = null;
   }
 
-  guardarUsuario() {
-    if (!this.usuarioSeleccionado || !this.usuarioSeleccionado.Nombre || !this.usuarioSeleccionado.Usuario) {
+  async guardarUsuario() {
+    if (!this.usuarioSeleccionado || !this.usuarioSeleccionado.Nombre || !this.usuarioSeleccionado.IdUsuario) {
+      const toast = await this.toastCtrl.create({
+        message: 'El ID y el Nombre son obligatorios',
+        duration: 2500,
+        color: 'warning'
+      });
+      await toast.present();
       return;
     }
-    const existe = this.usuarios.some(u => u.IdUsuario === this.usuarioSeleccionado!.IdUsuario);
-    if (existe) {
+
+    if (this.modoEdicion) {
       this.api.actualizarUsuario(this.usuarioSeleccionado.IdUsuario, this.usuarioSeleccionado).subscribe({
         next: async () => {
           this.cerrarModal();
           this.cargarUsuarios();
-          const t = await this.toastCtrl.create({ message: 'Usuario actualizado correctamente', duration: 2000, color: 'success' });
-          t.present();
+          const t = await this.toastCtrl.create({ message: 'Usuario actualizado con éxito', duration: 2000, color: 'success' });
+          await t.present();
+        },
+        error: async (err) => {
+          const t = await this.toastCtrl.create({ message: err.error?.message || 'Error al actualizar', duration: 3000, color: 'danger' });
+          await t.present();
         }
       });
     } else {
@@ -78,8 +97,12 @@ export class UsuariosPage implements OnInit {
         next: async () => {
           this.cerrarModal();
           this.cargarUsuarios();
-          const t = await this.toastCtrl.create({ message: 'Usuario creado exitosamente', duration: 2000, color: 'success' });
-          t.present();
+          const t = await this.toastCtrl.create({ message: 'Usuario creado con éxito', duration: 2000, color: 'success' });
+          await t.present();
+        },
+        error: async (err) => {
+          const t = await this.toastCtrl.create({ message: err.error?.message || 'Error al crear usuario', duration: 3000, color: 'danger' });
+          await t.present();
         }
       });
     }
@@ -87,17 +110,23 @@ export class UsuariosPage implements OnInit {
 
   async confirmarEliminar(id: number) {
     const alert = await this.alertCtrl.create({
-      header: 'Confirmar eliminación',
+      header: 'Confirmar Eliminación',
       message: '¿Estás seguro de que deseas eliminar este usuario?',
       buttons: [
         { text: 'Cancelar', role: 'cancel' },
         {
           text: 'Eliminar',
+          role: 'destructive',
           handler: () => {
             this.api.eliminarUsuario(id).subscribe({
-              next: () => {
-                this.cerrarModal();
+              next: async () => {
                 this.cargarUsuarios();
+                const t = await this.toastCtrl.create({ message: 'Usuario eliminado', duration: 2000, color: 'success' });
+                await t.present();
+              },
+              error: async (err) => {
+                const t = await this.toastCtrl.create({ message: err.error?.message || 'Error al eliminar', duration: 3000, color: 'danger' });
+                await t.present();
               }
             });
           }
@@ -105,5 +134,11 @@ export class UsuariosPage implements OnInit {
       ]
     });
     await alert.present();
+  }
+
+  logout() {
+    localStorage.clear();
+    sessionStorage.clear();
+    this.router.navigate(['/login'], { replaceUrl: true });
   }
 }
