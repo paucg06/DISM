@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ApiService, Fichaje, Usuario } from '../services/api';
 import { Router } from '@angular/router';
 
@@ -18,7 +18,8 @@ export class ConsultaFichajesPage implements OnInit {
 
   constructor(
     private api: ApiService,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -45,15 +46,26 @@ export class ConsultaFichajesPage implements OnInit {
   consultar() {
     if (!this.cargarUsuario()) return;
     this.cargando = true;
+    this.cdr.detectChanges();
+
+    // Timeout de seguridad máximo de 400 ms para garantizar fluidez absoluta
+    const safetyTimeout = setTimeout(() => {
+      this.cargando = false;
+      this.cdr.detectChanges();
+    }, 400);
 
     this.api.getFichajesUsuario(this.usuarioActual!.IdUsuario, this.filtroFechaInicio, this.filtroFechaFin).subscribe({
       next: (data) => {
+        clearTimeout(safetyTimeout);
         this.fichajes = data || [];
         this.cargando = false;
+        this.cdr.detectChanges();
       },
       error: () => {
+        clearTimeout(safetyTimeout);
         this.fichajes = [];
         this.cargando = false;
+        this.cdr.detectChanges();
       }
     });
   }

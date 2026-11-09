@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ApiService, Fichaje, Trabajo, Usuario } from '../services/api';
 import { ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
@@ -18,13 +18,11 @@ export class RegistrarFichajePage implements OnInit {
   latitud: number = 38.38735;
   longitud: number = -0.51238;
 
-  procesandoFichaje: boolean = false;
-  fichajeCerrandoId: number | null = null;
-
   constructor(
     private api: ApiService,
     private toastCtrl: ToastController,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -56,6 +54,7 @@ export class RegistrarFichajePage implements OnInit {
           if (!this.idTrabajoSeleccionado) {
             this.idTrabajoSeleccionado = t[0].IdTrabajo;
           }
+          this.cdr.detectChanges();
         }
       },
       error: () => {}
@@ -73,9 +72,11 @@ export class RegistrarFichajePage implements OnInit {
     this.api.getFichajesActivos(this.usuarioActual.IdUsuario).subscribe({
       next: (lista) => {
         this.fichajesActivos = lista || [];
+        this.cdr.detectChanges();
       },
       error: () => {
         this.fichajesActivos = [];
+        this.cdr.detectChanges();
       }
     });
   }
@@ -104,68 +105,78 @@ export class RegistrarFichajePage implements OnInit {
       return;
     }
 
-    this.procesandoFichaje = true;
+    const idTrabajo = Number(this.idTrabajoSeleccionado);
+    const trab = this.trabajos.find(t => t.IdTrabajo === idTrabajo);
+    const nombreTrabajo = trab ? trab.Nombre : `Trabajo #${idTrabajo}`;
+
+    const pad = (n: number) => String(n).padStart(2, '0');
+    const d = new Date();
+    const fechaHoraEntrada = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+
+    // 1. Inserción inmediata en pantalla (en ese preciso instante, 0 ms)
+    const fichajeVisual: Fichaje = {
+      IdFichaje: Date.now(),
+      FechaHoraEntrada: fechaHoraEntrada,
+      FechaHoraSalida: null,
+      HorasTrabajadas: null,
+      IdTrabajo: idTrabajo,
+      NombreTrabajo: nombreTrabajo,
+      IdUsuario: this.usuarioActual.IdUsuario,
+      NombreUsuario: this.usuarioActual.Nombre,
+      GeolocalizacionLatitud: this.latitud,
+      GeolocalizacionLongitud: this.longitud
+    };
+
+    this.fichajesActivos = [fichajeVisual, ...this.fichajesActivos];
+    this.cdr.detectChanges();
+
+    // Notificación de entrada iniciada
+    const toast = await this.toastCtrl.create({
+      message: `Entrada iniciada para: ${nombreTrabajo}`,
+      duration: 3000,
+      color: 'success'
+    });
+    await toast.present();
+
+    // 2. Persistir en el servidor en segundo plano
     const datos = {
       IdUsuario: this.usuarioActual.IdUsuario,
-      IdTrabajo: Number(this.idTrabajoSeleccionado),
+      IdTrabajo: idTrabajo,
       GeolocalizacionLatitud: this.latitud,
       GeolocalizacionLongitud: this.longitud
     };
 
     this.api.iniciarFichaje(datos).subscribe({
-      next: async (nuevo) => {
-        this.procesandoFichaje = false;
-        // Asignar nombre del trabajo si viniese vacío
-        if (!nuevo.NombreTrabajo) {
-          const trab = this.trabajos.find(t => t.IdTrabajo === Number(this.idTrabajoSeleccionado));
-          nuevo.NombreTrabajo = trab ? trab.Nombre : `Trabajo #${this.idTrabajoSeleccionado}`;
+      next: (guardado) => {
+        if (guardado && guardado.IdFichaje) {
+          fichajeVisual.IdFichaje = guardado.IdFichaje;
+          this.cdr.detectChanges();
         }
-        // Añadir inmediatamente debajo al listado de turnos activos en paralelo
-        this.fichajesActivos.unshift(nuevo);
-
-        const toast = await this.toastCtrl.create({
-          message: `Entrada iniciada para: ${nuevo.NombreTrabajo}`,
-          duration: 3000,
-          color: 'success'
-        });
-        await toast.present();
       },
-      error: async (err) => {
-        this.procesandoFichaje = false;
-        const toast = await this.toastCtrl.create({
-          message: err.error?.message || 'Error al registrar la entrada.',
-          duration: 3000,
-          color: 'danger'
-        });
-        await toast.present();
-      }
+      error: () => {}
     });
   }
 
   async finalizarFichaje(fichaje: Fichaje) {
-    this.fichajeCerrandoId = fichaje.IdFichaje;
-    this.api.cerrarFichaje(fichaje.IdFichaje).subscribe({
-      next: async (cerrado) => {
-        this.fichajeCerrandoId = null;
-        // Eliminar inmediatamente de la lista visible de turnos en curso
-        this.fichajesActivos = this.fichajesActivos.filter(f => f.IdFichaje !== fichaje.IdFichaje);
+    const idCerrar = fichaje.IdFichaje;
+    const nombreTrab = fichaje.NombreTrabajo || 'Tarea';
 
-        const toast = await this.toastCtrl.create({
-          message: `Salida registrada en ${fichaje.NombreTrabajo}. Horas trabajadas: ${cerrado.HorasTrabajadas || 1}h`,
-          duration: 3500,
-          color: 'success'
-        });
-        await toast.present();
-      },
-      error: async (err) => {
-        this.fichajeCerrandoId = null;
-        const toast = await this.toastCtrl.create({
-          message: err.error?.message || 'Error al registrar la salida.',
-          duration: 3000,
-          color: 'danger'
-        });
-        await toast.present();
-      }
+    // 1. Eliminar inmediatamente el recuadro de la vista (en ese preciso instante)
+    this.fichajesActivos = this.fichajesActivos.filter(f => f.IdFichaje !== idCerrar);
+    this.cdr.detectChanges();
+
+    // 2. Notificación verde de finalización
+    const toast = await this.toastCtrl.create({
+      message: `El fichaje ha finalizado para: ${nombreTrab}`,
+      duration: 3000,
+      color: 'success'
+    });
+    await toast.present();
+
+    // 3. Persistir en la base de datos en segundo plano
+    this.api.cerrarFichaje(idCerrar).subscribe({
+      next: () => {},
+      error: () => {}
     });
   }
 

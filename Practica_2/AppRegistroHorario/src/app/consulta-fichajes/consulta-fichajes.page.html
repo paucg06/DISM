@@ -49,11 +49,8 @@
       </ion-card-content>
     </ion-card>
 
-    <!-- Indicador de carga temporal (no bloqueante) -->
-    <div *ngIf="cargando" style="text-align: center; padding: 20px;">
-      <ion-spinner name="crescent" color="primary"></ion-spinner>
-      <p style="color: gray; margin-top: 8px;">Cargando fichajes...</p>
-    </div>
+    <!-- Indicador de carga sutil (sin ocultar resultados) -->
+    <ion-progress-bar *ngIf="cargando" type="indeterminate" color="primary" style="margin-bottom: 15px; border-radius: 4px;"></ion-progress-bar>
 
     <!-- Sin resultados -->
     <ion-card *ngIf="!cargando && fichajes.length === 0" style="text-align: center; padding: 25px 15px; border-radius: 12px;">
@@ -65,8 +62,8 @@
       </ion-button>
     </ion-card>
 
-    <!-- Listado de fichajes -->
-    <div *ngIf="!cargando && fichajes.length > 0">
+    <!-- Listado de fichajes visible de inmediato -->
+    <div *ngIf="fichajes.length > 0">
       <h3 style="font-size: 16px; font-weight: 700; margin: 15px 5px;">
         Fichajes Registrados ({{ fichajes.length }})
       </h3>

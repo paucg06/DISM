@@ -1,6 +1,6 @@
 const mysql = require('mysql2/promise');
 
-// Configuración de conexión a MySQL (127.0.0.1 evita latencias de resolución IPv6 en Windows)
+// Configuración de conexión a MySQL (127.0.0.1 evita demoras DNS/IPv6 en Windows)
 const dbConfig = {
   host: process.env.DB_HOST || '127.0.0.1',
   user: process.env.DB_USER || 'root',
@@ -9,10 +9,10 @@ const dbConfig = {
   waitForConnections: false,
   connectionLimit: 5,
   queueLimit: 0,
-  connectTimeout: 500
+  connectTimeout: 300
 };
 
-// Datos en memoria como fallback automático instantáneo (0 ms)
+// Datos en memoria como fallback automático instantáneo
 let mockApiKey = [{ idKey: 1, Key: 'dism-secret-key-2026' }];
 
 let mockTrabajos = [
@@ -49,8 +49,8 @@ let mockFichajes = [
   },
   {
     IdFichaje: 2,
-    FechaHoraEntrada: '2026-11-04 09:00:00',
-    FechaHoraSalida: '2026-11-04 17:00:00',
+    FechaHoraEntrada: '2026-11-08 09:00:00',
+    FechaHoraSalida: '2026-11-08 17:00:00',
     HorasTrabajadas: 8,
     IdTrabajo: 2,
     IdUsuario: 2,
@@ -59,8 +59,18 @@ let mockFichajes = [
   },
   {
     IdFichaje: 3,
-    FechaHoraEntrada: `${strHoy} 09:00:00`,
-    FechaHoraSalida: `${strHoy} 17:00:00`,
+    FechaHoraEntrada: '2026-11-05 08:00:00',
+    FechaHoraSalida: '2026-11-05 16:00:00',
+    HorasTrabajadas: 8,
+    IdTrabajo: 1,
+    IdUsuario: 2,
+    GeolocalizacionLatitud: 38.38735,
+    GeolocalizacionLongitud: -0.51238
+  },
+  {
+    IdFichaje: 4,
+    FechaHoraEntrada: `${strHoy} 09:15:00`,
+    FechaHoraSalida: `${strHoy} 17:15:00`,
     HorasTrabajadas: 8,
     IdTrabajo: 3,
     IdUsuario: 3,
@@ -68,11 +78,11 @@ let mockFichajes = [
     GeolocalizacionLongitud: -0.49068
   },
   {
-    IdFichaje: 4,
-    FechaHoraEntrada: '2026-10-14 08:30:00',
-    FechaHoraSalida: '2026-10-14 16:30:00',
+    IdFichaje: 5,
+    FechaHoraEntrada: '2026-11-04 09:00:00',
+    FechaHoraSalida: '2026-11-04 17:00:00',
     HorasTrabajadas: 8,
-    IdTrabajo: 1,
+    IdTrabajo: 2,
     IdUsuario: 2,
     GeolocalizacionLatitud: 38.38735,
     GeolocalizacionLongitud: -0.51238
@@ -97,12 +107,18 @@ try {
   isConnected = false;
 }
 
+// Wrapper seguro con límite duro de 200 ms: si MySQL tarda más de 0.2 segundos, salta instantáneamente al fallback
 const pool = {
   async query(sql, params) {
     if (!isConnected || !rawPool) {
       throw new Error('MySQL offline');
     }
-    return rawPool.query(sql, params);
+    return Promise.race([
+      rawPool.query(sql, params),
+      new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('MySQL query timeout (>200ms)')), 200)
+      )
+    ]);
   }
 };
 

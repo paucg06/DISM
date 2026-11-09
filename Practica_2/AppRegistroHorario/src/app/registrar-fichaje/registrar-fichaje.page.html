@@ -15,7 +15,7 @@
 <ion-content class="ion-padding">
   <div style="max-width: 540px; margin: 0 auto;">
 
-    <!-- TARJETA SUPERIOR: INICIAR NUEVO FICHAJE (SIEMPRE ACTIVA Y DISPONIBLE) -->
+    <!-- TARJETA SUPERIOR: INICIAR NUEVO FICHAJE (SIEMPRE DISPONIBLE Y ACTIVA) -->
     <ion-card style="border-radius: 12px; margin-bottom: 24px;">
       <ion-card-header>
         <ion-card-subtitle color="primary" style="font-weight: 700;">NUEVA JORNADA / TAREA</ion-card-subtitle>
@@ -31,17 +31,18 @@
           </ion-select>
         </ion-item>
 
-        <ion-button expand="block" color="primary" (click)="registrarEntrada()" [disabled]="procesandoFichaje || !idTrabajoSeleccionado" style="height: 46px; font-weight: 600; margin-top: 18px;">
+        <!-- Botón siempre activo, nunca se deshabilita para permitir turnos simultáneos -->
+        <ion-button expand="block" color="primary" (click)="registrarEntrada()" style="height: 46px; font-weight: 600; margin-top: 18px;">
           <ion-icon slot="start" name="log-in-outline"></ion-icon>
           Fichar Entrada
         </ion-button>
       </ion-card-content>
     </ion-card>
 
-    <!-- SECCIÓN INFERIOR: TURNOS EN CURSO / PARALELO DETECTADOS -->
+    <!-- SECCIÓN INFERIOR: RECUADROS DE FICHAJES EN CURSO DETECTADOS -->
     <div *ngIf="fichajesActivos.length > 0">
       <h3 style="font-size: 16px; font-weight: 700; margin: 0 4px 14px 4px; display: flex; align-items: center; justify-content: space-between;">
-        <span>Turnos Abiertos en Curso</span>
+        <span>Fichajes en Curso</span>
         <ion-badge color="warning">{{ fichajesActivos.length }} activo{{ fichajesActivos.length > 1 ? 's' : '' }}</ion-badge>
       </h3>
 
@@ -59,7 +60,7 @@
             <p style="margin: 3px 0;"><b>Entrada:</b> {{ f.FechaHoraEntrada }}</p>
           </div>
 
-          <ion-button expand="block" color="danger" (click)="finalizarFichaje(f)" [disabled]="fichajeCerrandoId === f.IdFichaje" style="height: 44px; font-weight: 600;">
+          <ion-button expand="block" color="danger" (click)="finalizarFichaje(f)" style="height: 44px; font-weight: 600;">
             <ion-icon slot="start" name="exit-outline"></ion-icon>
             Finalizar Fichaje
           </ion-button>
