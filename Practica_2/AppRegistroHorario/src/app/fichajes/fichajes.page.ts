@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ApiService, Fichaje, Usuario } from '../services/api';
+import { AlertController, ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import * as Leaflet from 'leaflet';
 
@@ -25,7 +26,10 @@ export class FichajesPage implements OnInit {
 
   constructor(
     private api: ApiService,
-    private router: Router
+    private alertCtrl: AlertController,
+    private toastCtrl: ToastController,
+    private router: Router,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -37,7 +41,10 @@ export class FichajesPage implements OnInit {
   }
 
   cargarDatos() {
-    this.api.getUsuarios().subscribe(u => this.usuarios = u || []);
+    this.api.getUsuarios().subscribe(u => {
+      this.usuarios = u || [];
+      this.cdr.detectChanges();
+    });
     this.aplicarFiltros();
   }
 
@@ -49,27 +56,16 @@ export class FichajesPage implements OnInit {
 
     this.api.getFichajes(filtros).subscribe({
       next: (data) => {
-        this.fichajes = data || [];
-        this.filtrarPorTexto();
+        this.fichajes = [...(data || [])];
+        this.fichajesFiltrados = [...this.fichajes];
+        this.cdr.detectChanges();
       },
       error: () => {
         this.fichajes = [];
         this.fichajesFiltrados = [];
+        this.cdr.detectChanges();
       }
     });
-  }
-
-  filtrarPorTexto() {
-    if (!this.filtroTexto || this.filtroTexto.trim() === '') {
-      this.fichajesFiltrados = [...this.fichajes];
-      return;
-    }
-    const q = this.filtroTexto.toLowerCase();
-    this.fichajesFiltrados = this.fichajes.filter(f =>
-      (f.NombreUsuario && f.NombreUsuario.toLowerCase().includes(q)) ||
-      (f.NombreTrabajo && f.NombreTrabajo.toLowerCase().includes(q)) ||
-      (f.FechaHoraEntrada && f.FechaHoraEntrada.includes(q))
-    );
   }
 
   limpiarFiltros() {
@@ -78,6 +74,42 @@ export class FichajesPage implements OnInit {
     this.filtroFechaInicio = '';
     this.filtroFechaFin = '';
     this.aplicarFiltros();
+  }
+
+  async confirmarEliminar(idFichaje: number) {
+    const alert = await this.alertCtrl.create({
+      header: 'Confirmar Eliminación',
+      message: '¿Estás seguro de que deseas eliminar este registro de fichaje?',
+      buttons: [
+        { text: 'Cancelar', role: 'cancel' },
+        {
+          text: 'Eliminar',
+          role: 'destructive',
+          handler: () => {
+            this.api.eliminarFichaje(idFichaje).subscribe({
+              next: async () => {
+                this.aplicarFiltros();
+                const t = await this.toastCtrl.create({
+                  message: 'Fichaje eliminado correctamente',
+                  duration: 2500,
+                  color: 'success'
+                });
+                await t.present();
+              },
+              error: async (err) => {
+                const t = await this.toastCtrl.create({
+                  message: err.error?.message || 'Error al eliminar fichaje',
+                  duration: 3000,
+                  color: 'danger'
+                });
+                await t.present();
+              }
+            });
+          }
+        }
+      ]
+    });
+    await alert.present();
   }
 
   abrirMapa(fichaje: Fichaje) {

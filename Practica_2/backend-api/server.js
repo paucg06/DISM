@@ -494,6 +494,28 @@ app.put('/api/v1/fichajes/cerrar/:idFichaje', async (req, res) => {
   }
 });
 
+// Eliminar fichaje (Admin)
+app.delete('/api/v1/fichajes/:id', async (req, res) => {
+  const id = parseInt(req.params.id);
+  try {
+    if (pool) {
+      try {
+        await pool.query('DELETE FROM Fichajes WHERE IdFichaje = ?', [id]);
+        return res.json({ message: 'Fichaje eliminado correctamente' });
+      } catch (e) {
+        console.warn('[DB] Fallback delete fichaje:', e.message);
+      }
+    }
+    const idx = mockFichajes.findIndex(f => f.IdFichaje === id);
+    if (idx !== -1) {
+      mockFichajes.splice(idx, 1);
+    }
+    res.json({ message: 'Fichaje eliminado correctamente' });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 // -------------------------------------------------------------
 // API KEY LIST
 // -------------------------------------------------------------

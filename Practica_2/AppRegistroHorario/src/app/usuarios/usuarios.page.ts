@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ApiService, Usuario } from '../services/api';
 import { AlertController, ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
@@ -20,7 +20,8 @@ export class UsuariosPage implements OnInit {
     private api: ApiService,
     private alertCtrl: AlertController,
     private toastCtrl: ToastController,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -33,13 +34,16 @@ export class UsuariosPage implements OnInit {
 
   cargarUsuarios() {
     this.cargando = true;
+    this.cdr.detectChanges();
     this.api.getUsuarios().subscribe({
       next: (data) => {
-        this.usuarios = data || [];
+        this.usuarios = [...(data || [])];
         this.cargando = false;
+        this.cdr.detectChanges();
       },
       error: () => {
         this.cargando = false;
+        this.cdr.detectChanges();
       }
     });
   }

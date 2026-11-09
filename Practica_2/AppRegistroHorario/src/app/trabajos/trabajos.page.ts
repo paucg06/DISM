@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ApiService, Trabajo } from '../services/api';
 import { AlertController, ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
@@ -19,7 +19,8 @@ export class TrabajosPage implements OnInit {
     private api: ApiService,
     private alertCtrl: AlertController,
     private toastCtrl: ToastController,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -32,13 +33,16 @@ export class TrabajosPage implements OnInit {
 
   cargarTrabajos() {
     this.cargando = true;
+    this.cdr.detectChanges();
     this.api.getTrabajos().subscribe({
       next: (data) => {
-        this.trabajos = data || [];
+        this.trabajos = [...(data || [])];
         this.cargando = false;
+        this.cdr.detectChanges();
       },
       error: () => {
         this.cargando = false;
+        this.cdr.detectChanges();
       }
     });
   }

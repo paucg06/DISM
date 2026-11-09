@@ -10,10 +10,6 @@
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
-
-  <ion-toolbar color="light">
-    <ion-searchbar [(ngModel)]="filtroTexto" (ionInput)="filtrarPorTexto()" placeholder="Buscar usuario, trabajo o fecha..."></ion-searchbar>
-  </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
@@ -78,11 +74,18 @@
         <p style="margin: 3px 0;" *ngIf="f.HorasTrabajadas"><b>Horas:</b> {{ f.HorasTrabajadas }} h</p>
         <p style="margin: 3px 0;"><b>GPS:</b> [{{ f.GeolocalizacionLatitud }}, {{ f.GeolocalizacionLongitud }}]</p>
 
-        <!-- Botón para ver el mapa interactivo con Leaflet -->
-        <ion-button expand="block" color="success" fill="outline" size="small" (click)="abrirMapa(f)" style="margin-top: 15px; height: 40px; font-weight: 600;">
-          <ion-icon slot="start" name="map-outline"></ion-icon>
-          Ver Mapa de Fichaje (Leaflet)
-        </ion-button>
+        <div style="display: flex; gap: 10px; margin-top: 15px;">
+          <!-- Botón para ver el mapa interactivo -->
+          <ion-button expand="block" color="success" fill="outline" size="small" (click)="abrirMapa(f)" style="flex: 1; height: 40px; font-weight: 600;">
+            <ion-icon slot="start" name="map-outline"></ion-icon>
+            Ver Mapa de Fichaje
+          </ion-button>
+
+          <!-- Botón para eliminar fichaje (Admin) -->
+          <ion-button expand="block" color="danger" fill="outline" size="small" (click)="confirmarEliminar(f.IdFichaje)" title="Eliminar fichaje" style="height: 40px; font-weight: 600;">
+            <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+          </ion-button>
+        </div>
       </ion-card-content>
     </ion-card>
 

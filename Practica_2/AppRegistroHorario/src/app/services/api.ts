@@ -100,6 +100,10 @@ export class ApiService {
     return this.http.get<Fichaje[]>(url, this.httpOptions);
   }
 
+  eliminarFichaje(id: number): Observable<any> {
+    return this.http.delete(`${this.basePath}fichajes/${id}`, this.httpOptions);
+  }
+
   // Metodos de Empleado (Fichajes activos / en paralelo y registro)
   getFichajesActivos(idUsuario: number): Observable<Fichaje[]> {
     return this.http.get<Fichaje[]>(`${this.basePath}fichajes/activos/${idUsuario}`, this.httpOptions);
