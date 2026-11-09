@@ -445,9 +445,9 @@ SCREENS_DATA = [
         "objetivo": "Punto de acceso unificado a la aplicación corporativa para toda la plantilla. Permite la identificación y validación segura tanto de administradores como de empleados mediante sus credenciales personales asignadas.",
         "acceso": "Al abrir la aplicación corporativa desde el navegador del dispositivo móvil o mediante el acceso directo de la PWA instalada.",
         "botones": [
-            "<b>Campo 'Nombre de usuario':</b> Espacio para introducir el nombre de usuario facilitado por la empresa (por ejemplo, 'admin' para labores directivas o 'sergio' / 'lucia' para trabajadores).",
-            "<b>Campo 'Contraseña':</b> Campo protegido mediante caracteres enmascarados para escribir la clave privada asignada a la cuenta.",
-            "<b>Botón 'Acceder al Sistema':</b> Al pulsar este botón, la aplicación envía los datos de autenticación de forma segura y comprueba los permisos de acceso al instante."
+            "<b>Nombre de usuario:</b> Espacio para introducir el identificador de cuenta asignado.",
+            "<b>Contraseña:</b> Clave privada de seguridad protegida por caracteres enmascarados.",
+            "<b>Acceder al sistema:</b> Valida las credenciales y da acceso al entorno de trabajo."
         ],
         "comportamiento": "Presenta una interfaz limpia y minimalista en escala de grises. Durante la validación se visualiza un indicador de carga animado que certifica la comunicación fluida con los servicios centrales de la organización sin bloquear la interacción."
     },
@@ -460,8 +460,8 @@ SCREENS_DATA = [
         "objetivo": "Avisar al usuario de forma inmediata y no intrusiva si se han introducido credenciales erróneas o si el usuario no figura registrado en el sistema corporativo.",
         "acceso": "Introducir una contraseña incorrecta en el formulario de acceso y presionar el botón 'Acceder al Sistema'.",
         "botones": [
-            "<b>Notificación Emergente (Toast Rojo):</b> Aparece en la zona inferior de la pantalla indicando de forma explícita el mensaje 'Usuario o contraseña incorrectos'.",
-            "<b>Edición Inmediata de Campos:</b> Permite hacer clic o tocar de nuevo en el campo de contraseña para corregir el dato tecleado sin necesidad de recargar la aplicación."
+            "<b>Aviso de error:</b> Notificación emergente roja indicando credenciales incorrectas.",
+            "<b>Contraseña:</b> Permite reescribir la clave sin recargar la página."
         ],
         "comportamiento": "La barra de progreso de carga se detiene en 0 milisegundos en el momento exacto en que se detecta el fallo. La pantalla se mantiene totalmente interactiva, evitando pérdidas de tiempo y permitiendo al usuario volver a intentar el acceso de inmediato."
     },
@@ -474,8 +474,8 @@ SCREENS_DATA = [
         "objetivo": "Confirmar la validación exitosa de la identidad del usuario y darle la bienvenida antes de conducirlo automáticamente al entorno adaptado a sus permisos laborales.",
         "acceso": "Introducir un nombre de usuario y contraseña válidos y presionar el botón 'Acceder al Sistema'.",
         "botones": [
-            "<b>Aviso de Bienvenida (Toast Verde):</b> Muestra en pantalla el mensaje emergente personalizado '¡Bienvenido/a [Nombre]!' para certificar la conexión exitosa.",
-            "<b>Transición Automática:</b> Sin necesidad de pulsar ningún botón adicional, la aplicación realiza la redirección hacia el panel principal correspondiente."
+            "<b>Aviso de bienvenida:</b> Notificación emergente verde con saludo personalizado.",
+            "<b>Redirección:</b> Conduce automáticamente al panel correspondiente según el rol."
         ],
         "comportamiento": "El sistema guarda los datos de sesión de forma segura y abre el entorno correspondiente: si el usuario tiene rol de 'Administrador', se abre el panel general verde con herramientas de supervisión; si tiene rol de 'Empleado', se abre el portal azul de fichajes."
     },
@@ -492,10 +492,10 @@ SCREENS_DATA = [
         "objetivo": "Centro de control integral con identidad visual corporativa verde, diseñado para que los responsables de la organización gestionen personal, proyectos y la auditoría horaria de la plantilla.",
         "acceso": "Iniciar sesión con una cuenta de usuario con privilegios de gestión (ej. usuario 'admin').",
         "botones": [
-            "<b>Tarjeta 'Gestión de Usuarios':</b> Conduce a la pestaña de administración de personal, donde se consultan, editan, añaden o dan de baja los trabajadores.",
-            "<b>Tarjeta 'Gestión de Trabajos':</b> Da acceso al catálogo de tareas y proyectos a los que la plantilla imputará sus jornadas.",
-            "<b>Tarjeta 'Gestión de Fichajes':</b> Conduce al módulo de auditoría de jornadas, filtros de fechas, mapas interactivos Leaflet con chincheta GPS y borrado de turnos.",
-            "<b>Icono 'Cerrar Sesión' (Barra Superior):</b> Permite salir del sistema y desconectar la cuenta de forma segura."
+            "<b>Gestión de usuarios:</b> Conduce a la administración y mantenimiento de la plantilla.",
+            "<b>Gestión de trabajos:</b> Da acceso al catálogo de tareas y proyectos de la empresa.",
+            "<b>Gestión de fichajes:</b> Conduce a la auditoría horaria, mapa Leaflet y borrado de turnos.",
+            "<b>Cerrar sesión:</b> Desconecta la cuenta activa y limpia el almacenamiento de sesión."
         ],
         "comportamiento": "Presenta una navegación rápida en tarjetas organizadas por categorías, con iconos distintivos y el badge superior que identifica permanentemente al usuario como 'Administrador'."
     },
@@ -508,9 +508,9 @@ SCREENS_DATA = [
         "objetivo": "Visualizar el listado completo de trabajadores de la empresa, consultar sus roles laborales asignados y acceder rápidamente a las operaciones de alta, edición y baja.",
         "acceso": "Desde el Panel Principal del Administrador, presionar sobre la tarjeta 'Gestión de Usuarios'.",
         "botones": [
-            "<b>Fila de Usuario (Tocar sobre el elemento):</b> Al pulsar sobre cualquier empleado de la lista se abre una ventana modal emergente con su información completa para editarla.",
-            "<b>Icono Papelera (Color Rojo):</b> Ubicado a la derecha de cada usuario. Abre una ventana de confirmación para eliminar al trabajador del sistema.",
-            "<b>Botón Inferior 'Añadir Nuevo Usuario':</b> Botón verde situado al final del listado dinámico para registrar un nuevo integrante."
+            "<b>Lista de usuarios:</b> Al pulsar sobre cualquier empleado se abre su modal de edición.",
+            "<b>Eliminar usuario:</b> Abre el diálogo de confirmación para dar de baja al trabajador.",
+            "<b>Añadir nuevo usuario:</b> Abre el formulario modal para registrar un nuevo integrante."
         ],
         "comportamiento": "Carga la lista completa de empleados nada más entrar sin necesidad de pulsar botones adicionales. Diferencia los permisos mediante etiquetas de color ('admin' en rojo y 'empleado' en verde)."
     },
@@ -523,11 +523,11 @@ SCREENS_DATA = [
         "objetivo": "Consultar de forma detallada y modificar los datos de un empleado, incluyendo su nombre completo, nombre de inicio de sesión, clave de acceso o cambio de rol.",
         "acceso": "Hacer clic o pulsar sobre cualquiera de las filas de usuario en la pantalla de gestión de personal.",
         "botones": [
-            "<b>Campo 'ID Usuario':</b> Muestra el código numérico asignado al usuario. Se encuentra protegido contra edición para preservar el historial previo de fichajes.",
-            "<b>Campos 'Nombre', 'Usuario' y 'Clave':</b> Permiten actualizar la información personal y restablecer la contraseña.",
-            "<b>Selector desplegable 'Rol':</b> Permite conmutar los permisos del usuario entre 'Administrador' o 'Empleado'.",
-            "<b>Botón 'Actualizar Usuario':</b> Guarda inmediatamente todos los cambios en la base de datos.",
-            "<b>Botón 'Cerrar' (Cabecera):</b> Descarta cualquier modificación y regresa al listado."
+            "<b>ID Usuario:</b> Identificador numérico protegido para preservar el historial previo.",
+            "<b>Nombre, usuario y clave:</b> Permiten actualizar la información personal y restablecer la contraseña.",
+            "<b>Rol:</b> Permite conmutar los permisos del usuario entre Administrador o Empleado.",
+            "<b>Actualizar usuario:</b> Guarda inmediatamente todos los cambios en la base de datos.",
+            "<b>Cerrar:</b> Descarta cualquier modificación y regresa a la vista de lista."
         ],
         "comportamiento": "Se despliega como una ventana emergente nativa con cabecera verde sin abandonar la vista del listado general, garantizando agilidad operativa al responsable."
     },
@@ -540,13 +540,13 @@ SCREENS_DATA = [
         "objetivo": "Dar de alta a un nuevo trabajador o directivo en la organización, asignándole su número de empleado, datos de acceso y nivel de permisos.",
         "acceso": "Presionar el botón verde 'Añadir Nuevo Usuario' ubicado al pie de la lista de usuarios.",
         "botones": [
-            "<b>Campo 'ID Usuario':</b> Número identificador obligatorio que representará al trabajador.",
-            "<b>Campo 'Nombre Completo':</b> Nombre y apellidos del empleado para las consultas y reportes.",
-            "<b>Campo 'Nombre de Usuario':</b> Identificador exclusivo que utilizará para iniciar sesión.",
-            "<b>Campo 'Contraseña':</b> Clave de seguridad provisional o definitiva.",
-            "<b>Selector 'Rol':</b> Asigna si la cuenta tendrá acceso al portal de empleado o al de administración.",
-            "<b>Botón 'Crear Usuario':</b> Valida los campos y persiste el nuevo registro.",
-            "<b>Botón 'Cerrar':</b> Cancela el registro y cierra la ventana modal."
+            "<b>ID Usuario:</b> Código numérico obligatorio que representará al nuevo empleado.",
+            "<b>Nombre completo:</b> Nombre y apellidos del trabajador para consultas y reportes.",
+            "<b>Nombre de usuario:</b> Identificador que empleará para acceder a la aplicación.",
+            "<b>Contraseña:</b> Clave de seguridad establecida para la cuenta.",
+            "<b>Rol:</b> Asigna si el usuario operará como Administrador o como Empleado.",
+            "<b>Crear usuario:</b> Valida los campos y persiste el nuevo registro en el sistema.",
+            "<b>Cerrar:</b> Cancela el registro y cierra la ventana modal."
         ],
         "comportamiento": "Al confirmar el alta, el nuevo empleado se incorpora inmediatamente a la lista y puede iniciar sesión en la aplicación al instante."
     },
@@ -559,9 +559,9 @@ SCREENS_DATA = [
         "objetivo": "Administrar el catálogo oficial de actividades, tareas y proyectos a los que los empleados imputarán sus horas durante sus turnos laborales.",
         "acceso": "Desde el Panel Principal del Administrador, seleccionar la tarjeta 'Gestión de Trabajos'.",
         "botones": [
-            "<b>Fila de Proyecto:</b> Al hacer clic sobre cualquier trabajo se abre la ventana modal para editar su nombre o código.",
-            "<b>Icono Papelera (Rojo):</b> Permite eliminar una tarea que ya no esté en curso previa confirmación.",
-            "<b>Botón Inferior 'Crear Nuevo Trabajo':</b> Botón verde situado al final de la lista para dar de alta una nueva actividad."
+            "<b>Lista de proyectos:</b> Al pulsar sobre cualquier trabajo se abre su modal de edición.",
+            "<b>Eliminar trabajo:</b> Permite suprimir una tarea que ya no esté en curso previa confirmación.",
+            "<b>Crear nuevo trabajo:</b> Abre el formulario modal para dar de alta una nueva actividad."
         ],
         "comportamiento": "Muestra todas las tareas vigentes con su identificador (#ID) e icono representativo de maletín. La lista está disponible inmediatamente al acceder a la pestaña."
     },
@@ -574,10 +574,10 @@ SCREENS_DATA = [
         "objetivo": "Inspeccionar o renombrar una tarea existente para adecuar su denominación a nuevas necesidades del centro de trabajo o de los clientes.",
         "acceso": "Pulsar sobre cualquiera de los proyectos que figuran en el catálogo de trabajos.",
         "botones": [
-            "<b>Campo 'ID Trabajo':</b> Identificador numérico asociado a la tarea.",
-            "<b>Campo 'Nombre del Trabajo / Proyecto':</b> Denominación descriptiva de la actividad laboral.",
-            "<b>Botón 'Guardar Trabajo':</b> Actualiza el nombre del proyecto en todo el sistema.",
-            "<b>Botón 'Cerrar' (Cabecera):</b> Cierra el formulario modal sin guardar cambios."
+            "<b>ID Trabajo:</b> Identificador numérico asociado a la tarea o proyecto.",
+            "<b>Nombre del trabajo:</b> Denominación descriptiva de la actividad laboral.",
+            "<b>Guardar trabajo:</b> Actualiza el nombre del proyecto en todo el sistema corporativo.",
+            "<b>Cerrar:</b> Cierra el formulario modal sin aplicar modificaciones."
         ],
         "comportamiento": "Al guardar los cambios, la nueva denominación se sincroniza de forma transparente en los selectores de fichaje de todos los empleados en tiempo real."
     },
@@ -590,10 +590,10 @@ SCREENS_DATA = [
         "objetivo": "Registrar una nueva tarea o proyecto en el catálogo para que la plantilla pueda seleccionarlo al fichar su entrada.",
         "acceso": "Hacer clic en el botón verde inferior 'Crear Nuevo Trabajo' situado al final del catálogo.",
         "botones": [
-            "<b>Campo 'ID Trabajo (Numérico)':</b> Código identificativo de la nueva tarea.",
-            "<b>Campo 'Nombre del Trabajo':</b> Título descriptivo (ej. 'Auditoría de Sistemas', 'Soporte Técnico', etc.).",
-            "<b>Botón 'Guardar Trabajo':</b> Da de alta el proyecto y lo habilita para el registro de turnos.",
-            "<b>Botón 'Cerrar':</b> Descarta el formulario y regresa a la vista general."
+            "<b>ID Trabajo:</b> Código numérico asignado a la nueva actividad empresarial.",
+            "<b>Nombre del trabajo:</b> Título descriptivo de la tarea o proyecto a incorporar.",
+            "<b>Guardar trabajo:</b> Registra la tarea y la habilita de inmediato para los empleados.",
+            "<b>Cerrar:</b> Descarta el formulario y regresa al catálogo general."
         ],
         "comportamiento": "El proyecto recién creado pasa a estar disponible de forma inmediata en el desplegable de tareas de todos los empleados conectados a la aplicación."
     },
@@ -606,11 +606,11 @@ SCREENS_DATA = [
         "objetivo": "Supervisar todos los fichajes de entrada y salida de la plantilla, verificar las horas de trabajo acumuladas y acceder a la geolocalización de cada jornada.",
         "acceso": "Desde el Panel Principal del Administrador, presionar en la tarjeta 'Gestión de Fichajes'.",
         "botones": [
-            "<b>Selector 'Filtrar por Empleado':</b> Desplegable para consultar los turnos de un trabajador específico o de toda la plantilla conjunta.",
-            "<b>Campos de Fecha ('Inicio' y 'Fin'):</b> Selectores de fecha con icono de calendario adaptativo que se ajusta automáticamente al tema claro u oscuro del dispositivo.",
-            "<b>Botón 'Aplicar Filtros':</b> Refresca la lista de turnos según los criterios seleccionados.",
-            "<b>Botón 'Ver Mapa de Fichaje':</b> Abre la ventana modal interactiva con el visor cartográfico Leaflet.",
-            "<b>Botón Papelera (Rojo):</b> Permite al administrador borrar registros de jornada duplicados o erróneos previa confirmación."
+            "<b>Filtrar por empleado:</b> Permite consultar los turnos de un trabajador o de toda la plantilla.",
+            "<b>Fecha inicio y fin:</b> Selectores de fecha con icono de calendario adaptativo claro y oscuro.",
+            "<b>Aplicar filtros:</b> Refresca la auditoría de turnos según los criterios seleccionados.",
+            "<b>Ver mapa de fichaje:</b> Abre la ventana modal interactiva con el visor Leaflet y chincheta GPS.",
+            "<b>Eliminar fichaje:</b> Permite al administrador borrar registros erróneos previa confirmación."
         ],
         "comportamiento": "Presenta el histórico detallado con tarjetas individuales que muestran el nombre del trabajador, proyecto imputado, fecha/hora de entrada, salida, total de horas calculadas y coordenadas GPS."
     },
@@ -623,9 +623,9 @@ SCREENS_DATA = [
         "objetivo": "Inspeccionar visualmente sobre un mapa cartográfico interactivo la ubicación exacta donde el trabajador se encontraba al registrar su entrada.",
         "acceso": "Pulsar el botón 'Ver Mapa de Fichaje' en cualquiera de las tarjetas de fichaje supervisadas.",
         "botones": [
-            "<b>Visor de Mapa Leaflet:</b> Permite desplazarse por el mapa, acercar o alejar el zoom y explorar el callejero oficial de OpenStreetMap.",
-            "<b>Chincheta / Marcador GPS:</b> Señaliza las coordenadas capturadas por el dispositivo y abre un globo informativo con el nombre del empleado y la hora de inicio.",
-            "<b>Botón 'Cerrar' (Cabecera):</b> Cierra el visor de mapa y devuelve al administrador a la auditoría de fichajes."
+            "<b>Mapa Leaflet:</b> Permite zoom y desplazamiento sobre la cartografía oficial OpenStreetMap.",
+            "<b>Marcador GPS:</b> Señaliza la posición exacta y muestra los datos del turno en un globo emergente.",
+            "<b>Cerrar:</b> Cierra el visor de mapa y devuelve a la tabla de fichajes."
         ],
         "comportamiento": "Renderiza en alta definición las teselas cartográficas en tiempo real basándose en la latitud y longitud certificadas por el navegador del empleado en el instante de fichar."
     },
@@ -642,9 +642,9 @@ SCREENS_DATA = [
         "objetivo": "Entorno simplificado y enfocado bajo identidad visual corporativa azul para que el trabajador gestione sus registros diarios y consulte sus horas de forma rápida y sencilla.",
         "acceso": "Iniciar sesión con una cuenta de empleado estándar (ej. usuario 'sergio' o 'lucia').",
         "botones": [
-            "<b>Tarjeta 'Registrar Fichaje':</b> Conduce al área de inicio de turnos, gestión de actividades simultáneas en paralelo y finalización de jornada.",
-            "<b>Tarjeta 'Consulta de Fichajes':</b> Conduce al historial personal del empleado para verificar las horas imputadas en cada proyecto.",
-            "<b>Icono 'Cerrar Sesión' (Barra Superior):</b> Ubicado a la derecha para desconectarse de la aplicación de manera segura."
+            "<b>Registrar fichaje:</b> Conduce al área de inicio de turnos y gestión de tareas en paralelo.",
+            "<b>Consulta de fichajes:</b> Da acceso al historial individual de horas y jornadas del trabajador.",
+            "<b>Cerrar sesión:</b> Cierra la sesión activa y retorna a la pantalla de login de forma segura."
         ],
         "comportamiento": "Presenta un saludo personalizado al empleado ('Bienvenido, Sergio Martin') y dos accesos destacados en tarjetas azules para la operativa habitual."
     },
@@ -657,8 +657,8 @@ SCREENS_DATA = [
         "objetivo": "Iniciar el registro de un turno o actividad laboral seleccionando el proyecto deseado y capturando la hora y ubicación del trabajador.",
         "acceso": "Desde el menú principal del empleado, presionar sobre la tarjeta 'Registrar Fichaje'.",
         "botones": [
-            "<b>Desplegable 'Seleccionar Trabajo':</b> Permite escoger a qué proyecto o tarea se van a imputar las horas del turno que se inicia.",
-            "<b>Botón Azul 'Fichar Entrada':</b> Registra la entrada en el sistema, captura la posición GPS y genera inmediatamente la tarjeta de turno activo debajo."
+            "<b>Seleccionar trabajo:</b> Permite escoger el proyecto al que se imputarán las horas del turno.",
+            "<b>Fichar entrada:</b> Registra la hora, captura el GPS y genera la tarjeta activa debajo."
         ],
         "comportamiento": "La tarjeta superior 'Nueva Jornada / Tarea' permanece siempre activa y visible en la parte superior. Nunca se bloquea para que el empleado pueda iniciar tareas adicionales si desempeña varias funciones en su jornada."
     },
@@ -671,8 +671,8 @@ SCREENS_DATA = [
         "objetivo": "Ofrecer confirmación visual al trabajador del turno que mantiene abierto, mostrando los detalles de la tarea y el control para finalizarlo cuando concluya.",
         "acceso": "Pulsar el botón 'Fichar Entrada' tras seleccionar una actividad en la tarjeta superior.",
         "botones": [
-            "<b>Tarjeta 'Fichaje en Curso':</b> Muestra el subtítulo azul, la insignia amarilla 'En Curso', el nombre de la tarea y la hora exacta de inicio.",
-            "<b>Botón Rojo 'Finalizar Fichaje':</b> Permite concluir la jornada o actividad de ese turno específico en el momento que el empleado termine la tarea."
+            "<b>Fichaje en curso:</b> Muestra el estado activo, el proyecto asignado y la hora de inicio.",
+            "<b>Finalizar fichaje:</b> Concluye la actividad del turno específico y registra la hora de salida."
         ],
         "comportamiento": "Aparece de forma inmediata (0 ms) justo debajo de la tarjeta superior de inicio, homologando exactamente sus dimensiones, bordes redondeados y estilo visual para ofrecer máxima coherencia estética."
     },
@@ -685,8 +685,8 @@ SCREENS_DATA = [
         "objetivo": "Permitir al empleado registrar y mantener abiertos dos o más turnos de trabajo de forma simultánea en paralelo, ideal para jornadas donde se compaginan múltiples proyectos a la vez.",
         "acceso": "Con un turno ya abierto, seleccionar otra tarea diferente en la tarjeta superior y pulsar nuevamente 'Fichar Entrada'.",
         "botones": [
-            "<b>Contador de Turnos Activos:</b> En la cabecera se indica dinámicamente el número de tareas abiertas (ej. '2 activos').",
-            "<b>Tarjetas Independientes:</b> Cada turno en curso cuenta con su propio recuadro, sus datos específicos y su propio botón rojo 'Finalizar Fichaje' individual."
+            "<b>Contador de activos:</b> Indica dinámicamente el número total de turnos abiertos en paralelo.",
+            "<b>Turnos independientes:</b> Cada tarea dispone de sus propios datos y su propio botón de finalización."
         ],
         "comportamiento": "El sistema computa de forma paralela e independiente el tiempo de cada actividad. El empleado puede cerrar una de las tareas en cualquier momento sin afectar en absoluto a las demás."
     },
@@ -699,8 +699,8 @@ SCREENS_DATA = [
         "objetivo": "Cerrar un turno de trabajo activo, registrar la hora de salida, calcular el total de horas empleadas y certificar la operación ante el usuario.",
         "acceso": "Hacer clic o pulsar sobre el botón rojo 'Finalizar Fichaje' en la tarjeta de la tarea que se desea concluir.",
         "botones": [
-            "<b>Notificación Toast Verde:</b> Aparece en la parte inferior informando 'El fichaje ha finalizado para: [Nombre de la Tarea]'.",
-            "<b>Eliminación Instantánea del Recuadro:</b> La tarjeta del turno cerrado se borra de la vista en 0 milisegundos."
+            "<b>Aviso de finalización:</b> Notificación emergente verde confirmando el cierre de la jornada.",
+            "<b>Cierre de recuadro:</b> El turno finalizado se retira de la vista de forma inmediata."
         ],
         "comportamiento": "Al finalizar, el registro se consolida en el historial personal con la fecha y hora de salida y el cómputo de horas trabajadas. Si el empleado tenía otros turnos abiertos en paralelo, estos permanecen activos sin alteración."
     },
@@ -713,8 +713,8 @@ SCREENS_DATA = [
         "objetivo": "Permitir al trabajador revisar todas sus jornadas anteriores, verificar las horas computadas y filtrar por rangos de fechas específicos.",
         "acceso": "Desde el portal principal del empleado, hacer clic sobre la tarjeta 'Consulta de Fichajes'.",
         "botones": [
-            "<b>Filtros de Fecha ('Fecha Inicio' y 'Fecha Fin'):</b> Permiten acotar la búsqueda temporal. Incorporan iconos de calendario adaptativos que se muestran en blanco sobre fondos oscuros y en negro sobre fondos claros.",
-            "<b>Tarjetas de Historial:</b> Detallan el nombre del proyecto, fecha/hora de entrada, salida y total de horas calculadas de forma automática."
+            "<b>Filtros de fecha:</b> Acotan la búsqueda cronológica mediante selector adaptativo claro y oscuro.",
+            "<b>Historial de jornadas:</b> Muestra entrada, salida, proyecto y total de horas calculadas."
         ],
         "comportamiento": "Presenta el histórico ordenado cronológicamente con indicadores de estado ('Completado' o 'Abierto') para facilitar el autocontrol horario del empleado."
     },
@@ -727,8 +727,8 @@ SCREENS_DATA = [
         "objetivo": "Cerrar la sesión de trabajo destruyendo de forma segura los datos de acceso temporal para proteger la privacidad en dispositivos compartidos de la empresa.",
         "acceso": "Presionar el botón con el icono de salida situado en la esquina superior derecha de cualquier barra de navegación.",
         "botones": [
-            "<b>Icono 'Cerrar Sesión' (Cabecera):</b> Limpia de inmediato la memoria de sesión activa del navegador.",
-            "<b>Retorno Limpio a Pantalla Inicial:</b> Devuelve al usuario a la pantalla de acceso sin credenciales retenidas."
+            "<b>Cerrar sesión:</b> Limpia de inmediato la memoria de sesión activa del navegador.",
+            "<b>Retorno al login:</b> Devuelve a la pantalla de acceso limpia sin credenciales retenidas."
         ],
         "comportamiento": "Garantiza que ningún usuario posterior pueda acceder a la cuenta anterior sin volver a introducir la clave correspondiente, preservando la confidencialidad de los datos."
     }
@@ -880,7 +880,14 @@ def split_element(txt):
     m = _EL.match(txt)
     if not m:
         return "", txt
-    return m.group(1).rstrip(":").strip(), m.group(2).strip()
+    name = m.group(1).rstrip(":").strip()
+    desc = m.group(2).strip()
+    name = re.sub(r"\s*\(.*?\)", "", name)
+    name = re.sub(r"^(Campo|Botón(?:\s+\w+)?|Tarjeta|Icono|Desplegable|Selector(?:\s+\w+)?|Fila de|Notificación(?:\s+\w+)?)\s+", "", name, flags=re.I)
+    name = name.replace("'", "").replace('"', '').strip()
+    if name.lower().startswith("de "):
+        name = name[3:].strip()
+    return name, desc
 
 
 def callout(S, kind, text, width=CW):
@@ -975,21 +982,7 @@ def screen_flowables(S, item, idx, total):
     for r in range(2, len(rows), 2):
         st.append(("BACKGROUND", (0, r), (-1, r), C_GRAY_BG))
     t.setStyle(TableStyle(st))
-    out += [t, Spacer(1, 10), callout(S, ckind, ctext), Spacer(1, 8)]
-
-    prev = SCREENS_DATA[idx - 1] if idx > 0 else None
-    nxt = SCREENS_DATA[idx + 1] if idx < total - 1 else None
-
-    def lk(key, txt):
-        return f"<a href='#{key}' color='{hx(C_BLUE)}'>{txt}</a>"
-
-    nav = Table([[P(lk(f"scr_{prev['id']}", f"&laquo; {prev['id']}. Anterior") if prev else "", S["nav_l"]),
-                  P(lk("indice", "Índice de contenidos"), S["nav_c"]),
-                  P(lk(f"scr_{nxt['id']}", f"{nxt['id']}. Siguiente &raquo;") if nxt else "", S["nav_r"])]],
-                colWidths=[170, 175, 170])
-    nav.setStyle(TableStyle([("LINEABOVE", (0, 0), (-1, 0), 0.5, C_BORDER), ("TOPPADDING", (0, 0), (-1, -1), 6),
-                             ("LEFTPADDING", (0, 0), (-1, -1), 0), ("RIGHTPADDING", (0, 0), (-1, -1), 0)]))
-    out.append(nav)
+    out += [t, Spacer(1, 10), callout(S, ckind, ctext)]
     return out
 
 
