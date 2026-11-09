@@ -38,19 +38,24 @@
 
 
 /* Icono de selector de fecha adaptativo al tema claro/oscuro */
-input[type="date"]::-webkit-calendar-picker-indicator {
+input[type="date"]::-webkit-calendar-picker-indicator,
+ion-input[type="date"]::part(native)::-webkit-calendar-picker-indicator {
   cursor: pointer;
   filter: invert(0);
 }
 
 @media (prefers-color-scheme: dark) {
-  input[type="date"]::-webkit-calendar-picker-indicator {
+  input[type="date"]::-webkit-calendar-picker-indicator,
+  ion-input[type="date"]::part(native)::-webkit-calendar-picker-indicator {
     filter: invert(1);
   }
 }
 
 body.dark input[type="date"]::-webkit-calendar-picker-indicator,
 html.dark input[type="date"]::-webkit-calendar-picker-indicator,
-.ion-palette-dark input[type="date"]::-webkit-calendar-picker-indicator {
+.ion-palette-dark input[type="date"]::-webkit-calendar-picker-indicator,
+body.dark ion-input[type="date"]::part(native)::-webkit-calendar-picker-indicator,
+html.dark ion-input[type="date"]::part(native)::-webkit-calendar-picker-indicator,
+.ion-palette-dark ion-input[type="date"]::part(native)::-webkit-calendar-picker-indicator {
   filter: invert(1);
 }

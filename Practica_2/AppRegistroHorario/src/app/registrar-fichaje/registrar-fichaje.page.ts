@@ -95,6 +95,12 @@ export class RegistrarFichajePage implements OnInit {
   }
 
   async registrarEntrada() {
+    if (!this.usuarioActual) {
+      this.cargarUsuario();
+    }
+    if (!this.idTrabajoSeleccionado && this.trabajos && this.trabajos.length > 0) {
+      this.idTrabajoSeleccionado = this.trabajos[0].IdTrabajo;
+    }
     if (!this.usuarioActual || !this.idTrabajoSeleccionado) {
       const t = await this.toastCtrl.create({
         message: 'Por favor, selecciona un trabajo asignado',

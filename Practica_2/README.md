@@ -3,126 +3,124 @@
 
 Proyecto correspondiente a la **Entrega 2 de DISM (Desarrollo de Interfaces para Sistemas Móviles)**.
 
-Se ha diseñado e implementado una solución integral basada en una **Progressive Web App (PWA)** desarrollada con **Ionic Framework** y **Angular**, conectada a una arquitectura de microservicios con **Node.js, Express y MySQL** documentada bajo el estándar **OpenAPI 3.0 (Swagger UI)**.
+Se ha diseñado e implementado una solución integral basada en una **Progressive Web App (PWA)** desarrollada con **Ionic Framework** y **Angular**, conectada a una arquitectura de backend REST con **Node.js, Express y MySQL / SQLite** documentada bajo el estándar **OpenAPI 3.0 (Swagger UI)**.
 
 ---
 
 ## 1. Puesta en Marcha Inmediata (0 Instalaciones)
 
-La solución se entrega completamente compilada y empaquetada con dependencias locales, garantizando su ejecución instantánea en cualquier ordenador con Windows:
+La solución se entrega completamente compilada y empaquetada con sus dependencias en la carpeta de distribución del Escritorio:
 
 1. Accede a la carpeta **`Practica_Compilada`** (ubicada en el Escritorio).
-2. Haz doble clic sobre el archivo ejecutable:
-   👉 **`iniciar_todo.bat`**
-3. El script ejecutará automáticamente la liberación de puertos y arrancará:
-   - **Servidor Backend REST API (Puerto 8080):** `http://localhost:8080/api-docs/` (Swagger UI interactivo).
-   - **Servidor Web PWA (Puerto 8100):** `http://localhost:8100` (Aplicación PWA en vivo).
+2. Haz doble clic sobre el script de inicio:
+   - **`iniciar_todo.bat`**
+3. El script liberará automáticamente los puertos en caso de conflicto y levantará los servicios:
+   - **Servidor Backend REST API (Puerto 8080):** `http://localhost:8080/api-docs/` (Documentación Swagger UI interactiva).
+   - **Servidor Web PWA (Puerto 8100):** `http://localhost:8100` (Aplicación PWA unificada).
 4. El navegador predeterminado se abrirá automáticamente en ambas direcciones.
-5. Para ejecutar la PWA en **modo ventana nativa independiente** (sin barras ni controles de navegador), haz doble clic en **`Abrir_PWA.bat`**.
+5. Para ejecutar la aplicación en **modo ventana nativa independiente** (sin barras de navegación del explorador), haz doble clic en **`Abrir_PWA.bat`**.
 
 ---
 
 ## 2. Control de Acceso y Roles de Usuario
 
-La aplicación cuenta con una **pantalla de inicio de sesión unificada** en tema neutral gris (`#475569`):
+La aplicación cuenta con una **pantalla de autenticación unificada** con identidad visual neutral en escala de grises (`#475569`):
 
 | Rol | Usuario | Contraseña | Identidad Visual | Funcionalidades Principales |
 | :--- | :--- | :--- | :--- | :--- |
-| **Administrador** | `admin` | `admin123` / `adminadmin123` | **Tema Verde** (`#2dd36f`) | Gestión de Usuarios (CRUD), Catálogo de Trabajos (CRUD), Auditoría de Fichajes con filtros de fecha, eliminación y mapas interactivos Leaflet. |
-| **Empleado** | `sergio` | `1234` | **Tema Azul** (`#3880ff`) | Registro de turnos en tiempo real, turnos en paralelo, cierre de jornada y consulta histórica de fichajes con cálculo de horas. |
-| **Empleado** | `lucia` | `1234` | **Tema Azul** (`#3880ff`) | Registro y consulta de turnos de trabajo. |
+| **Administrador** | `admin` | `admin123` / `adminadmin123` | **Tema Verde** (`#2dd36f`) | Gestión de Usuarios (CRUD), Catálogo de Trabajos (CRUD), Auditoría de Fichajes con filtros de fecha adaptativos, borrado de turnos y visor de mapas interactivos Leaflet con chincheta GPS. |
+| **Empleado** | `sergio` | `1234` | **Tema Azul** (`#3880ff`) | Registro de turnos en tiempo real, soporte de turnos simultáneos en paralelo, cierre instantáneo de jornada y consulta de historial con cómputo de horas. |
+| **Empleado** | `lucia` | `1234` | **Tema Azul** (`#3880ff`) | Registro y consulta de turnos de trabajo individuales. |
 
 ---
 
 ## 3. Funcionalidades Detalladas del Sistema
 
 ### A. Portal del Empleado (Tema Azul)
-- **Registrar Fichaje en Tiempo Real:**
-  - **Tarjeta superior de "Nueva Jornada / Tarea":** Siempre disponible y activa para seleccionar el trabajo deseado e iniciar la entrada.
-  - **Soporte de turnos simultáneos en paralelo:** El empleado puede tener varias tareas activas al mismo tiempo.
-  - **Visualización inmediata (0 ms):** Al pulsar "Fichar Entrada", aparece de forma instantánea la tarjeta de turno en curso con las mismas métricas visuales.
-  - **Finalización de turno:** Al pulsar el botón rojo **"Finalizar Fichaje"**, el turno se cierra al instante, se actualiza el historial y se muestra un toast verde de confirmación.
+- **Registro de Jornada y Turnos en Paralelo:**
+  - **Tarjeta superior "Nueva Jornada / Tarea":** Permite seleccionar el proyecto asignado y pulsar "Fichar Entrada". El botón permanece siempre activo para permitir iniciar múltiples tareas consecutivas.
+  - **Tarjetas dinámicas de "Fichaje en Curso":** Al pulsar el botón de entrada, se genera de inmediato (0 ms) un recuadro debajo que homologa exactamente las métricas, bordes y estilos de la tarjeta superior.
+  - **Multitarea en paralelo:** El empleado puede tener abiertos dos o más turnos simultáneamente para proyectos diferentes, mostrando el contador dinámico de fichajes activos.
+  - **Finalización de turno:** Al presionar el botón rojo **"Finalizar Fichaje"** en cualquiera de las tareas en curso, dicho recuadro desaparece instantáneamente y se presenta un aviso toast verde de confirmación.
 - **Consulta de Fichajes:**
-  - Filtro por rango de fechas ("Desde" y "Hasta") con selectores de fecha nativos y adaptativos.
-  - Historial detallado con fecha/hora de entrada, fecha/hora de salida y cómputo de horas trabajadas.
-  - Carga inmediata optimizada con tolerancia a fallos de conexión.
+  - Filtro por rango de fechas ("Fecha Inicio" y "Fecha Fin") con iconos de calendario adaptativos (`filter: invert(0)` en tema claro y `filter: invert(1)` en tema oscuro).
+  - Cálculo automático del total de horas trabajadas y visualización cronológica detallada.
 
 ### B. Panel del Administrador (Tema Verde)
 - **Gestión de Usuarios (CRUD):**
-  - Carga automática e inmediata de la lista completa de usuarios del sistema.
-  - Formulario modal para consultar, editar y dar de alta nuevos usuarios con validación de roles (`admin` o `empleado`).
-  - Botón verde **"Añadir Nuevo Usuario"** ubicado al final del listado dinámico.
-  - Eliminación segura con diálogo modal de confirmación.
+  - Carga inmediata y completa de la lista de usuarios al entrar a la sección.
+  - Ventana modal interactiva para consultar y editar usuarios existentes.
+  - Botón verde **"Añadir Nuevo Usuario"** al pie del listado para dar de alta nuevos empleados o administradores.
+  - Borrado directo con diálogo de confirmación.
 - **Gestión de Trabajos (CRUD):**
-  - Carga instantánea del catálogo de proyectos y tareas asignables.
-  - Botón verde **"Crear Nuevo Trabajo"** al pie de la lista de proyectos.
-  - Modificación y borrado de tareas.
-- **Auditoría Global de Fichajes:**
-  - Visualización de todos los fichajes de la plantilla con distintivos de estado (`Completado` o `Abierto`).
+  - Catálogo de tareas y proyectos disponible de forma instantánea.
+  - Ventana modal para visualizar y actualizar denominaciones y códigos.
+  - Botón verde **"Crear Nuevo Trabajo"** ubicado al final de la lista.
+- **Auditoría Global de Fichajes y Mapa Leaflet:**
   - Filtros avanzados por empleado y rango de fechas.
-  - **Eliminación de fichajes:** Botón rojo para borrar registros obsoletos o erróneos.
-  - **Visor de Mapa Interactivo:** Botón **"Ver Mapa de Fichaje"** que abre un modal con OpenStreetMap y Leaflet posicionando con chincheta las coordenadas GPS de la entrada.
+  - Visualización del estado del turno (`Completado` o `Abierto (<12h)`).
+  - **Botón "Ver Mapa de Fichaje":** Abre una ventana modal emergente con un mapa interactivo de OpenStreetMap renderizado mediante la librería **Leaflet**, posicionando con precisión la chincheta GPS del empleado en el momento del fichaje.
+  - **Eliminación de fichajes:** Botón rojo para eliminar registros directamente desde la interfaz de auditoría.
 
 ---
 
 ## 4. Requisitos Técnicos de PWA (Progressive Web App)
 
-Siguiendo la guía de la asignatura (*Procedimiento para crear una App PWA desde Ionic*):
-
 - **Manifiesto Web (`manifest.webmanifest` / `manifest.json`):**
   - Nombre: `Control Horario` / Nombre corto: `ControlHorario`.
   - Modo de visualización: `standalone`.
-  - Iconos oficiales corporativos en todas las resoluciones reglamentarias (`favicon.png`, `icon-192.png`, `icon-512.png`, `icon-of-app-icon.png`).
+  - Iconos corporativos actualizados en todas las resoluciones reglamentarias (`assets/icons/favicon.png`, `icon-192.png`, `icon-512.png`, `icon-of-app-icon.png`).
 - **Service Worker (`sw.js` y `ngsw-worker.js`):**
   - Registro automático del Service Worker en el ciclo de vida de la aplicación.
-  - Política de caché configurada para actualización inmediata en vivo y compatibilidad sin conexión.
+  - Política de caché configurada sin conflicto con el almacenamiento local de sesión.
 - **Instalabilidad:**
-  - Compatible con el prompt nativo de instalación de Google Chrome, Edge y navegadores móviles Android/iOS.
-  - Lanzador directo `Abrir_PWA.bat` para ejecución en ventana dedicada sin marco web.
+  - Compatible con el prompt de instalación nativo de Google Chrome y Microsoft Edge.
+  - Lanzador de acceso directo `Abrir_PWA.bat` para ejecución en ventana de aplicación dedicada.
 
 ---
 
-## 5. Arquitectura del Backend REST API
+## 5. Catálogo Oficial de Capturas Responsive (470 x 900 px)
 
-El servidor backend está construido con **Node.js, Express y MySQL** (`backend-api/server.js`):
+Todas las pantallas, modales emergentes y estados del sistema han sido capturados a resolución móvil (470 x 900 px con factor de escala 2x) y se encuentran organizados en la subcarpeta **`Capturas_Responsive_470x900`**:
 
-- **Seguridad y ApiKey:** Middleware de validación mediante clave `dism-secret-key-2026`.
-- **Límite duro de tolerancia a fallos (200 ms):** Wrapper con `Promise.race` en `db.js`. Si el servidor MySQL no está iniciado o sufre caídas de socket, el backend conmuta de inmediato (0 ms) a los datos locales en memoria para que la aplicación nunca se quede congelada.
-- **Endpoints principales:**
-  - `POST /api/v1/auth/login`: Autenticación por roles.
-  - `GET / POST / PUT / DELETE /api/v1/usuarios`: Gestión completa de usuarios.
-  - `GET / POST / PUT / DELETE /api/v1/trabajos`: Gestión de proyectos y tareas.
-  - `GET /api/v1/fichajes`: Consulta y auditoría con filtros.
-  - `POST /api/v1/fichajes`: Inicio de turno con GPS.
-  - `PUT /api/v1/fichajes/cerrar/:id`: Cierre de turno y cálculo de horas.
-  - `DELETE /api/v1/fichajes/:id`: Eliminación de registros de fichaje.
-  - `GET /api/v1/fichajes/activos/:idUsuario`: Listado de turnos abiertos en paralelo.
+| N.º | Archivo de Captura | Estado / Pantalla Demostrada |
+| :---: | :--- | :--- |
+| **01** | `01_Login_Inicio.png` | Pantalla de inicio de sesión limpia en escala de grises. |
+| **02** | `02_Login_Error_Contrasena.png` | Aviso toast rojo ante clave errónea y detención inmediata de la barra de carga. |
+| **03** | `03_Login_Exito_Toast.png` | Toast de bienvenida personalizado tras introducir credenciales correctas. |
+| **04** | `04_Panel_Admin_General.png` | Hub de gestión del Administrador con identidad visual verde. |
+| **05** | `05_Admin_Gestion_Usuarios.png` | Listado completo de usuarios y botón inferior "Añadir Nuevo Usuario". |
+| **06** | `06_Admin_Modal_Detalle_Usuario.png` | Ventana modal emergente para inspeccionar y editar los datos del usuario. |
+| **07** | `07_Admin_Modal_Nuevo_Usuario.png` | Ventana modal emergente para dar de alta un nuevo usuario. |
+| **08** | `08_Admin_Gestion_Trabajos.png` | Catálogo de proyectos cargado por defecto y botón inferior "Crear Nuevo Trabajo". |
+| **09** | `09_Admin_Modal_Detalle_Trabajo.png` | Ventana modal emergente con el detalle de la tarea seleccionada. |
+| **10** | `10_Admin_Modal_Nuevo_Trabajo.png` | Ventana modal emergente para crear una nueva actividad o proyecto. |
+| **11** | `11_Admin_Gestion_Fichajes.png` | Auditoría de fichajes con filtros de fecha adaptativos y botón rojo de borrado. |
+| **12** | `12_Admin_Modal_Mapa_Fichaje.png` | Ventana modal emergente con el mapa interactivo Leaflet y chincheta GPS. |
+| **13** | `13_Panel_Empleado_General.png` | Portal principal del Empleado con identidad corporativa azul. |
+| **14** | `14_Empleado_Registrar_Fichaje_Inicial.png` | Pantalla de registro de fichaje con tarjeta superior de Nueva Jornada. |
+| **15** | `15_Empleado_Fichaje_Activo_Unico.png` | Recuadro inferior de turno en curso con métricas homologadas y botón finalizar rojo. |
+| **16** | `16_Empleado_Fichajes_Activos_Paralelo.png` | Demostración de múltiples turnos activos simultáneos en paralelo. |
+| **17** | `17_Empleado_Fichaje_Finalizado_Toast.png` | Cierre de turno: borrado instantáneo del recuadro y confirmación toast verde. |
+| **18** | `18_Empleado_Consulta_Fichajes.png` | Historial individual de jornadas con cálculo de horas y selectores de fecha. |
+| **19** | `19_Cerrar_Sesion_Retorno_Login.png` | Cierre seguro de sesión desde la barra superior y retorno limpio al login. |
+
+📄 **Presentación PDF Oficial:**  
+Dentro del mismo directorio se incluye el documento compilado en formato A4 **`Presentacion_Capturas_PWA.pdf`**, que agrupa las 19 capturas con ficha descriptiva técnica para su exposición o entrega académica.
 
 ---
 
-## 6. Capturas de Pantalla Móviles (Responsive 470 x 900 px)
+## 6. Arquitectura del Backend REST API
 
-Para la presentación del proyecto se ha generado una colección completa de capturas de pantalla automatizadas en resolución móvil nativa de **470 x 900 píxeles**, disponibles en la carpeta:
-📁 **`Capturas_Responsive_470x900/`**
-
-### Documento PDF de Presentación
-Se incluye el archivo listo para imprimir o proyectar:
-📄 **`Capturas_Responsive_470x900/Presentacion_Capturas_PWA.pdf`**
-
-### Relación de Pantallas:
-1. **`01_Login_Inicio.png`**: Pantalla inicial de login con tema neutral gris.
-2. **`02_Login_Error_Contrasena.png`**: Feedback inmediato ante contraseña incorrecta con toast rojo y spinner detenido.
-3. **`03_Login_Exito_Toast.png`**: Notificación de bienvenida personalizada tras login correcto.
-4. **`04_Panel_Admin_General.png`**: Menú principal del Administrador con tema verde.
-5. **`05_Admin_Gestion_Usuarios.png`**: Listado de usuarios con roles y botón inferior "Añadir Nuevo Usuario".
-6. **`06_Admin_Modal_Detalle_Usuario.png`**: Formulario modal de alta/edición de usuario.
-7. **`07_Admin_Gestion_Trabajos.png`**: Catálogo de proyectos y botón inferior "Crear Nuevo Trabajo".
-8. **`08_Admin_Modal_Detalle_Trabajo.png`**: Formulario modal de detalle de trabajo.
-9. **`09_Admin_Gestion_Fichajes.png`**: Panel de auditoría de fichajes con filtros y botón de eliminación.
-10. **`10_Admin_Modal_Mapa_Fichaje.png`**: Modal interactivo de mapa Leaflet con marcador GPS.
-11. **`11_Panel_Empleado_General.png`**: Menú principal del Empleado con tema azul corporativo.
-12. **`12_Empleado_Registrar_Fichaje_Inicial.png`**: Formulario de entrada con selector de tareas y botón activo.
-13. **`13_Empleado_Fichajes_Activos_Paralelo.png`**: Turnos activos en paralelo con métricas visuales homologadas.
-14. **`14_Empleado_Fichaje_Finalizado_Toast.png`**: Confirmación verde tras finalizar turno y borrado inmediato.
-15. **`15_Empleado_Consulta_Fichajes.png`**: Historial de fichajes con selector de fechas adaptativo claro/oscuro.
-16. **`16_Cerrar_Sesion_Retorno_Login.png`**: Cierre de sesión seguro y retorno limpio al inicio.
+- **Servidor Express:** `backend-api/server.js` (Puerto 8080).
+- **Especificación OpenAPI 3.0:** Archivo `backend-api/openapi.yaml` accesible vía navegador en `/api-docs/`.
+- **Persistencia Híbrida y Alta Disponibilidad:** Capa de datos con límite de tolerancia a fallos (`Promise.race` a 200 ms) que conmuta sin interrupciones a la persistencia local en memoria para garantizar que la aplicación nunca se bloquee ante desconexiones de base de datos.
+- **Rutas Principales:**
+  - `POST /api/v1/auth/login`: Autenticación por roles (`admin` / `empleado`).
+  - `GET / POST / PUT / DELETE /api/v1/usuarios`: Mantenimiento de personal.
+  - `GET / POST / PUT / DELETE /api/v1/trabajos`: Mantenimiento de proyectos.
+  - `GET /api/v1/fichajes`: Auditoría y filtrado por usuario o fechas.
+  - `POST /api/v1/fichajes`: Registro de entrada con coordenadas GPS.
+  - `PUT /api/v1/fichajes/cerrar/:id`: Finalización de jornada laboral y cómputo de horas.
+  - `DELETE /api/v1/fichajes/:id`: Eliminación física de registros.
+  - `GET /api/v1/fichajes/activos/:idUsuario`: Consulta de fichajes abiertos en curso.
