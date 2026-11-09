@@ -51,8 +51,7 @@ function createSpaServer(port, staticDir, appName) {
       const ext = path.extname(filePath).toLowerCase();
       const contentType = mimeTypes[ext] || 'application/octet-stream';
 
-      // Forzar 0% de caché y purga total en todos los archivos para actualización en vivo garantizada
-      res.setHeader('Clear-Site-Data', '"cache", "storage"');
+      // Forzar 0% de caché en archivos estáticos sin borrar el almacenamiento local (localStorage de sesión)
       res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0');
       res.setHeader('Pragma', 'no-cache');
       res.setHeader('Expires', '0');

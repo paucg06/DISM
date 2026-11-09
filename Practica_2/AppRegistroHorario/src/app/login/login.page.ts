@@ -42,9 +42,9 @@ export class LoginPage implements OnInit {
     this.api.login(this.usuario, this.clave).subscribe({
       next: async (user: Usuario) => {
         this.cargando = false;
-        // Limpiar cualquier sesión anterior antes de guardar la nueva
-        localStorage.clear();
-        sessionStorage.clear();
+        // Guardar sesión activa en localStorage
+        localStorage.removeItem('auth_user');
+        sessionStorage.removeItem('auth_user');
         localStorage.setItem('auth_user', JSON.stringify(user));
 
         const toast = await this.toastCtrl.create({

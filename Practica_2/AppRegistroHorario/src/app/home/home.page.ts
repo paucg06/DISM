@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -12,7 +12,10 @@ export class HomePage implements OnInit {
   userRole = 'empleado';
   userObj: any = null;
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit() {
     this.cargarDatos();
@@ -28,14 +31,19 @@ export class HomePage implements OnInit {
       this.router.navigate(['/login'], { replaceUrl: true });
       return;
     }
-    this.userObj = JSON.parse(raw);
-    this.userName = this.userObj.Nombre || 'Usuario';
-    this.userRole = (this.userObj.Rol === 'admin' || this.userObj.Usuario === 'admin') ? 'admin' : 'empleado';
+    try {
+      this.userObj = JSON.parse(raw);
+      this.userName = this.userObj.Nombre || 'Usuario';
+      this.userRole = (this.userObj.Rol === 'admin' || this.userObj.Usuario === 'admin') ? 'admin' : 'empleado';
+      this.cdr.detectChanges();
+    } catch {
+      this.router.navigate(['/login'], { replaceUrl: true });
+    }
   }
 
   logout() {
-    localStorage.clear();
-    sessionStorage.clear();
+    localStorage.removeItem('auth_user');
+    sessionStorage.removeItem('auth_user');
     this.userObj = null;
     this.router.navigate(['/login'], { replaceUrl: true });
   }

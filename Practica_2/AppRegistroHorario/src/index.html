@@ -30,31 +30,14 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="ControlHorario" />
 
-  <!-- Control de Caché y Purga Total Inmediata -->
+  <!-- Desregistro de Service Workers antiguos -->
   <script>
-    // 1. Purga de cualquier caché de almacenamiento en navegador
-    if ('caches' in window) {
-      caches.keys().then(function(names) {
-        names.forEach(function(name) { caches.delete(name); });
-      });
-    }
-
-    // 2. Desregistro inmediato de Service Workers antiguos para forzar ejecución en vivo
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.getRegistrations().then(function(registrations) {
         for (var i = 0; i < registrations.length; i++) {
           registrations[i].unregister();
         }
       });
-    }
-
-    // 3. Forzar actualización inmediata si el navegador conserva versión previa en memoria
-    var APP_BUILD_ID = 'build_20261109_v5_live';
-    if (localStorage.getItem('app_build_id') !== APP_BUILD_ID) {
-      localStorage.setItem('app_build_id', APP_BUILD_ID);
-      if (!window.location.search.includes('fresh=')) {
-        window.location.replace(window.location.pathname + '?fresh=' + Date.now());
-      }
     }
   </script>
 </head>
