@@ -2,10 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ApiService, Fichaje, Usuario } from '../services/api';
 import { Router } from '@angular/router';
 
-interface FichajeConDireccion extends Fichaje {
-  direccionPostal?: string;
-}
-
 @Component({
   selector: 'app-consulta-fichajes',
   templateUrl: './consulta-fichajes.page.html',
@@ -14,7 +10,7 @@ interface FichajeConDireccion extends Fichaje {
 })
 export class ConsultaFichajesPage implements OnInit {
   usuarioActual: Usuario | null = null;
-  fichajes: FichajeConDireccion[] = [];
+  fichajes: Fichaje[] = [];
   cargando: boolean = false;
 
   filtroFechaInicio = '';
@@ -50,19 +46,12 @@ export class ConsultaFichajesPage implements OnInit {
     if (!this.cargarUsuario()) return;
     this.cargando = true;
 
-    const safetyTimeout = setTimeout(() => {
-      this.cargando = false;
-    }, 1500);
-
     this.api.getFichajesUsuario(this.usuarioActual!.IdUsuario, this.filtroFechaInicio, this.filtroFechaFin).subscribe({
       next: (data) => {
-        clearTimeout(safetyTimeout);
         this.fichajes = data || [];
         this.cargando = false;
-        this.geocodificarFichajes();
       },
       error: () => {
-        clearTimeout(safetyTimeout);
         this.fichajes = [];
         this.cargando = false;
       }
@@ -73,21 +62,6 @@ export class ConsultaFichajesPage implements OnInit {
     this.filtroFechaInicio = '';
     this.filtroFechaFin = '';
     this.consultar();
-  }
-
-  geocodificarFichajes() {
-    for (const f of this.fichajes) {
-      if (f.GeolocalizacionLatitud && f.GeolocalizacionLongitud) {
-        this.api.getDireccionNominatim(f.GeolocalizacionLatitud, f.GeolocalizacionLongitud).subscribe({
-          next: (res) => {
-            if (res && res.display_name) {
-              f.direccionPostal = res.display_name;
-            }
-          },
-          error: () => {}
-        });
-      }
-    }
   }
 
   logout() {

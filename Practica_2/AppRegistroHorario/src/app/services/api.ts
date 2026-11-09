@@ -42,7 +42,7 @@ export class ApiService {
 
   constructor(private http: HttpClient) {}
 
-  // Autenticación (Login)
+  // Autenticacion (Login)
   login(usuario: string, clave: string): Observable<Usuario> {
     return this.http.post<Usuario>(`${this.basePath}auth/login`, { usuario, clave }, this.httpOptions);
   }
@@ -100,7 +100,11 @@ export class ApiService {
     return this.http.get<Fichaje[]>(url, this.httpOptions);
   }
 
-  // Métodos de Empleado (Fichajes <12h y registro)
+  // Metodos de Empleado (Fichajes activos / en paralelo y registro)
+  getFichajesActivos(idUsuario: number): Observable<Fichaje[]> {
+    return this.http.get<Fichaje[]>(`${this.basePath}fichajes/activos/${idUsuario}`, this.httpOptions);
+  }
+
   getUltimoFichajeActivo(idUsuario: number): Observable<Fichaje | null> {
     return this.http.get<Fichaje | null>(`${this.basePath}fichajes/ultimo-activo/${idUsuario}`, this.httpOptions);
   }
@@ -120,7 +124,7 @@ export class ApiService {
     return this.http.get<Fichaje[]>(url, this.httpOptions);
   }
 
-  // Geocodificación inversa a través del backend proxy (sin errores CORS ni bloqueos)
+  // Geocodificacion inversa a traves del backend proxy
   getDireccionNominatim(lat: number, lon: number): Observable<any> {
     const url = `${this.basePath}reverse-geocode?lat=${lat}&lon=${lon}`;
     return this.http.get(url, this.httpOptions);

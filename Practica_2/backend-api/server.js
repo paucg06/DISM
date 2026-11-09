@@ -326,7 +326,34 @@ app.get('/api/v1/fichajes', async (req, res) => {
   }
 });
 
-// Comprobar si el usuario tiene un fichaje abierto en las últimas 12 horas
+// Listar TODOS los fichajes activos (en curso, sin salida) de un usuario (para fichajes en paralelo)
+app.get('/api/v1/fichajes/activos/:idUsuario', async (req, res) => {
+  const idUsuario = parseInt(req.params.idUsuario);
+  try {
+    if (pool) {
+      try {
+        const sql = `
+          SELECT f.*, u.Nombre AS NombreUsuario, t.Nombre AS NombreTrabajo
+          FROM Fichajes f
+          JOIN Usuarios u ON f.IdUsuario = u.IdUsuario
+          JOIN Trabajos t ON f.IdTrabajo = t.IdTrabajo
+          WHERE f.IdUsuario = ? AND f.FechaHoraSalida IS NULL
+          ORDER BY f.FechaHoraEntrada DESC
+        `;
+        const [rows] = await pool.query(sql, [idUsuario]);
+        return res.json(rows);
+      } catch (e) {}
+    }
+
+    const activos = mockFichajes.filter(f => f.IdUsuario === idUsuario && f.FechaHoraSalida === null);
+    activos.sort((a, b) => new Date(b.FechaHoraEntrada) - new Date(a.FechaHoraEntrada));
+    return res.json(enriquecerFichajes(activos));
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// Comprobar el ultimo fichaje abierto (compatibilidad)
 app.get('/api/v1/fichajes/ultimo-activo/:idUsuario', async (req, res) => {
   const idUsuario = parseInt(req.params.idUsuario);
   try {
@@ -387,16 +414,15 @@ app.post('/api/v1/fichajes', async (req, res) => {
           'INSERT INTO Fichajes (FechaHoraEntrada, IdTrabajo, IdUsuario, GeolocalizacionLatitud, GeolocalizacionLongitud) VALUES (?, ?, ?, ?, ?)',
           [fechaHoraEntrada, IdTrabajo, IdUsuario, lat, lon]
         );
-        return res.status(201).json({
-          IdFichaje: result.insertId,
-          FechaHoraEntrada: fechaHoraEntrada,
-          FechaHoraSalida: null,
-          HorasTrabajadas: null,
-          IdTrabajo,
-          IdUsuario,
-          GeolocalizacionLatitud: lat,
-          GeolocalizacionLongitud: lon
-        });
+        const [rows] = await pool.query(
+          `SELECT f.*, u.Nombre AS NombreUsuario, t.Nombre AS NombreTrabajo
+           FROM Fichajes f
+           JOIN Usuarios u ON f.IdUsuario = u.IdUsuario
+           JOIN Trabajos t ON f.IdTrabajo = t.IdTrabajo
+           WHERE f.IdFichaje = ?`,
+          [result.insertId]
+        );
+        if (rows.length > 0) return res.status(201).json(rows[0]);
       } catch (e) {
         console.warn('[DB] Fallback insert fichaje a mock:', e.message);
       }
@@ -408,19 +434,20 @@ app.post('/api/v1/fichajes', async (req, res) => {
       FechaHoraEntrada: fechaHoraEntrada,
       FechaHoraSalida: null,
       HorasTrabajadas: null,
-      IdTrabajo,
-      IdUsuario,
+      IdTrabajo: Number(IdTrabajo),
+      IdUsuario: Number(IdUsuario),
       GeolocalizacionLatitud: lat,
       GeolocalizacionLongitud: lon
     };
     mockFichajes.unshift(nuevoFichaje);
-    res.status(201).json(nuevoFichaje);
+    const enriched = enriquecerFichajes([nuevoFichaje])[0];
+    res.status(201).json(enriched);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 });
 
-// Cerrar fichaje (Salida y cálculo de HorasTrabajadas)
+// Cerrar fichaje (Salida y calculo de HorasTrabajadas)
 app.put('/api/v1/fichajes/cerrar/:idFichaje', async (req, res) => {
   const idFichaje = parseInt(req.params.idFichaje);
   const pad = (n) => String(n).padStart(2, '0');
@@ -434,11 +461,18 @@ app.put('/api/v1/fichajes/cerrar/:idFichaje', async (req, res) => {
         const [rows] = await pool.query('SELECT FechaHoraEntrada FROM Fichajes WHERE IdFichaje = ?', [idFichaje]);
         if (rows.length > 0) {
           fEntrada = new Date(rows[0].FechaHoraEntrada);
-          const diffMs = new Date(fechaHoraSalida) - fEntrada;
+          const diffMs = Math.max(0, new Date(fechaHoraSalida) - fEntrada);
           const horas = Math.max(1, Math.round(diffMs / (1000 * 60 * 60)));
           await pool.query('UPDATE Fichajes SET FechaHoraSalida = ?, HorasTrabajadas = ? WHERE IdFichaje = ?', [fechaHoraSalida, horas, idFichaje]);
-          const [updated] = await pool.query('SELECT * FROM Fichajes WHERE IdFichaje = ?', [idFichaje]);
-          return res.json(updated[0]);
+          const [updated] = await pool.query(
+            `SELECT f.*, u.Nombre AS NombreUsuario, t.Nombre AS NombreTrabajo
+             FROM Fichajes f
+             JOIN Usuarios u ON f.IdUsuario = u.IdUsuario
+             JOIN Trabajos t ON f.IdTrabajo = t.IdTrabajo
+             WHERE f.IdFichaje = ?`,
+            [idFichaje]
+          );
+          if (updated.length > 0) return res.json(updated[0]);
         }
       } catch (e) {}
     }
@@ -447,13 +481,13 @@ app.put('/api/v1/fichajes/cerrar/:idFichaje', async (req, res) => {
     if (!fichaje) return res.status(404).json({ message: 'Fichaje no encontrado' });
 
     fEntrada = new Date(fichaje.FechaHoraEntrada);
-    const diffMs = new Date(fechaHoraSalida) - fEntrada;
+    const diffMs = Math.max(0, new Date(fechaHoraSalida) - fEntrada);
     const horas = Math.max(1, Math.round(diffMs / (1000 * 60 * 60)));
 
     fichaje.FechaHoraSalida = fechaHoraSalida;
     fichaje.HorasTrabajadas = horas;
 
-    res.json(fichaje);
+    res.json(enriquecerFichajes([fichaje])[0]);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

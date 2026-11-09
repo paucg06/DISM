@@ -79,16 +79,12 @@
               {{ f.FechaHoraSalida ? (f.HorasTrabajadas || 0) + 'h trabajadas' : 'En Curso' }}
             </ion-badge>
           </div>
-          <ion-card-title style="font-size: 17px; margin-top: 4px;">{{ f.FechaHoraEntrada }}</ion-card-title>
+          <ion-card-title style="font-size: 17px; margin-top: 4px;">{{ f.NombreTrabajo }}</ion-card-title>
         </ion-card-header>
         <ion-card-content>
-          <p style="margin: 3px 0;"><b>Salida:</b> {{ f.FechaHoraSalida || 'Pendiente de registrar salida' }}</p>
-          <p style="margin: 3px 0;" *ngIf="f.GeolocalizacionLatitud">
-            <b>Coordenadas:</b> {{ f.GeolocalizacionLatitud }}, {{ f.GeolocalizacionLongitud }}
-          </p>
-          <p style="margin: 3px 0; color: gray;" *ngIf="f.direccionPostal">
-            <b>Dirección:</b> {{ f.direccionPostal }}
-          </p>
+          <p style="margin: 3px 0;"><b>Trabajo:</b> {{ f.NombreTrabajo }}</p>
+          <p style="margin: 3px 0;"><b>Entrada:</b> {{ f.FechaHoraEntrada }}</p>
+          <p style="margin: 3px 0;"><b>Salida:</b> {{ f.FechaHoraSalida || 'Turno en curso' }}</p>
         </ion-card-content>
       </ion-card>
     </div>

@@ -12,15 +12,14 @@ import { Router } from '@angular/router';
 export class RegistrarFichajePage implements OnInit {
   usuarioActual: Usuario | null = null;
   trabajos: Trabajo[] = [];
-  fichajeActivo: Fichaje | null = null;
+  fichajesActivos: Fichaje[] = [];
 
   idTrabajoSeleccionado: number = 1;
   latitud: number = 38.38735;
   longitud: number = -0.51238;
-  direccionGeorreferenciada: string = 'Universidad de Alicante, San Vicente del Raspeig';
 
-  cargando: boolean = false;
   procesandoFichaje: boolean = false;
+  fichajeCerrandoId: number | null = null;
 
   constructor(
     private api: ApiService,
@@ -49,7 +48,7 @@ export class RegistrarFichajePage implements OnInit {
   cargarDatos() {
     if (!this.cargarUsuario()) return;
 
-    // Cargar trabajos
+    // Cargar catálogo de trabajos
     this.api.getTrabajos().subscribe({
       next: (t) => {
         if (t && t.length > 0) {
@@ -62,18 +61,23 @@ export class RegistrarFichajePage implements OnInit {
       error: () => {}
     });
 
-    // Comprobar si hay fichaje activo en < 12 horas
-    this.api.getUltimoFichajeActivo(this.usuarioActual!.IdUsuario).subscribe({
-      next: (f) => {
-        this.fichajeActivo = f;
+    // Cargar fichajes activos en paralelo
+    this.cargarFichajesActivos();
+
+    // Actualizar coordenadas GPS en segundo plano
+    this.obtenerUbicacionGPS();
+  }
+
+  cargarFichajesActivos() {
+    if (!this.usuarioActual) return;
+    this.api.getFichajesActivos(this.usuarioActual.IdUsuario).subscribe({
+      next: (lista) => {
+        this.fichajesActivos = lista || [];
       },
       error: () => {
-        this.fichajeActivo = null;
+        this.fichajesActivos = [];
       }
     });
-
-    // Intentar geolocalización en segundo plano sin bloquear
-    this.obtenerUbicacionGPS();
   }
 
   obtenerUbicacionGPS() {
@@ -82,26 +86,11 @@ export class RegistrarFichajePage implements OnInit {
         (pos) => {
           this.latitud = pos.coords.latitude;
           this.longitud = pos.coords.longitude;
-          this.resolverDireccionNominatim();
         },
-        () => {
-          // Si falla o no hay permiso, se mantienen las coordenadas predeterminadas de la UA
-        },
-        { enableHighAccuracy: false, timeout: 2500 }
+        () => {},
+        { enableHighAccuracy: false, timeout: 2000 }
       );
     }
-  }
-
-  resolverDireccionNominatim() {
-    if (!this.latitud || !this.longitud) return;
-    this.api.getDireccionNominatim(this.latitud, this.longitud).subscribe({
-      next: (res) => {
-        if (res && res.display_name) {
-          this.direccionGeorreferenciada = res.display_name;
-        }
-      },
-      error: () => {}
-    });
   }
 
   async registrarEntrada() {
@@ -126,9 +115,16 @@ export class RegistrarFichajePage implements OnInit {
     this.api.iniciarFichaje(datos).subscribe({
       next: async (nuevo) => {
         this.procesandoFichaje = false;
-        this.fichajeActivo = nuevo;
+        // Asignar nombre del trabajo si viniese vacío
+        if (!nuevo.NombreTrabajo) {
+          const trab = this.trabajos.find(t => t.IdTrabajo === Number(this.idTrabajoSeleccionado));
+          nuevo.NombreTrabajo = trab ? trab.Nombre : `Trabajo #${this.idTrabajoSeleccionado}`;
+        }
+        // Añadir inmediatamente debajo al listado de turnos activos en paralelo
+        this.fichajesActivos.unshift(nuevo);
+
         const toast = await this.toastCtrl.create({
-          message: 'Entrada registrada exitosamente.',
+          message: `Entrada iniciada para: ${nuevo.NombreTrabajo}`,
           duration: 3000,
           color: 'success'
         });
@@ -146,23 +142,23 @@ export class RegistrarFichajePage implements OnInit {
     });
   }
 
-  async registrarSalida() {
-    if (!this.fichajeActivo) return;
-
-    this.procesandoFichaje = true;
-    this.api.cerrarFichaje(this.fichajeActivo.IdFichaje).subscribe({
+  async finalizarFichaje(fichaje: Fichaje) {
+    this.fichajeCerrandoId = fichaje.IdFichaje;
+    this.api.cerrarFichaje(fichaje.IdFichaje).subscribe({
       next: async (cerrado) => {
-        this.procesandoFichaje = false;
-        this.fichajeActivo = null;
+        this.fichajeCerrandoId = null;
+        // Eliminar inmediatamente de la lista visible de turnos en curso
+        this.fichajesActivos = this.fichajesActivos.filter(f => f.IdFichaje !== fichaje.IdFichaje);
+
         const toast = await this.toastCtrl.create({
-          message: `Salida registrada. Horas trabajadas: ${cerrado.HorasTrabajadas || 0}h`,
+          message: `Salida registrada en ${fichaje.NombreTrabajo}. Horas trabajadas: ${cerrado.HorasTrabajadas || 1}h`,
           duration: 3500,
           color: 'success'
         });
         await toast.present();
       },
       error: async (err) => {
-        this.procesandoFichaje = false;
+        this.fichajeCerrandoId = null;
         const toast = await this.toastCtrl.create({
           message: err.error?.message || 'Error al registrar la salida.',
           duration: 3000,

@@ -1,18 +1,18 @@
 const mysql = require('mysql2/promise');
 
-// Configuración de conexión a MySQL
+// Configuración de conexión a MySQL (127.0.0.1 evita latencias de resolución IPv6 en Windows)
 const dbConfig = {
-  host: process.env.DB_HOST || 'localhost',
+  host: process.env.DB_HOST || '127.0.0.1',
   user: process.env.DB_USER || 'root',
   password: process.env.DB_PASSWORD || 'password',
   database: process.env.DB_NAME || 'dism_registro',
   waitForConnections: false,
   connectionLimit: 5,
   queueLimit: 0,
-  connectTimeout: 800
+  connectTimeout: 500
 };
 
-// Datos en memoria como fallback automático instantáneo
+// Datos en memoria como fallback automático instantáneo (0 ms)
 let mockApiKey = [{ idKey: 1, Key: 'dism-secret-key-2026' }];
 
 let mockTrabajos = [
@@ -32,7 +32,6 @@ let mockUsuarios = [
   { IdUsuario: 7, Nombre: 'Maria Lopez', Usuario: 'maria.lopez', Clave: 'user123', Rol: 'empleado' }
 ];
 
-// Generar fecha hoy en formato YYYY-MM-DD
 const pad = (n) => String(n).padStart(2, '0');
 const dHoy = new Date();
 const strHoy = `${dHoy.getFullYear()}-${pad(dHoy.getMonth() + 1)}-${pad(dHoy.getDate())}`;
