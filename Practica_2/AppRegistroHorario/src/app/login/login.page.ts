@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApiService, Usuario } from '../services/api';
 import { ToastController } from '@ionic/angular';
@@ -17,7 +17,8 @@ export class LoginPage implements OnInit {
   constructor(
     private api: ApiService,
     private router: Router,
-    private toastCtrl: ToastController
+    private toastCtrl: ToastController,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {}
@@ -25,6 +26,8 @@ export class LoginPage implements OnInit {
   ionViewWillEnter() {
     this.usuario = '';
     this.clave = '';
+    this.cargando = false;
+    this.cdr.detectChanges();
   }
 
   async onLogin() {
@@ -39,9 +42,13 @@ export class LoginPage implements OnInit {
     }
 
     this.cargando = true;
+    this.cdr.detectChanges();
+
     this.api.login(this.usuario, this.clave).subscribe({
       next: async (user: Usuario) => {
         this.cargando = false;
+        this.cdr.detectChanges();
+
         // Guardar sesión activa en localStorage
         localStorage.removeItem('auth_user');
         sessionStorage.removeItem('auth_user');
@@ -57,7 +64,10 @@ export class LoginPage implements OnInit {
         this.router.navigate(['/home'], { replaceUrl: true });
       },
       error: async (err) => {
+        // Desactivar inmediatamente la carga y forzar actualización en la UI en 0 ms
         this.cargando = false;
+        this.cdr.detectChanges();
+
         const toast = await this.toastCtrl.create({
           message: err.error?.message || 'Usuario o contraseña incorrectos',
           duration: 3000,

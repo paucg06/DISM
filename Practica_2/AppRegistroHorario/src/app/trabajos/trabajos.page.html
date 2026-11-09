@@ -5,9 +5,6 @@
     </ion-buttons>
     <ion-title>Gestión de Trabajos</ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="nuevoTrabajo()" title="Añadir Trabajo">
-        <ion-icon slot="icon-only" name="add-circle-outline"></ion-icon>
-      </ion-button>
       <ion-button (click)="logout()" fill="clear" color="light" title="Cerrar sesión">
         <ion-icon slot="icon-only" name="log-out-outline"></ion-icon>
       </ion-button>
@@ -30,11 +27,6 @@
       </ion-button>
     </ion-item>
   </ion-list>
-
-  <ion-button expand="block" color="success" (click)="nuevoTrabajo()" style="margin-top: 20px; height: 46px; font-weight: 600;">
-    <ion-icon slot="start" name="add-outline"></ion-icon>
-    Crear Nuevo Trabajo
-  </ion-button>
 
   <!-- Modal Detalle / Edición / Creación -->
   <ion-modal [isOpen]="mostrarModal" (didDismiss)="cerrarModal()">
