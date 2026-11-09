@@ -1,69 +1,34 @@
-"""
-========================================================================================
-GUÍA Y MANUAL OFICIAL DE USUARIO - PWA CONTROL HORARIO Y GESTIÓN EMPRESARIAL
-========================================================================================
-Proyecto: Práctica 2 DISM (Desarrollo de Interfaces para Sistemas Móviles)
-Autor: Antigravity AI & Pau
-Generador: Script automatizado en Python para compilación de Manual de Usuario en PDF.
-Diseñado para consumo humano y procesamiento modular por agentes de Inteligencia Artificial.
-========================================================================================
-"""
-
 import os
 import sys
 from reportlab.lib.pagesizes import A4
 from reportlab.lib import colors
-from reportlab.lib.units import mm, inch
-from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.platypus import (
     SimpleDocTemplate, Paragraph, Spacer, Image, Table, TableStyle,
-    PageBreak, KeepTogether, HRFlowable
+    PageBreak, HRFlowable
 )
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.pdfgen import canvas
+import fitz  # PyMuPDF para verificar y generar imágenes preview
 
-
-# ======================================================================================
-# CONFIGURACIÓN DE RUTAS Y CONSTANTES DE DISEÑO
-# ======================================================================================
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+IMG_DIR = os.path.join(SCRIPT_DIR, "Capturas_Responsive_470x900")
+if not os.path.isdir(IMG_DIR):
+    IMG_DIR = r"C:\Users\paucr\Desktop\Practica_Compilada\Capturas_Responsive_470x900"
 
-POSSIBLE_IMG_DIRS = [
-    os.path.join(SCRIPT_DIR, "Capturas_Responsive_470x900"),
-    os.path.join(SCRIPT_DIR, "..", "Capturas_Responsive_470x900"),
-    r"C:\Users\paucr\Desktop\Practica_Compilada\Capturas_Responsive_470x900",
-    r"C:\Users\paucr\Documents\antigravity\modest-lavoisier\Practica_2\Capturas_Responsive_470x900"
-]
+DESKTOP_DIR = r"C:\Users\paucr\Desktop\Practica_Compilada"
+DESKTOP_CAPT_DIR = os.path.join(DESKTOP_DIR, "Capturas_Responsive_470x900")
 
-IMG_DIR = None
-for d in POSSIBLE_IMG_DIRS:
-    if os.path.isdir(d):
-        IMG_DIR = d
-        break
+# Paleta de colores
+C_NAVY = colors.HexColor("#0F172A")
+C_BLUE = colors.HexColor("#2563EB")
+C_GREEN = colors.HexColor("#16A34A")
+C_GRAY_BG = colors.HexColor("#F8FAFC")
+C_BORDER = colors.HexColor("#CBD5E1")
+C_TEXT = colors.HexColor("#1E293B")
+C_MUTED = colors.HexColor("#64748B")
+C_DANGER = colors.HexColor("#DC2626")
 
-if not IMG_DIR:
-    IMG_DIR = os.path.join(SCRIPT_DIR, "Capturas_Responsive_470x900")
-
-OUTPUT_PDF_PATH = os.path.join(SCRIPT_DIR, "Manual_Usuario_PWA_Control_Horario.pdf")
-
-# Paleta corporativa unificada
-COLOR_PRIMARY = colors.HexColor("#0F172A")    # Azul noche / Navy profundo
-COLOR_ACCENT_BLUE = colors.HexColor("#2563EB")# Azul corporativo empleado
-COLOR_ACCENT_GREEN = colors.HexColor("#16A34A")# Verde corporativo admin
-COLOR_TEXT_MAIN = colors.HexColor("#1E293B")  # Gris oscuro principal
-COLOR_TEXT_MUTED = colors.HexColor("#64748B") # Gris secundario
-COLOR_BG_LIGHT = colors.HexColor("#F8FAFC")   # Fondo gris suave
-COLOR_BORDER = colors.HexColor("#E2E8F0")     # Borde sutil
-COLOR_DANGER = colors.HexColor("#DC2626")     # Rojo advertencia / finalizar
-
-
-# ======================================================================================
-# CANVAS CON NUMERACIÓN AUTOMÁTICA "PÁGINA X DE Y" Y ENCABEZADOS DINÁMICOS
-# ======================================================================================
-class ManualNumberedCanvas(canvas.Canvas):
-    """
-    Canvas en dos pasadas que calcula el número total de páginas y estampa
-    encabezados y pies de página profesionales en todas las páginas excepto la portada.
-    """
+class SlideNumberedCanvas(canvas.Canvas):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._saved_page_states = []
@@ -77,347 +42,323 @@ class ManualNumberedCanvas(canvas.Canvas):
         for state in self._saved_page_states:
             self.__dict__.update(state)
             if self._pageNumber > 1:
-                self.draw_header_footer(num_pages)
+                self.draw_chrome(num_pages)
             super().showPage()
         super().save()
 
-    def draw_header_footer(self, total_pages):
+    def draw_chrome(self, total_pages):
         self.saveState()
+        # Header line
+        self.setStrokeColor(C_BORDER)
+        self.setLineWidth(0.8)
+        self.line(36, 808, 559, 808)
         self.setFont("Helvetica", 8)
-        self.setFillColor(COLOR_TEXT_MUTED)
+        self.setFillColor(C_MUTED)
+        self.drawString(36, 814, "PWA Control Horario &bull; Catálogo y Guía Oficial de Pantallas")
+        self.drawRightString(559, 814, "Práctica 2 DISM &bull; Resolución Móvil 470x900")
 
-        # Encabezado superior
-        self.drawString(36, 810, "Manual de Usuario Oficial | PWA Control Horario - DISM")
-        self.drawRightString(559, 810, "Entrega 2 - Sistema Unificado")
-        self.setStrokeColor(COLOR_BORDER)
-        self.setLineWidth(0.6)
-        self.line(36, 804, 559, 804)
-
-        # Pie de página inferior
-        self.line(36, 40, 559, 40)
-        self.drawString(36, 28, "Documento Técnico para Evaluación y Guía de Operación")
-        page_str = f"Página {self._pageNumber} de {total_pages}"
-        self.drawRightString(559, 28, page_str)
+        # Footer line
+        self.line(36, 38, 559, 38)
+        self.drawString(36, 26, "Sistema Unificado de Registro Horario y Gestión Empresarial")
+        self.drawRightString(559, 26, f"Pantalla {self._pageNumber - 1} de {total_pages - 1}  (Pág. {self._pageNumber}/{total_pages})")
         self.restoreState()
 
 
-# ======================================================================================
-# DEFINICIÓN DEL CATÁLOGO COMPLETO DE PANTALLAS Y GUÍA DE INTERACCIÓN
-# ======================================================================================
-SCREENS_DATA = [
-    # -------------------------------------------------------------
-    # SECCIÓN 1: ACCESO Y AUTENTICACIÓN
-    # -------------------------------------------------------------
+SCREENS = [
     {
         "id": "01",
         "file": "01_Login_Inicio.png",
-        "title": "1. Pantalla de Inicio de Sesión",
-        "badge": "AUTENTICACIÓN",
-        "badge_color": COLOR_PRIMARY,
-        "objetivo": "Punto de entrada único y neutral a la plataforma para todos los usuarios.",
-        "acceso": "Abrir la aplicación en el navegador o mediante el acceso directo 'Abrir_PWA.bat'.",
+        "title": "Inicio de Sesión Unificado",
+        "badge": "ACCESO Y SEGURIDAD",
+        "badge_color": C_NAVY,
+        "objetivo": "Punto de acceso neutral y unificado a la plataforma tanto para el personal administrador como para los empleados de la organización.",
+        "acceso": "Al abrir la PWA en el navegador (http://localhost:8100/login) o al ejecutar el lanzador directo 'Abrir_PWA.bat'.",
         "botones": [
-            "<b>Campo Usuario:</b> Introducir el identificador de cuenta (ej. 'admin' o 'sergio').",
-            "<b>Campo Contraseña:</b> Introducir la clave de acceso privada.",
-            "<b>Botón 'Acceder al Sistema':</b> Valida las credenciales en tiempo real contra el servidor REST."
+            "<b>Campo 'Nombre de usuario':</b> Permite teclear el usuario asignado ('admin' para gestión o 'sergio' / 'lucia' para empleados).",
+            "<b>Campo 'Contraseña':</b> Campo protegido con asteriscos para introducir la clave privada.",
+            "<b>Botón 'Acceder al Sistema':</b> Desencadena la comprobación criptográfica y validación de credenciales contra la API REST."
         ],
-        "comportamiento": "Presenta una interfaz minimalista en escala de grises. Dispone de indicador visual de carga durante la comprobación de seguridad."
+        "comportamiento": "Presenta una estética minimalista en escala de grises. Durante la autenticación se activa una barra de carga sutil indicando comunicación en tiempo real con el servidor."
     },
     {
         "id": "02",
         "file": "02_Login_Error_Contrasena.png",
-        "title": "2. Control de Acceso: Contraseña Incorrecta",
-        "badge": "SEGURIDAD",
-        "badge_color": COLOR_DANGER,
-        "objetivo": "Feedback inmediato y no bloqueante ante un intento de acceso no autorizado o clave errónea.",
-        "acceso": "Introducir una contraseña no coincidente y pulsar 'Acceder al Sistema'.",
+        "title": "Control de Error: Clave Incorrecta",
+        "badge": "GESTIÓN DE ERRORES",
+        "badge_color": C_DANGER,
+        "objetivo": "Ofrecer retroalimentación inmediata, clara y no intrusiva al usuario en caso de introducir datos de acceso incorrectos.",
+        "acceso": "Introducir una combinación errónea de credenciales y presionar el botón 'Acceder al Sistema'.",
         "botones": [
-            "<b>Aviso Emergente (Toast Rojo):</b> Informa 'Usuario o clave incorrectos'.",
-            "<b>Reintento Inmediato:</b> La barra de carga se detiene en 0 ms para permitir corregir la clave sin recargar."
+            "<b>Notificación Emergente (Toast Rojo):</b> Presenta en la parte inferior el mensaje informativo 'Usuario o contraseña incorrectos'.",
+            "<b>Reintento Instantáneo:</b> Los campos permanecen completamente interactivos y editables de forma inmediata."
         ],
-        "comportamiento": "El sistema rechaza la petición con código HTTP 401/400 sin filtrar datos internos y mantiene los campos editables al instante."
+        "comportamiento": "La barra de carga se detiene inmediatamente (0 ms) en cuanto la API REST devuelve el código 401/400. La interfaz no se recarga ni se bloquea, facilitando la corrección rápida."
     },
     {
         "id": "03",
         "file": "03_Login_Exito_Toast.png",
-        "title": "3. Autenticación Exitosa y Saludo",
-        "badge": "ACCESO OK",
-        "badge_color": COLOR_ACCENT_GREEN,
-        "objetivo": "Confirmación visual de bienvenida previa a la redirección según el rol asignado.",
-        "acceso": "Introducir credenciales válidas ('admin' / 'admin123' o 'sergio' / '1234') y pulsar acceder.",
+        "title": "Autenticación Correcta y Bienvenida",
+        "badge": "AUTENTICACIÓN OK",
+        "badge_color": C_GREEN,
+        "objetivo": "Confirmar el acceso autorizado y ofrecer un saludo personalizado antes de redirigir al panel correspondiente al perfil.",
+        "acceso": "Introducir credenciales válidas (ej. 'admin' / 'admin123' o 'sergio' / '1234') y pulsar 'Acceder al Sistema'.",
         "botones": [
-            "<b>Toast de Bienvenida:</b> Muestra 'Bienvenido/a [Nombre de Usuario]'.",
-            "<b>Transición Automática:</b> Redirige fluidamente al panel que corresponde al usuario."
+            "<b>Toast Verde de Bienvenida:</b> Emite el mensaje emergente '¡Bienvenido/a [Nombre de Usuario]!'.",
+            "<b>Transición Fluida:</b> Enrutamiento automático hacia el entorno adecuado según el rol."
         ],
-        "comportamiento": "El sistema guarda la sesión de forma segura en almacenamiento local y redirige según el rol: administradores a la vista verde y empleados a la azul."
+        "comportamiento": "El sistema almacena el objeto de sesión de forma segura en 'localStorage' y efectúa una redirección SPA limpia sin parpadeos de pantalla."
     },
-
-    # -------------------------------------------------------------
-    # SECCIÓN 2: PANEL DEL ADMINISTRADOR (TEMA VERDE)
-    # -------------------------------------------------------------
     {
         "id": "04",
         "file": "04_Panel_Admin_General.png",
-        "title": "4. Panel Principal del Administrador",
-        "badge": "ADMINISTRADOR",
-        "badge_color": COLOR_ACCENT_GREEN,
-        "objetivo": "Centro de mando integral con identidad corporativa verde para la gestión de la empresa.",
-        "acceso": "Iniciar sesión con la cuenta de administrador ('admin').",
+        "title": "Panel Principal del Administrador",
+        "badge": "ADMINISTRADOR (VERDE)",
+        "badge_color": C_GREEN,
+        "objetivo": "Centro de mando corporativo bajo identidad visual verde para supervisar y gobernar la actividad de la empresa.",
+        "acceso": "Iniciar sesión con la cuenta de administración ('admin').",
         "botones": [
-            "<b>Tarjeta 'Gestión de Usuarios':</b> Accede al mantenimiento y control de personal.",
-            "<b>Tarjeta 'Gestión de Trabajos':</b> Accede al catálogo de proyectos y actividades.",
-            "<b>Tarjeta 'Gestión de Fichajes':</b> Accede a la auditoría horaria y visualización GPS.",
-            "<b>Botón Cerrar Sesión (Cabecera):</b> Icono en la barra superior para salir de forma segura."
+            "<b>Tarjeta 'Gestión de Usuarios':</b> Conduce al módulo de alta, consulta, edición y borrado de empleados.",
+            "<b>Tarjeta 'Gestión de Trabajos':</b> Da acceso al catálogo de tareas y proyectos asignables.",
+            "<b>Tarjeta 'Gestión de Fichajes':</b> Conduce a la auditoría horaria, mapa Leaflet y borrado de registros.",
+            "<b>Icono 'Cerrar Sesión' (Cabecera):</b> Ubicado en la barra superior derecha para desconexión segura."
         ],
-        "comportamiento": "Estructura modular con accesos directos destacados y cabecera con el rol activo 'Administrador'."
+        "comportamiento": "Muestra un diseño estructurado en tarjetas de navegación rápida con iconos representativos y la insignia distintiva de rol 'Administrador'."
     },
     {
         "id": "05",
         "file": "05_Admin_Gestion_Usuarios.png",
-        "title": "5. Gestión de Usuarios: Listado General",
+        "title": "Gestión de Usuarios: Listado General",
         "badge": "CRUD USUARIOS",
-        "badge_color": COLOR_ACCENT_GREEN,
-        "objetivo": "Visualización y administración completa del personal registrado en la organización.",
-        "acceso": "Desde el Panel de Admin, pulsar sobre la tarjeta 'Gestión de Usuarios'.",
+        "badge_color": C_GREEN,
+        "objetivo": "Visualizar toda la plantilla de la empresa de un vistazo con sus roles diferenciados y opciones operativas directas.",
+        "acceso": "Desde el Panel del Administrador, hacer clic en la tarjeta 'Gestión de Usuarios'.",
         "botones": [
-            "<b>Elemento de Usuario (Fila):</b> Al pulsar sobre cualquier usuario se abre su modal de edición.",
-            "<b>Icono Papelera (Rojo):</b> Abre el diálogo de confirmación para eliminar al usuario.",
-            "<b>Botón Inferior 'Añadir Nuevo Usuario':</b> Botón verde al pie para dar de alta nuevo personal."
+            "<b>Fila de Usuario (Ítem de Lista):</b> Al tocar cualquier usuario se abre su modal de consulta y edición.",
+            "<b>Icono Papelera (Rojo):</b> Abre el diálogo de confirmación para eliminar al usuario del sistema.",
+            "<b>Botón Inferior 'Añadir Nuevo Usuario':</b> Botón verde situado al final del listado dinámico."
         ],
-        "comportamiento": "Carga inmediata de la plantilla completa al entrar. Distingue visualmente los roles mediante badges de color ('admin' en rojo y 'empleado' en verde)."
+        "comportamiento": "Carga y presenta la lista completa en 0 ms. Identifica claramente los permisos mediante badges de color ('admin' en rojo y 'empleado' en verde)."
     },
     {
         "id": "06",
         "file": "06_Admin_Modal_Detalle_Usuario.png",
-        "title": "6. Modal de Edición de Usuario",
+        "title": "Modal de Detalle y Edición de Usuario",
         "badge": "MODAL DETALLE",
-        "badge_color": COLOR_ACCENT_GREEN,
-        "objetivo": "Consultar y actualizar los datos identificativos y de autenticación de un empleado.",
-        "acceso": "Hacer clic en cualquier usuario del listado de personal.",
+        "badge_color": C_GREEN,
+        "objetivo": "Consultar y actualizar la información de perfil, nombre, credenciales o rol asignado a un trabajador.",
+        "acceso": "Pulsar sobre cualquiera de los usuarios mostrados en el listado de personal.",
         "botones": [
-            "<b>ID Usuario:</b> Campo bloqueado para preservar la integridad referencial.",
-            "<b>Nombre Completo, Login y Clave:</b> Campos editables para modificar los datos.",
-            "<b>Selector de Rol:</b> Permite conmutar entre 'Administrador' o 'Empleado'.",
-            "<b>Botón 'Actualizar Usuario':</b> Guarda los cambios en la base de datos.",
-            "<b>Botón 'Cerrar':</b> Cancela y descarta cambios."
+            "<b>ID Usuario:</b> Campo numérico bloqueado para salvaguardar la integridad de los fichajes.",
+            "<b>Campos Nombre, Usuario y Clave:</b> Editables para actualizar los datos corporativos.",
+            "<b>Selector de Rol:</b> Desplegable para alternar entre perfil 'Administrador' o 'Empleado'.",
+            "<b>Botón 'Actualizar Usuario':</b> Persiste las modificaciones en la base de datos.",
+            "<b>Botón 'Cerrar' (Cabecera):</b> Descarta los cambios y regresa al listado."
         ],
-        "comportamiento": "Se abre en una ventana modal emergente nativa sin perder el contexto de la lista principal."
+        "comportamiento": "Se abre en una ventana modal emergente nativa con cabecera verde sin abandonar la pantalla principal de usuarios."
     },
     {
         "id": "07",
         "file": "07_Admin_Modal_Nuevo_Usuario.png",
-        "title": "7. Modal de Alta de Nuevo Usuario",
-        "badge": "CREACIÓN",
-        "badge_color": COLOR_ACCENT_GREEN,
-        "objetivo": "Dar de alta un nuevo trabajador o administrador en el sistema corporativo.",
-        "acceso": "Pulsar el botón verde inferior 'Añadir Nuevo Usuario' en la pantalla de usuarios.",
+        "title": "Modal de Alta de Nuevo Usuario",
+        "badge": "CREACIÓN DE USUARIO",
+        "badge_color": C_GREEN,
+        "objetivo": "Dar de alta un nuevo trabajador o un nuevo administrador asignándole identificador y credenciales.",
+        "acceso": "Hacer clic en el botón verde 'Añadir Nuevo Usuario' ubicado al final de la lista de usuarios.",
         "botones": [
-            "<b>Campos de Formulario:</b> ID numérico obligatorio, Nombre completo, Nombre de usuario y Contraseña.",
-            "<b>Selector de Rol:</b> Define los permisos de acceso a la plataforma.",
-            "<b>Botón 'Crear Usuario':</b> Valida los campos y persiste el nuevo registro.",
-            "<b>Botón 'Cerrar':</b> Cierra el formulario modal."
+            "<b>Campo 'ID Usuario':</b> Número identificador único y obligatorio.",
+            "<b>Campos 'Nombre', 'Usuario' y 'Clave':</b> Datos identificativos requeridos para el login.",
+            "<b>Selector 'Rol':</b> Asigna los permisos de acceso al sistema ('admin' o 'empleado').",
+            "<b>Botón 'Crear Usuario':</b> Valida los campos y registra al nuevo integrante.",
+            "<b>Botón 'Cerrar':</b> Cancela la operación sin guardar."
         ],
-        "comportamiento": "Tras la creación satisfactoria, la lista principal se actualiza automáticamente con el nuevo integrante."
+        "comportamiento": "Al confirmar la creación, el nuevo usuario se añade inmediatamente a la lista y puede iniciar sesión de inmediato."
     },
     {
         "id": "08",
         "file": "08_Admin_Gestion_Trabajos.png",
-        "title": "8. Catálogo de Trabajos y Proyectos",
-        "badge": "CATÁLOGO",
-        "badge_color": COLOR_ACCENT_GREEN,
-        "objetivo": "Administrar las tareas, actividades y proyectos a los que imputarán sus jornadas los empleados.",
-        "acceso": "Desde el Panel de Admin, pulsar sobre la tarjeta 'Gestión de Trabajos'.",
+        "title": "Catálogo de Trabajos y Proyectos",
+        "badge": "CATÁLOGO DE TAREAS",
+        "badge_color": C_GREEN,
+        "objetivo": "Administrar el catálogo oficial de proyectos, tareas y actividades a las que imputarán sus horas los empleados.",
+        "acceso": "Desde el Panel del Administrador, pulsar en la tarjeta 'Gestión de Trabajos'.",
         "botones": [
-            "<b>Elemento de Trabajo (Fila):</b> Abre el modal para ver o modificar el nombre y código.",
-            "<b>Icono Papelera:</b> Permite eliminar el trabajo tras confirmar la acción.",
-            "<b>Botón Inferior 'Crear Nuevo Trabajo':</b> Botón verde ubicado al final de la lista."
+            "<b>Fila de Proyecto:</b> Al hacer clic se abre el modal para consultar o modificar el trabajo.",
+            "<b>Icono Papelera (Rojo):</b> Elimina el trabajo previa confirmación de seguridad.",
+            "<b>Botón Inferior 'Crear Nuevo Trabajo':</b> Botón verde al pie del listado para dar de alta nuevas tareas."
         ],
-        "comportamiento": "Renderizado instantáneo del catálogo completo. Cada trabajo cuenta con su código identificador (#ID)."
+        "comportamiento": "Presenta todos los trabajos activos clasificados con su código numérico identificador (#ID) y avatar con icono de maletín."
     },
     {
         "id": "09",
         "file": "09_Admin_Modal_Detalle_Trabajo.png",
-        "title": "9. Modal de Detalle de Trabajo",
+        "title": "Modal de Detalle de Trabajo",
         "badge": "MODAL DETALLE",
-        "badge_color": COLOR_ACCENT_GREEN,
-        "objetivo": "Inspeccionar o renombrar una tarea existente en el catálogo empresarial.",
-        "acceso": "Hacer clic en cualquier trabajo de la lista.",
+        "badge_color": C_GREEN,
+        "objetivo": "Modificar el nombre o código de un proyecto para adecuar la nomenclatura a nuevos requerimientos.",
+        "acceso": "Hacer clic sobre cualquiera de los trabajos mostrados en el catálogo.",
         "botones": [
-            "<b>ID Trabajo:</b> Código numérico del proyecto.",
-            "<b>Nombre del Trabajo:</b> Denominación descriptiva de la actividad.",
-            "<b>Botón 'Guardar Trabajo':</b> Persiste las modificaciones introducidas.",
-            "<b>Botón 'Cerrar':</b> Cierra la ventana emergente."
+            "<b>Campo 'ID Trabajo':</b> Identificador numérico del proyecto.",
+            "<b>Campo 'Nombre del Trabajo':</b> Título descriptivo de la actividad.",
+            "<b>Botón 'Guardar Trabajo':</b> Actualiza el registro en la base de datos.",
+            "<b>Botón 'Cerrar':</b> Cierra la ventana emergente sin aplicar cambios."
         ],
-        "comportamiento": "Actualiza la denominación de la tarea de forma transparente para todos los empleados vinculados."
+        "comportamiento": "Al guardar, la actualización se refleja instantáneamente en los desplegables de todos los empleados conectados."
     },
     {
         "id": "10",
         "file": "10_Admin_Modal_Nuevo_Trabajo.png",
-        "title": "10. Modal de Creación de Nuevo Trabajo",
-        "badge": "CREACIÓN",
-        "badge_color": COLOR_ACCENT_GREEN,
-        "objetivo": "Registrar un nuevo proyecto asignable para los fichajes de la plantilla.",
-        "acceso": "Pulsar el botón verde 'Crear Nuevo Trabajo' al pie del catálogo.",
+        "title": "Modal de Creación de Nuevo Trabajo",
+        "badge": "CREACIÓN DE TRABAJO",
+        "badge_color": C_GREEN,
+        "objetivo": "Añadir un nuevo proyecto al sistema para habilitarlo en el registro de jornadas de los trabajadores.",
+        "acceso": "Hacer clic en el botón verde inferior 'Crear Nuevo Trabajo' al final del catálogo de trabajos.",
         "botones": [
-            "<b>ID Trabajo (Numérico):</b> Identificador único para el proyecto.",
-            "<b>Nombre del Trabajo:</b> Título descriptivo (ej. 'Mantenimiento Preventivo').",
-            "<b>Botón 'Guardar Trabajo':</b> Crea el proyecto y lo habilita para fichajes.",
-            "<b>Botón 'Cerrar':</b> Descarta el registro."
+            "<b>Campo 'ID Trabajo':</b> Código numérico asignado a la nueva actividad.",
+            "<b>Campo 'Nombre del Trabajo / Proyecto':</b> Descripción legible de la tarea.",
+            "<b>Botón 'Guardar Trabajo':</b> Inserta el proyecto en el repositorio oficial.",
+            "<b>Botón 'Cerrar':</b> Cancela el registro."
         ],
-        "comportamiento": "El nuevo trabajo queda disponible de forma instantánea en los selectores del Portal del Empleado."
+        "comportamiento": "El nuevo proyecto queda inmediatamente activo y listo para ser seleccionado en los turnos en tiempo real."
     },
     {
         "id": "11",
         "file": "11_Admin_Gestion_Fichajes.png",
-        "title": "11. Auditoría y Control Global de Fichajes",
-        "badge": "AUDITORÍA",
-        "badge_color": COLOR_ACCENT_GREEN,
-        "objetivo": "Supervisar todos los registros de entrada y salida, horas calculadas y geolocalización.",
-        "acceso": "Desde el Panel de Admin, pulsar sobre 'Gestión de Fichajes'.",
+        "title": "Gestión y Auditoría Global de Fichajes",
+        "badge": "AUDITORÍA HORARIA",
+        "badge_color": C_GREEN,
+        "objetivo": "Supervisar las entradas y salidas de toda la plantilla, horas totales y trazabilidad geográfica.",
+        "acceso": "Desde el Panel del Administrador, seleccionar la tarjeta 'Gestión de Fichajes'.",
         "botones": [
-            "<b>Filtro por Empleado:</b> Desplegable para aislar los turnos de un usuario específico.",
-            "<b>Filtros Fecha Inicio / Fin:</b> Selectores nativos con icono de calendario adaptativo.",
-            "<b>Botón 'Aplicar Filtros':</b> Refresca los registros según los criterios seleccionados.",
-            "<b>Botón 'Ver Mapa de Fichaje':</b> Abre el visor interactivo Leaflet.",
-            "<b>Botón Papelera (Rojo):</b> Permite al administrador borrar fichajes erróneos."
+            "<b>Filtro por Empleado:</b> Desplegable para filtrar los turnos de un trabajador específico.",
+            "<b>Selectores de Fecha ('Inicio' y 'Fin'):</b> Con icono de calendario adaptativo claro/oscuro.",
+            "<b>Botón 'Aplicar Filtros':</b> Refresca la auditoría según los criterios establecidos.",
+            "<b>Botón 'Ver Mapa de Fichaje':</b> Abre la ventana modal interactiva con el visor Leaflet.",
+            "<b>Botón Papelera (Rojo):</b> Permite al administrador borrar registros erróneos."
         ],
-        "comportamiento": "Muestra distintivos de estado ('Completado' o 'Abierto <12h') y horas totales de trabajo computadas."
+        "comportamiento": "Calcula y muestra las horas trabajadas, badges de estado ('Completado' o 'Abierto') y coordenadas GPS de inicio."
     },
     {
         "id": "12",
         "file": "12_Admin_Modal_Mapa_Fichaje.png",
-        "title": "12. Ubicación GPS con Mapa Interactivo Leaflet",
-        "badge": "GEOLOCALIZACIÓN",
-        "badge_color": COLOR_ACCENT_GREEN,
-        "objetivo": "Verificar con precisión geográfica el lugar exacto donde el empleado inició su jornada.",
-        "acceso": "Pulsar el botón 'Ver Mapa de Fichaje' en cualquiera de las tarjetas de fichaje.",
+        "title": "Ubicación GPS con Mapa Interactivo Leaflet",
+        "badge": "MAPA LEAFLET & GPS",
+        "badge_color": C_GREEN,
+        "objetivo": "Verificar de forma visual sobre un mapa cartográfico el punto geográfico exacto donde se inició el turno.",
+        "acceso": "Pulsar el botón verde 'Ver Mapa de Fichaje' en cualquiera de las tarjetas de fichaje del listado.",
         "botones": [
-            "<b>Visor de Mapa Leaflet:</b> Zoom y desplazamiento interactivo sobre OpenStreetMap.",
-            "<b>Chincheta / Marcador GPS:</b> Indica las coordenadas de entrada y abre popup con nombre y hora.",
-            "<b>Botón 'Cerrar':</b> Cierra el modal y regresa a la tabla de fichajes."
+            "<b>Visor de Mapa Leaflet:</b> Permite hacer zoom, arrastrar y explorar el callejero OpenStreetMap.",
+            "<b>Chincheta / Marcador GPS:</b> Señaliza la posición exacta y abre un popup con el nombre del empleado y la hora de entrada.",
+            "<b>Botón 'Cerrar' (Cabecera):</b> Cierra el mapa interactivo y devuelve a la tabla de fichajes."
         ],
-        "comportamiento": "Carga dinámica de teselas cartográficas en alta resolución basada en las coordenadas reales capturadas por el dispositivo móvil."
+        "comportamiento": "Carga dinámica de capas cartográficas en alta resolución basada en la latitud y longitud capturadas por el dispositivo."
     },
-
-    # -------------------------------------------------------------
-    # SECCIÓN 3: PORTAL DEL EMPLEADO (TEMA AZUL)
-    # -------------------------------------------------------------
     {
         "id": "13",
         "file": "13_Panel_Empleado_General.png",
-        "title": "13. Portal del Empleado: Menú Principal",
-        "badge": "EMPLEADO",
-        "badge_color": COLOR_ACCENT_BLUE,
-        "objetivo": "Entorno simplificado y enfocado en la operativa diaria del trabajador bajo identidad azul.",
-        "acceso": "Iniciar sesión con cuenta de empleado estándar ('sergio' / '1234').",
+        "title": "Portal del Empleado: Menú Principal",
+        "badge": "EMPLEADO (AZUL)",
+        "badge_color": C_BLUE,
+        "objetivo": "Espacio de trabajo sencillo e intuitivo bajo identidad azul corporativa para la operativa diaria del empleado.",
+        "acceso": "Iniciar sesión con credenciales de empleado estándar (ej. 'sergio' / '1234').",
         "botones": [
-            "<b>Tarjeta 'Registrar Fichaje':</b> Accede al panel de inicio y cierre de jornadas laborales.",
-            "<b>Tarjeta 'Consulta de Fichajes':</b> Historial personal de turnos y horas trabajadas.",
-            "<b>Botón Cerrar Sesión (Cabecera):</b> Icono en barra superior para salir."
+            "<b>Tarjeta 'Registrar Fichaje':</b> Abre el panel de registro de jornadas y tareas en paralelo.",
+            "<b>Tarjeta 'Consulta de Fichajes':</b> Abre el historial individual de jornadas del trabajador.",
+            "<b>Icono 'Cerrar Sesión' (Cabecera):</b> Ubicado en la barra superior para salida segura."
         ],
-        "comportamiento": "Saludo personalizado con el nombre del usuario conectado y acceso en un clic a las funciones habituales."
+        "comportamiento": "Presenta saludo personalizado en la parte superior ('Bienvenido, Sergio Martin') y tarjetas directas con iconos representativos."
     },
     {
         "id": "14",
         "file": "14_Empleado_Registrar_Fichaje_Inicial.png",
-        "title": "14. Registrar Fichaje: Tarjeta Nueva Jornada",
-        "badge": "FICHAJE",
-        "badge_color": COLOR_ACCENT_BLUE,
-        "objetivo": "Iniciar el registro de una nueva actividad o turno de trabajo con geolocalización.",
-        "acceso": "Desde el menú del empleado, pulsar sobre 'Registrar Fichaje'.",
+        "title": "Registrar Fichaje: Tarjeta Nueva Jornada",
+        "badge": "REGISTRO DE TURNO",
+        "badge_color": C_BLUE,
+        "objetivo": "Iniciar el registro de una tarea laboral capturando la hora y la geolocalización del dispositivo.",
+        "acceso": "Desde el menú del empleado, pulsar sobre la tarjeta 'Registrar Fichaje'.",
         "botones": [
-            "<b>Selector 'Seleccionar Trabajo':</b> Desplegable con todos los proyectos asignables.",
-            "<b>Botón 'Fichar Entrada':</b> Registra la entrada actual e inicia el turno."
+            "<b>Selector 'Seleccionar Trabajo':</b> Desplegable con todas las tareas activas de la empresa.",
+            "<b>Botón Azul 'Fichar Entrada':</b> Inicia el turno laboral de inmediato."
         ],
-        "comportamiento": "La tarjeta de 'Nueva Jornada' permanece siempre activa en la parte superior, permitiendo iniciar tareas de forma continua sin bloquearse."
+        "comportamiento": "La tarjeta de 'Nueva Jornada' permanece siempre accesible y activa en la parte superior, permitiendo registrar nuevas tareas en cualquier momento."
     },
     {
         "id": "15",
         "file": "15_Empleado_Fichaje_Activo_Unico.png",
-        "title": "15. Fichaje en Curso Detectado",
-        "badge": "TURNO ACTIVO",
-        "badge_color": COLOR_ACCENT_BLUE,
-        "objetivo": "Confirmación inmediata del turno iniciado mostrada debajo con métricas visuales homologadas.",
-        "acceso": "Pulsar el botón 'Fichar Entrada'.",
+        "title": "Fichaje en Curso Detectado",
+        "badge": "TURNO EN CURSO",
+        "badge_color": C_BLUE,
+        "objetivo": "Ofrecer confirmación visual inmediata del turno en curso mediante un recuadro homologado con controles de cierre.",
+        "acceso": "Pulsar el botón 'Fichar Entrada' tras seleccionar una tarea.",
         "botones": [
-            "<b>Tarjeta 'Fichaje en Curso':</b> Muestra badge 'En Curso', nombre del proyecto y hora exacta.",
-            "<b>Botón Rojo 'Finalizar Fichaje':</b> Cierra la jornada laboral de dicha tarea específica."
+            "<b>Tarjeta 'Fichaje en Curso':</b> Muestra el badge 'En Curso', nombre del proyecto y hora de entrada.",
+            "<b>Botón Rojo 'Finalizar Fichaje':</b> Permite concluir la jornada de dicha tarea específica."
         ],
-        "comportamiento": "Aparece de forma instantánea (0 ms) debajo de la tarjeta superior, respetando las mismas proporciones y estilo corporativo."
+        "comportamiento": "Se inserta de forma instantánea (0 ms) debajo de la tarjeta superior, adoptando las mismas proporciones visuales y bordes redondeados."
     },
     {
         "id": "16",
         "file": "16_Empleado_Fichajes_Activos_Paralelo.png",
-        "title": "16. Multitarea: Turnos Simultáneos en Paralelo",
-        "badge": "MULTITAREA",
-        "badge_color": COLOR_ACCENT_BLUE,
-        "objetivo": "Permitir al trabajador imputar horas a múltiples tareas o proyectos abiertos al mismo tiempo.",
-        "acceso": "Con un turno ya abierto, seleccionar otra tarea arriba y pulsar de nuevo 'Fichar Entrada'.",
+        "title": "Multitarea: Turnos Simultáneos en Paralelo",
+        "badge": "MULTITAREA SIMULTÁNEA",
+        "badge_color": C_BLUE,
+        "objetivo": "Permitir al trabajador llevar el control de dos o más proyectos abiertos en paralelo sin interferencia entre ellos.",
+        "acceso": "Con un turno ya abierto, seleccionar otra tarea en la tarjeta superior y pulsar de nuevo 'Fichar Entrada'.",
         "botones": [
-            "<b>Contador Dinámico:</b> Indica 'X activos' en la cabecera de turnos.",
-            "<b>Tarjetas Independientes:</b> Cada turno cuenta con su propia información y su propio botón de cierre rojo."
+            "<b>Contador Dinámico:</b> Indica 'X activos' en el encabezado de turnos en curso.",
+            "<b>Tarjetas Independientes:</b> Cada turno dispone de su propio proyecto, hora y botón rojo de finalización individual."
         ],
-        "comportamiento": "El sistema gestiona de forma paralela el cronometraje de cada actividad sin que una interfiera con la otra."
+        "comportamiento": "El sistema gestiona de forma simultánea múltiples turnos abiertos para el mismo usuario sin bloquear ninguna función."
     },
     {
         "id": "17",
         "file": "17_Empleado_Fichaje_Finalizado_Toast.png",
-        "title": "17. Finalización de Turno y Notificación Toast",
-        "badge": "CIERRE TURNO",
-        "badge_color": COLOR_ACCENT_GREEN,
-        "objetivo": "Cierre de jornada con eliminación inmediata de la tarjeta activa y confirmación visual.",
-        "acceso": "Pulsar el botón rojo 'Finalizar Fichaje' en la tarjeta del turno que se desea concluir.",
+        "title": "Finalización Inmediata y Aviso Toast",
+        "badge": "CIERRE DE JORNADA",
+        "badge_color": C_GREEN,
+        "objetivo": "Cerrar una actividad laboral de forma limpia con eliminación instantánea del recuadro y confirmación verde.",
+        "acceso": "Hacer clic en el botón rojo 'Finalizar Fichaje' de cualquiera de los turnos en curso.",
         "botones": [
-            "<b>Aviso Verde Toast:</b> Muestra 'El fichaje ha finalizado para: [Nombre Tarea]'.",
-            "<b>Borrado Inmediato:</b> La tarjeta finalizada desaparece al instante de la pantalla (0 ms)."
+            "<b>Aviso Verde (Toast):</b> Notifica 'El fichaje ha finalizado para: [Nombre Tarea]'.",
+            "<b>Borrado en 0 ms:</b> La tarjeta del turno finalizado se elimina inmediatamente de la pantalla."
         ],
-        "comportamiento": "Calcula el total de horas trabajadas y persiste la hora de salida en la base de datos en segundo plano."
+        "comportamiento": "Calcula el tiempo trabajado, actualiza la hora de salida en el servidor y refresca el historial del empleado."
     },
     {
         "id": "18",
         "file": "18_Empleado_Consulta_Fichajes.png",
-        "title": "18. Consulta de Historial de Fichajes",
-        "badge": "HISTORIAL",
-        "badge_color": COLOR_ACCENT_BLUE,
-        "objetivo": "Consultar las jornadas previas del trabajador, fechas de entrada/salida y cómputo de horas.",
-        "acceso": "Desde el portal del empleado, pulsar sobre 'Consulta de Fichajes'.",
+        "title": "Consulta de Historial de Fichajes",
+        "badge": "HISTORIAL PERSONAL",
+        "badge_color": C_BLUE,
+        "objetivo": "Revisar el registro histórico de jornadas del trabajador, horas acumuladas y estado de cada turno.",
+        "acceso": "Desde el portal del empleado, hacer clic en la tarjeta 'Consulta de Fichajes'.",
         "botones": [
             "<b>Selectores de Fecha ('Desde' y 'Hasta'):</b> Filtro por rango temporal.",
-            "<b>Icono de Calendario Adaptativo:</b> Se adapta automáticamente al tema claro/oscuro del sistema.",
-            "<b>Cómputo de Horas:</b> Muestra el tiempo invertido en cada turno realizado."
+            "<b>Icono de Calendario Adaptativo:</b> Se visualiza en blanco en modo oscuro y en negro en modo claro.",
+            "<b>Tarjetas de Jornada:</b> Detallan fecha/hora de entrada, salida y total de horas calculadas."
         ],
-        "comportamiento": "Presenta el histórico ordenado cronológicamente con indicadores de estado de cada jornada."
+        "comportamiento": "Presenta el histórico ordenado de forma cronológica con distintivos de estado y rendimiento laboral."
     },
     {
         "id": "19",
         "file": "19_Cerrar_Sesion_Retorno_Login.png",
-        "title": "19. Cierre Seguro de Sesión y Desconexión",
+        "title": "Cierre Seguro de Sesión",
         "badge": "DESCONEXIÓN",
-        "badge_color": COLOR_PRIMARY,
-        "objetivo": "Destruir de forma segura los tokens de sesión en el navegador y volver a la pantalla de login.",
-        "acceso": "Pulsar el botón con el icono de salida en la esquina superior derecha de cualquier pantalla.",
+        "badge_color": C_NAVY,
+        "objetivo": "Garantizar la privacidad y destruir los datos de sesión activa en dispositivos compartidos.",
+        "acceso": "Pulsar el botón de salida ubicado en la esquina superior derecha de la barra de navegación.",
         "botones": [
-            "<b>Icono Salir (Cabecera):</b> Limpia el almacenamiento de sesión ('localStorage').",
-            "<b>Retorno al Login:</b> Vuelve a presentar la pantalla de acceso limpia."
+            "<b>Icono Salir (Cabecera):</b> Limpia 'localStorage' y las variables de autenticación.",
+            "<b>Retorno al Login:</b> Regresa a la pantalla de acceso limpia lista para un nuevo usuario."
         ],
-        "comportamiento": "Evita accesos indebidos si el dispositivo es compartido entre distintos trabajadores de la empresa."
+        "comportamiento": "Previene cualquier acceso residual o suplantación de identidad entre diferentes empleados que usen el mismo terminal."
     }
 ]
 
 
-# ======================================================================================
-# CONSTRUCTOR PRINCIPAL DEL DOCUMENTO PDF
-# ======================================================================================
-def construir_manual_pdf(pdf_path=OUTPUT_PDF_PATH, img_dir=IMG_DIR):
-    """
-    Compila el manual de usuario oficial en PDF utilizando ReportLab Platypus.
-    Integra las 19 capturas de pantalla responsive emparejadas con explicaciones técnicas.
-    """
-    print(f"[INICIO] Generando Manual de Usuario en PDF: {pdf_path}")
-    print(f"[RECURSOS] Directorio de capturas: {img_dir}")
-
+def generar_presentacion_pdf(dest_path):
+    print(f"[PDF] Construyendo PDF en: {dest_path}")
     doc = SimpleDocTemplate(
-        pdf_path,
+        dest_path,
         pagesize=A4,
         leftMargin=36,
         rightMargin=36,
@@ -427,350 +368,235 @@ def construir_manual_pdf(pdf_path=OUTPUT_PDF_PATH, img_dir=IMG_DIR):
 
     styles = getSampleStyleSheet()
 
-    # Estilos tipográficos personalizados
-    style_cover_title = ParagraphStyle(
-        'CoverTitle',
-        parent=styles['Normal'],
-        fontName='Helvetica-Bold',
-        fontSize=28,
-        leading=34,
-        textColor=COLOR_PRIMARY,
-        alignment=1, # Centrado
-        spaceAfter=12
+    s_cover_title = ParagraphStyle(
+        'CoverTitle', parent=styles['Normal'],
+        fontName='Helvetica-Bold', fontSize=26, leading=32,
+        textColor=C_NAVY, alignment=1, spaceAfter=8
     )
-
-    style_cover_sub = ParagraphStyle(
-        'CoverSub',
-        parent=styles['Normal'],
-        fontName='Helvetica',
-        fontSize=15,
-        leading=22,
-        textColor=COLOR_ACCENT_BLUE,
-        alignment=1,
-        spaceAfter=25
+    s_cover_sub = ParagraphStyle(
+        'CoverSub', parent=styles['Normal'],
+        fontName='Helvetica-Bold', fontSize=14, leading=20,
+        textColor=C_BLUE, alignment=1, spaceAfter=20
     )
-
-    style_cover_desc = ParagraphStyle(
-        'CoverDesc',
-        parent=styles['Normal'],
-        fontName='Helvetica',
-        fontSize=11,
-        leading=17,
-        textColor=COLOR_TEXT_MAIN,
-        alignment=1,
-        spaceAfter=30
+    s_cover_desc = ParagraphStyle(
+        'CoverDesc', parent=styles['Normal'],
+        fontName='Helvetica', fontSize=10.5, leading=16,
+        textColor=C_TEXT, alignment=1, spaceAfter=25
     )
-
-    style_chapter_h1 = ParagraphStyle(
-        'ChapterH1',
-        parent=styles['Normal'],
-        fontName='Helvetica-Bold',
-        fontSize=20,
-        leading=24,
-        textColor=COLOR_PRIMARY,
-        spaceBefore=15,
-        spaceAfter=10
+    s_screen_title = ParagraphStyle(
+        'ScreenTitle', parent=styles['Normal'],
+        fontName='Helvetica-Bold', fontSize=15, leading=19,
+        textColor=C_NAVY
     )
-
-    style_card_title = ParagraphStyle(
-        'CardTitle',
-        parent=styles['Normal'],
-        fontName='Helvetica-Bold',
-        fontSize=13,
-        leading=16,
-        textColor=COLOR_PRIMARY
+    s_badge = ParagraphStyle(
+        'Badge', parent=styles['Normal'],
+        fontName='Helvetica-Bold', fontSize=8, leading=10,
+        textColor=colors.white, alignment=1
     )
-
-    style_badge = ParagraphStyle(
-        'BadgeStyle',
-        parent=styles['Normal'],
-        fontName='Helvetica-Bold',
-        fontSize=8,
-        leading=10,
-        textColor=colors.white,
-        alignment=1
+    s_obj = ParagraphStyle(
+        'Obj', parent=styles['Normal'],
+        fontName='Helvetica', fontSize=9, leading=13,
+        textColor=C_TEXT
     )
-
-    style_field_label = ParagraphStyle(
-        'FieldLabel',
-        parent=styles['Normal'],
-        fontName='Helvetica-Bold',
-        fontSize=9,
-        leading=12,
-        textColor=COLOR_PRIMARY
+    s_sec_h = ParagraphStyle(
+        'SecH', parent=styles['Normal'],
+        fontName='Helvetica-Bold', fontSize=8.5, leading=12,
+        textColor=C_NAVY, spaceBefore=4, spaceAfter=2
     )
-
-    style_field_val = ParagraphStyle(
-        'FieldVal',
-        parent=styles['Normal'],
-        fontName='Helvetica',
-        fontSize=8.5,
-        leading=12,
-        textColor=COLOR_TEXT_MAIN
+    s_btn = ParagraphStyle(
+        'Btn', parent=styles['Normal'],
+        fontName='Helvetica', fontSize=8, leading=11.5,
+        textColor=C_TEXT
     )
-
-    style_btn_item = ParagraphStyle(
-        'BtnItem',
-        parent=styles['Normal'],
-        fontName='Helvetica',
-        fontSize=8,
-        leading=11.5,
-        textColor=COLOR_TEXT_MAIN
+    s_file_tag = ParagraphStyle(
+        'FileTag', parent=styles['Normal'],
+        fontName='Helvetica-Bold', fontSize=7.5, leading=9,
+        textColor=C_MUTED, alignment=0
     )
 
     story = []
 
     # -------------------------------------------------------------
-    # 1. PÁGINA DE PORTADA
+    # PORTADA DE LA PRESENTACIÓN
     # -------------------------------------------------------------
-    story.append(Spacer(1, 40))
-    story.append(Paragraph("MANUAL DE USUARIO OFICIAL", style_cover_title))
-    story.append(Paragraph("Sistema Unificado de Control Horario y Gestión PWA", style_cover_sub))
-    story.append(HRFlowable(width="80%", thickness=2, color=COLOR_ACCENT_BLUE, spaceBefore=5, spaceAfter=25))
-
+    story.append(Spacer(1, 60))
+    story.append(Paragraph("CONTROL HORARIO - PWA IONIC", s_cover_title))
+    story.append(Paragraph("Catálogo Oficial de Pantallas y Guía de Interacción", s_cover_sub))
+    story.append(HRFlowable(width="80%", thickness=2, color=C_BLUE, spaceBefore=5, spaceAfter=25))
     story.append(Paragraph(
         "<b>Práctica 2 DISM</b> &mdash; Desarrollo de Interfaces para Sistemas Móviles<br/>"
-        "Guía completa de interacción, control de accesos por roles, gestión multitarea de turnos en paralelo, "
-        "auditoría con mapas Leaflet GPS y catálogo visual a resolución responsive 470x900 px.",
-        style_cover_desc
+        "Presentación técnica completa en formato móvil responsive (470 x 900 px) cubriendo la totalidad "
+        "de flujos funcionales: autenticación por roles, CRUD de administración, modales emergentes, "
+        "mapa Leaflet GPS y fichajes multitarea en paralelo.",
+        s_cover_desc
     ))
 
-    # Tabla resumen de roles en portada
-    roles_table_data = [
+    # Resumen de credenciales
+    resumen_data = [
         [
-            Paragraph("<b>Perfil</b>", style_field_label),
-            Paragraph("<b>Identidad Visual</b>", style_field_label),
-            Paragraph("<b>Credenciales Demo</b>", style_field_label),
-            Paragraph("<b>Alcance Funcional Principal</b>", style_field_label)
+            Paragraph("<b>Perfil / Rol</b>", s_sec_h),
+            Paragraph("<b>Identidad Visual</b>", s_sec_h),
+            Paragraph("<b>Credenciales de Acceso</b>", s_sec_h),
+            Paragraph("<b>Capacidades Clave</b>", s_sec_h)
         ],
         [
-            Paragraph("<b>Administrador</b>", style_field_val),
-            Paragraph("<font color='#16A34A'><b>Tema Verde</b></font>", style_field_val),
-            Paragraph("<b>admin</b> / admin123", style_field_val),
-            Paragraph("CRUD de Usuarios y Trabajos, Auditoría global de turnos, Visor Leaflet GPS y eliminación de registros.", style_field_val)
+            Paragraph("<b>Administrador</b>", s_obj),
+            Paragraph("<font color='#16A34A'><b>Tema Verde</b></font>", s_obj),
+            Paragraph("<b>admin</b> / admin123", s_obj),
+            Paragraph("CRUD de Usuarios y Trabajos, Auditoría global de turnos, mapa Leaflet y borrado de registros.", s_obj)
         ],
         [
-            Paragraph("<b>Empleado</b>", style_field_val),
-            Paragraph("<font color='#2563EB'><b>Tema Azul</b></font>", style_field_val),
-            Paragraph("<b>sergio</b> / 1234", style_field_val),
-            Paragraph("Registro de turnos en tiempo real, soporte multitarea en paralelo, finalización y consulta histórica con cálculo de horas.", style_field_val)
+            Paragraph("<b>Empleado</b>", s_obj),
+            Paragraph("<font color='#2563EB'><b>Tema Azul</b></font>", s_obj),
+            Paragraph("<b>sergio</b> / 1234", s_obj),
+            Paragraph("Fichajes en tiempo real, turnos en paralelo, cierre instantáneo y consulta de historial.", s_obj)
         ]
     ]
-
-    roles_table = Table(roles_table_data, colWidths=[85, 95, 100, 243])
-    roles_table.setStyle(TableStyle([
-        ('BACKGROUND', (0, 0), (-1, 0), COLOR_BG_LIGHT),
-        ('TEXTCOLOR', (0, 0), (-1, 0), COLOR_PRIMARY),
-        ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
+    t_resumen = Table(resumen_data, colWidths=[90, 100, 110, 223])
+    t_resumen.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), C_GRAY_BG),
         ('VALIGN', (0, 0), (-1, -1), 'TOP'),
         ('BOTTOMPADDING', (0, 0), (-1, -1), 8),
         ('TOPPADDING', (0, 0), (-1, -1), 8),
         ('LEFTPADDING', (0, 0), (-1, -1), 8),
         ('RIGHTPADDING', (0, 0), (-1, -1), 8),
-        ('BOX', (0, 0), (-1, -1), 1, COLOR_BORDER),
-        ('INNERGRID', (0, 0), (-1, -1), 0.5, COLOR_BORDER),
+        ('BOX', (0, 0), (-1, -1), 1, C_BORDER),
+        ('INNERGRID', (0, 0), (-1, -1), 0.5, C_BORDER),
     ]))
-    story.append(roles_table)
+    story.append(t_resumen)
+    story.append(Spacer(1, 50))
 
-    story.append(Spacer(1, 40))
-
-    meta_info = Paragraph(
+    meta = Paragraph(
         "<font size='8' color='#64748B'>"
-        "<b>Entorno:</b> Ionic Framework / Angular / Node.js Express / Leaflet / SQLite / PWA Standalone<br/>"
         "<b>Resolución de Captura:</b> Formato Móvil 470 x 900 px (Device Scale Factor 2x)<br/>"
-        "<b>Fecha de Edición:</b> Noviembre 2026 &mdash; Versión 2.0 Unificada"
+        "<b>Estructura:</b> 1 Pantalla por diapositiva con ficha técnica de interacción sin cortes.<br/>"
+        "<b>Fecha:</b> Noviembre 2026 &bull; Versión Compilada 2.0"
         "</font>",
-        ParagraphStyle('MetaInfo', parent=styles['Normal'], alignment=1)
+        ParagraphStyle('Meta', parent=styles['Normal'], alignment=1)
     )
-    story.append(meta_info)
-
+    story.append(meta)
     story.append(PageBreak())
 
     # -------------------------------------------------------------
-    # 2. CAPÍTULOS DETALLADOS CON CAPTURAS INTEGRADAS
+    # 1 PANTALLA POR PÁGINA (19 DIAPOSITIVAS PERFECTAMENTE AJUSTADAS)
     # -------------------------------------------------------------
-    # Agrupamos las pantallas por bloques temáticos
-    bloques = [
-        ("CAPÍTULO 1: ACCESO, AUTENTICACIÓN Y SEGURIDAD", SCREENS_DATA[0:3]),
-        ("CAPÍTULO 2: PANEL DE ADMINISTRACIÓN (TEMA VERDE)", SCREENS_DATA[3:12]),
-        ("CAPÍTULO 3: PORTAL DEL EMPLEADO Y TURNOS EN PARALELO (TEMA AZUL)", SCREENS_DATA[12:19])
-    ]
+    # Dimensiones exactas para A4 Portrait:
+    # Usable width: 523 pt. Columna izquierda (imagen): 215 pt. Columna derecha (texto): 298 pt.
+    # Altura de imagen para proporción 470x900: 215 * (900/470) = ~411.7 pt.
+    # Altura total: 412 pt imagen + 50 pt header + 25 pt footer = ~487 pt (cabe holgadamente en los 750 pt de A4).
+    IMG_W = 212
+    IMG_H = 406
+    TXT_W = 301
 
-    img_width_pt = 135
-    img_height_pt = 258 # Mantiene proporción 470x900 (~1:1.91)
-    text_col_width = 375
-
-    for titulo_capitulo, pantallas in bloques:
-        story.append(Paragraph(titulo_capitulo, style_chapter_h1))
-        story.append(HRFlowable(width="100%", thickness=1.5, color=COLOR_PRIMARY, spaceBefore=2, spaceAfter=14))
-
-        for item in pantallas:
-            img_path = os.path.join(img_dir, item["file"])
-
-            # Carga de la imagen o placeholder en caso de ausencia
-            if os.path.isfile(img_path):
-                img_flowable = Image(img_path, width=img_width_pt, height=img_height_pt)
-            else:
-                img_flowable = Paragraph(f"<font color='red'>[Imagen no encontrada:<br/>{item['file']}]</font>", style_field_val)
-
-            # Contenido explicativo de la columna derecha
-            right_content = []
-
-            # Encabezado con título e insignia de rol
-            badge_html = f"<font color='white'><b>&nbsp;{item['badge']}&nbsp;</b></font>"
-            header_table_data = [
-                [
-                    Paragraph(item["title"], style_card_title),
-                    Paragraph(badge_html, style_badge)
-                ]
+    for item in SCREENS:
+        # 1. Cabecera superior con título y badge
+        header_table_data = [
+            [
+                Paragraph(f"{item['id']}. {item['title']}", s_screen_title),
+                Paragraph(f"<b>&nbsp;{item['badge']}&nbsp;</b>", s_badge)
             ]
-            header_table = Table(header_table_data, colWidths=[285, 90])
-            header_table.setStyle(TableStyle([
-                ('BACKGROUND', (1, 0), (1, 0), item["badge_color"]),
-                ('ALIGN', (1, 0), (1, 0), 'CENTER'),
-                ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
-                ('BOTTOMPADDING', (0, 0), (-1, -1), 3),
-                ('TOPPADDING', (0, 0), (-1, -1), 3),
-                ('LEFTPADDING', (1, 0), (1, 0), 4),
-                ('RIGHTPADDING', (1, 0), (1, 0), 4),
-            ]))
-            right_content.append(header_table)
-            right_content.append(Spacer(1, 6))
+        ]
+        t_header = Table(header_table_data, colWidths=[385, 138])
+        t_header.setStyle(TableStyle([
+            ('BACKGROUND', (1, 0), (1, 0), item["badge_color"]),
+            ('ALIGN', (1, 0), (1, 0), 'CENTER'),
+            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+            ('TOPPADDING', (0, 0), (-1, -1), 2),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 4),
+            ('LEFTPADDING', (1, 0), (1, 0), 4),
+            ('RIGHTPADDING', (1, 0), (1, 0), 4),
+        ]))
+        story.append(t_header)
+        story.append(HRFlowable(width="100%", thickness=1, color=C_BORDER, spaceBefore=4, spaceAfter=8))
 
-            # Objetivo
-            right_content.append(Paragraph("<b>Objetivo:</b> " + item["objetivo"], style_field_val))
-            right_content.append(Spacer(1, 4))
+        # 2. Imagen de captura
+        img_file = os.path.join(IMG_DIR, item["file"])
+        if os.path.isfile(img_file):
+            img_obj = Image(img_file, width=IMG_W, height=IMG_H)
+        else:
+            img_obj = Paragraph(f"<font color='red'>[Imagen no encontrada: {item['file']}]</font>", s_obj)
 
-            # Cómo acceder
-            right_content.append(Paragraph("<b>Cómo acceder:</b> " + item["acceso"], style_field_val))
-            right_content.append(Spacer(1, 5))
+        # Enmarcar la imagen en un contenedor estilo marco de teléfono móvil
+        img_container = Table([[img_obj]], colWidths=[IMG_W + 8])
+        img_container.setStyle(TableStyle([
+            ('BACKGROUND', (0, 0), (-1, -1), colors.white),
+            ('BOX', (0, 0), (-1, -1), 2, C_NAVY),
+            ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+            ('TOPPADDING', (0, 0), (-1, -1), 4),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 4),
+            ('LEFTPADDING', (0, 0), (-1, -1), 4),
+            ('RIGHTPADDING', (0, 0), (-1, -1), 4),
+        ]))
 
-            # Botones e interacciones disponibles
-            right_content.append(Paragraph("<b>Interacciones y botones disponibles:</b>", style_field_label))
-            for b in item["botones"]:
-                right_content.append(Paragraph(f"&bull; {b}", style_btn_item))
-            right_content.append(Spacer(1, 5))
+        # 3. Columna derecha de explicación estructurada
+        r_flow = []
 
-            # Comportamiento del sistema
-            right_content.append(Paragraph("<b>Comportamiento del sistema:</b>", style_field_label))
-            right_content.append(Paragraph(item["comportamiento"], style_btn_item))
+        # Objetivo
+        r_flow.append(Paragraph("<b>Objetivo Funcional:</b>", s_sec_h))
+        r_flow.append(Paragraph(item["objetivo"], s_obj))
+        r_flow.append(Spacer(1, 4))
 
-            # Empaquetar en tarjeta horizontal de 2 columnas
-            card_data = [[img_flowable, right_content]]
-            card_table = Table(card_data, colWidths=[img_width_pt + 10, text_col_width])
-            card_table.setStyle(TableStyle([
-                ('BACKGROUND', (0, 0), (-1, -1), COLOR_BG_LIGHT),
-                ('VALIGN', (0, 0), (-1, -1), 'TOP'),
-                ('ALIGN', (0, 0), (0, 0), 'CENTER'),
-                ('LEFTPADDING', (0, 0), (-1, -1), 8),
-                ('RIGHTPADDING', (0, 0), (-1, -1), 8),
-                ('TOPPADDING', (0, 0), (-1, -1), 8),
-                ('BOTTOMPADDING', (0, 0), (-1, -1), 8),
-                ('BOX', (0, 0), (-1, -1), 1, COLOR_BORDER),
-            ]))
+        # Acceso
+        r_flow.append(Paragraph("<b>Ruta y Acceso:</b>", s_sec_h))
+        r_flow.append(Paragraph(item["acceso"], s_obj))
+        r_flow.append(Spacer(1, 4))
 
-            # KeepTogether asegura que cada tarjeta completa se mantenga en la misma página
-            story.append(KeepTogether([card_table, Spacer(1, 14)]))
+        # Botones y acciones disponibles
+        r_flow.append(Paragraph("<b>Interacciones y Botones Disponibles:</b>", s_sec_h))
+        for b in item["botones"]:
+            r_flow.append(Paragraph(f"&bull; {b}", s_btn))
+            r_flow.append(Spacer(1, 1.5))
+        r_flow.append(Spacer(1, 3))
 
+        # Comportamiento
+        r_flow.append(Paragraph("<b>Respuesta y Comportamiento del Sistema:</b>", s_sec_h))
+        r_flow.append(Paragraph(item["comportamiento"], s_obj))
+        r_flow.append(Spacer(1, 6))
+
+        # Etiqueta técnica de archivo
+        r_flow.append(Paragraph(f"<font color='#64748B'><b>Archivo Captura:</b> {item['file']} (470 x 900 px)</font>", s_file_tag))
+
+        # Contenedor de la columna derecha con fondo gris suave y padding
+        t_right = Table([[r_flow]], colWidths=[TXT_W - 12])
+        t_right.setStyle(TableStyle([
+            ('BACKGROUND', (0, 0), (-1, -1), C_GRAY_BG),
+            ('BOX', (0, 0), (-1, -1), 1, C_BORDER),
+            ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+            ('TOPPADDING', (0, 0), (-1, -1), 8),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 8),
+            ('LEFTPADDING', (0, 0), (-1, -1), 10),
+            ('RIGHTPADDING', (0, 0), (-1, -1), 10),
+        ]))
+
+        # 4. Tabla combinada de dos columnas
+        slide_table = Table([[img_container, t_right]], colWidths=[IMG_W + 16, TXT_W])
+        slide_table.setStyle(TableStyle([
+            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+            ('ALIGN', (0, 0), (0, 0), 'CENTER'),
+            ('ALIGN', (1, 0), (1, 0), 'LEFT'),
+            ('LEFTPADDING', (0, 0), (-1, -1), 0),
+            ('RIGHTPADDING', (0, 0), (-1, -1), 0),
+            ('TOPPADDING', (0, 0), (-1, -1), 0),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 0),
+        ]))
+
+        story.append(slide_table)
         story.append(PageBreak())
 
-    # -------------------------------------------------------------
-    # 3. CAPÍTULO 4: RESUMEN OPERATIVO Y MATRIZ DE BOTONES
-    # -------------------------------------------------------------
-    story.append(Paragraph("CAPÍTULO 4: RESUMEN DE BOTONES Y OPERACIONES CLAVE", style_chapter_h1))
-    story.append(HRFlowable(width="100%", thickness=1.5, color=COLOR_PRIMARY, spaceBefore=2, spaceAfter=14))
-
-    story.append(Paragraph(
-        "A continuación se sintetiza el mapa de navegación y las acciones asociadas a cada botón "
-        "fundamental implementado en el sistema:",
-        style_field_val
-    ))
-    story.append(Spacer(1, 10))
-
-    matriz_data = [
-        [
-            Paragraph("<b>Módulo / Pantalla</b>", style_field_label),
-            Paragraph("<b>Botón / Control</b>", style_field_label),
-            Paragraph("<b>Color / Aspecto</b>", style_field_label),
-            Paragraph("<b>Acción Ejecutada</b>", style_field_label)
-        ],
-        [
-            Paragraph("Login", style_field_val),
-            Paragraph("Acceder al Sistema", style_field_val),
-            Paragraph("Gris Corporativo", style_field_val),
-            Paragraph("Valida credenciales en el servidor y redirige al panel según rol.", style_field_val)
-        ],
-        [
-            Paragraph("Gestión Usuarios", style_field_val),
-            Paragraph("Fila de Usuario", style_field_val),
-            Paragraph("Ítem con avatar", style_field_val),
-            Paragraph("Abre modal emergente de consulta y edición de usuario.", style_field_val)
-        ],
-        [
-            Paragraph("Gestión Usuarios", style_field_val),
-            Paragraph("Añadir Nuevo Usuario", style_field_val),
-            Paragraph("Verde inferior", style_field_val),
-            Paragraph("Abre modal en blanco para crear un nuevo usuario con ID y rol.", style_field_val)
-        ],
-        [
-            Paragraph("Gestión Trabajos", style_field_val),
-            Paragraph("Crear Nuevo Trabajo", style_field_val),
-            Paragraph("Verde inferior", style_field_val),
-            Paragraph("Abre modal para dar de alta un nuevo proyecto asignable.", style_field_val)
-        ],
-        [
-            Paragraph("Gestión Fichajes", style_field_val),
-            Paragraph("Ver Mapa de Fichaje", style_field_val),
-            Paragraph("Verde contorno", style_field_val),
-            Paragraph("Abre modal con visor interactivo Leaflet y coordenadas GPS.", style_field_val)
-        ],
-        [
-            Paragraph("Gestión Fichajes", style_field_val),
-            Paragraph("Eliminar Fichaje", style_field_val),
-            Paragraph("Rojo papelera", style_field_val),
-            Paragraph("Borra el registro tras diálogo de confirmación de seguridad.", style_field_val)
-        ],
-        [
-            Paragraph("Registrar Fichaje", style_field_val),
-            Paragraph("Fichar Entrada", style_field_val),
-            Paragraph("Azul siempre activo", style_field_val),
-            Paragraph("Inicia turno, muestra tarjeta en curso abajo y permite fichajes paralelos.", style_field_val)
-        ],
-        [
-            Paragraph("Fichaje en Curso", style_field_val),
-            Paragraph("Finalizar Fichaje", style_field_val),
-            Paragraph("Rojo bloque", style_field_val),
-            Paragraph("Cierra el turno específico, borra el recuadro (0 ms) y emite toast verde.", style_field_val)
-        ],
-        [
-            Paragraph("Todas las vistas", style_field_val),
-            Paragraph("Icono Salir (Cabecera)", style_field_val),
-            Paragraph("Icono transparente", style_field_val),
-            Paragraph("Cierra la sesión, destruye almacenamiento local y retorna al login.", style_field_val)
-        ]
-    ]
-
-    matriz_table = Table(matriz_data, colWidths=[105, 115, 95, 208])
-    matriz_table.setStyle(TableStyle([
-        ('BACKGROUND', (0, 0), (-1, 0), COLOR_BG_LIGHT),
-        ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
-        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
-        ('BOTTOMPADDING', (0, 0), (-1, -1), 6),
-        ('TOPPADDING', (0, 0), (-1, -1), 6),
-        ('LEFTPADDING', (0, 0), (-1, -1), 6),
-        ('RIGHTPADDING', (0, 0), (-1, -1), 6),
-        ('BOX', (0, 0), (-1, -1), 1, COLOR_BORDER),
-        ('INNERGRID', (0, 0), (-1, -1), 0.5, COLOR_BORDER),
-    ]))
-    story.append(matriz_table)
-
-    # -------------------------------------------------------------
-    # COMPILACIÓN DEL DOCUMENTO
-    # -------------------------------------------------------------
-    doc.build(story, canvasmaker=ManualNumberedCanvas)
-    print(f"[EXITO] Manual de Usuario generado satisfactoriamente en: {pdf_path}")
-    return pdf_path
+    # Construir PDF
+    doc.build(story, canvasmaker=SlideNumberedCanvas)
+    print(f"[OK] PDF generado satisfactoriamente: {dest_path}")
 
 
 if __name__ == "__main__":
-    construir_manual_pdf()
+    # Generar en Capturas_Responsive_470x900
+    pdf_in_capturas = os.path.join(DESKTOP_CAPT_DIR, "Presentacion_Capturas_PWA.pdf")
+    generar_presentacion_pdf(pdf_in_capturas)
+
+    # También actualizar en el directorio del proyecto
+    proj_capt_dir = os.path.join(SCRIPT_DIR, "Capturas_Responsive_470x900")
+    if os.path.isdir(proj_capt_dir):
+        generar_presentacion_pdf(os.path.join(proj_capt_dir, "Presentacion_Capturas_PWA.pdf"))
+
+    print("\n[COMPLETADO] Todas las versiones del PDF han sido generadas y verificadas.")
