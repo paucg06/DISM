@@ -28,6 +28,11 @@
     </ion-item>
   </ion-list>
 
+  <ion-button expand="block" color="success" (click)="nuevoTrabajo()" style="margin-top: 20px; height: 46px; font-weight: 600;">
+    <ion-icon slot="start" name="add-outline"></ion-icon>
+    Crear Nuevo Trabajo
+  </ion-button>
+
   <!-- Modal Detalle / Edición / Creación -->
   <ion-modal [isOpen]="mostrarModal" (didDismiss)="cerrarModal()">
     <ng-template>
