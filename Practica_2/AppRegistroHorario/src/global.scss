@@ -37,35 +37,20 @@
 @import "@ionic/angular/css/palettes/dark.system.css";
 
 
-/* Selectores de fecha siempre con fondo blanco y texto oscuro legible */
-ion-input[type="date"], input[type="date"] {
-  color-scheme: light !important;
-  --color: #0f172a !important;
-  color: #0f172a !important;
-}
-
+/* Icono de selector de fecha adaptativo al tema claro/oscuro */
 input[type="date"]::-webkit-calendar-picker-indicator {
   cursor: pointer;
-  filter: invert(0) !important;
+  filter: invert(0);
 }
 
-.date-selector-item {
-  --background: #ffffff !important;
-  background: #ffffff !important;
-  border-radius: 8px !important;
-  border: 1px solid #cbd5e1 !important;
-  margin-top: 4px !important;
-  color-scheme: light !important;
-
-  ion-label {
-    color: #334155 !important;
-    font-weight: 600 !important;
+@media (prefers-color-scheme: dark) {
+  input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
   }
+}
 
-  ion-input {
-    --color: #0f172a !important;
-    color: #0f172a !important;
-    color-scheme: light !important;
-    font-weight: 500 !important;
-  }
+body.dark input[type="date"]::-webkit-calendar-picker-indicator,
+html.dark input[type="date"]::-webkit-calendar-picker-indicator,
+.ion-palette-dark input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
 }
