@@ -52,7 +52,7 @@ DESKTOP_CAPT_DIR = os.path.join(DESKTOP_DIR, "Capturas_Responsive_470x900")
 # ----------------------------------------------------------------------------------------
 # METADATOS DEL DOCUMENTO
 # ----------------------------------------------------------------------------------------
-APP_NAME = "Control Horario PWA Ionic"
+APP_NAME = "Control Horario"
 DOC_TITLE = "Manual de Usuario"
 AUTHOR = "Pau Cremades García"
 SUBJECT = "DISM — Dispositivos e Infraestructuras de Sistemas Multimedia"
@@ -263,7 +263,7 @@ class NumberedCanvas(canvas.Canvas):
         self.setLineWidth(0.6)
         self.setFillColor(C_NAVY)
         self.setFont("Helvetica-Bold", 8)
-        self.drawString(MX, 806, "CONTROL HORARIO PWA IONIC")
+        self.drawString(MX, 806, "CONTROL HORARIO")
         self.setFillColor(C_MUTED)
         self.setFont("Helvetica", 8)
         self.drawRightString(PAGE_W - MX, 806, self.section_name)
@@ -273,7 +273,7 @@ class NumberedCanvas(canvas.Canvas):
         self.line(MX, 42, PAGE_W - MX, 42)
         self.setFillColor(C_MUTED)
         self.setFont("Helvetica", 8)
-        self.drawString(MX, 29, f"{DOC_TITLE}  ·  Práctica 2 DISM  ·  {AUTHOR}")
+        self.drawString(MX, 29, f"{DOC_TITLE}  ·  Práctica 2 DISM")
         self.setFillColor(C_NAVY)
         self.setFont("Helvetica-Bold", 8)
         self.drawRightString(PAGE_W - MX, 29, f"Página {self._pageNumber} de {total}")
@@ -409,13 +409,13 @@ class ManualDoc(BaseDocTemplate):
 # PARTES DEL MANUAL
 # ========================================================================================
 PARTS = [
-    {"num": "I", "name": "Acceso y Seguridad", "ids": (1, 3), "bg": "#0F172A", "accent": "#60A5FA",
+    {"num": "1", "name": "Acceso y Seguridad", "ids": (1, 3), "bg": "#0F172A", "accent": "#60A5FA",
      "desc": "Cómo identificarse en la aplicación, qué ocurre cuando las credenciales no son correctas "
              "y cómo se accede de forma segura al entorno de cada perfil."},
-    {"num": "II", "name": "Panel del Administrador", "ids": (4, 12), "bg": "#14532D", "accent": "#86EFAC",
+    {"num": "2", "name": "Panel del Administrador", "ids": (4, 12), "bg": "#14532D", "accent": "#86EFAC",
      "desc": "Herramientas para gestionar el personal, el catálogo de proyectos y la auditoría de fichajes, "
              "incluida la geolocalización de cada jornada."},
-    {"num": "III", "name": "Portal del Empleado", "ids": (13, 19), "bg": "#1E3A8A", "accent": "#93C5FD",
+    {"num": "3", "name": "Portal del Empleado", "ids": (13, 19), "bg": "#1E3A8A", "accent": "#93C5FD",
      "desc": "Operativa diaria del trabajador: registrar entradas, trabajar en varias tareas en paralelo, "
              "finalizar turnos, consultar el historial y cerrar sesión."},
 ]
@@ -935,11 +935,11 @@ def screen_flowables(S, item, idx, total):
     ah = hx(acc)
     part = part_for(sid)
     pasos, (ckind, ctext) = EXTRAS[sid]
-    out = [TocMarker(1, f"{sid}. {item['title']}", f"scr_{sid}", section=f"Parte {part['num']} · {part['name']}")]
+    out = [TocMarker(1, f"{sid}. {item['title']}", f"scr_{sid}", section=f"Parte {part['num']}: {part['name']}")]
 
     head = Table([[P(sid, S["num"]),
                    [P(item["title"], S["screen_title"]),
-                    P(f"Parte {part['num']} · {part['name']}   |   Pantalla {int(sid)} de {total}", S["screen_sub"])],
+                    P(f"Parte {part['num']}: {part['name']}", S["screen_sub"])],
                    P(item["badge"], S["badge"])]],
                  colWidths=[50, 327, 138], rowHeights=[48])
     head.setStyle(TableStyle([
@@ -1197,8 +1197,8 @@ def build_story(S):
     for part in PARTS:
         story += [NextPageTemplate("Div" + part["num"]), PageBreak()]
         acc = part["accent"]
-        story.append(TocMarker(0, f"Parte {part['num']} · {part['name']}", f"part_{part['num']}",
-                               section=f"Parte {part['num']} · {part['name']}"))
+        story.append(TocMarker(0, f"Parte {part['num']}: {part['name']}", f"part_{part['num']}",
+                               section=f"Parte {part['num']}: {part['name']}"))
         story += [P(f"<font color='{acc}'>PARTE {part['num']}</font>",
                     ParagraphStyle("dl", fontName="Helvetica-Bold", fontSize=12, leading=16, textColor=colors.white, spaceAfter=6)),
                   P(part["name"], ParagraphStyle("dt", fontName="Helvetica-Bold", fontSize=34, leading=40, textColor=colors.white, spaceAfter=12)),
