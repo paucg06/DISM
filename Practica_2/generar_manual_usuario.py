@@ -239,8 +239,12 @@ class NumberedCanvas(canvas.Canvas):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._saved_page_states = []
+        self._pending_bookmarks = {}
         self.page_kind = "body"
         self.section_name = ""
+
+    def bookmarkPage(self, key, **kw):
+        self._pending_bookmarks.setdefault(self._pageNumber, []).append((key, kw))
 
     def showPage(self):
         self._saved_page_states.append(dict(self.__dict__))
@@ -250,6 +254,8 @@ class NumberedCanvas(canvas.Canvas):
         total = len(self._saved_page_states)
         for state in self._saved_page_states:
             self.__dict__.update(state)
+            for k, kw in self._pending_bookmarks.get(self._pageNumber, []):
+                super().bookmarkPage(k, **kw)
             if self.page_kind == "body":
                 self.draw_chrome(total)
             super().showPage()
@@ -317,6 +323,7 @@ def on_cover(c, doc):
     t = c.beginText(48, H - 62)
     t.setFont("Helvetica-Bold", 8.5); t.setFillColor(colors.HexColor("#93C5FD")); t.setCharSpace(2)
     t.textOut("DISM  ·  ENTREGA 2  ·  IONIC & REST")
+    t.setCharSpace(0)
     c.drawText(t)
 
     c.setFillColor(colors.white)
@@ -336,8 +343,8 @@ def on_cover(c, doc):
                        textColor=colors.HexColor("#CBD5E1")))
     _, dh = desc.wrapOn(c, 285, 200)
     desc.drawOn(c, 48, 466 - dh)
-    w1 = _chip(c, 48, 372, "PERFIL ADMINISTRADOR", C_GREEN)
-    _chip(c, 48 + w1 + 12, 372, "PERFIL EMPLEADO", C_BLUE)
+    w1 = _chip(c, 48, 365, "PERFIL ADMINISTRADOR", C_GREEN)
+    _chip(c, 48 + w1 + 12, 365, "PERFIL EMPLEADO", C_BLUE)
 
     c.saveState()
     c.translate(447, 440)
@@ -351,6 +358,7 @@ def on_cover(c, doc):
         tt = c.beginText(x, y)
         tt.setFont("Helvetica-Bold", 7); tt.setFillColor(colors.HexColor("#93C5FD")); tt.setCharSpace(1.6)
         tt.textOut(label)
+        tt.setCharSpace(0)
         c.drawText(tt)
         c.setFillColor(colors.white); c.setFont("Helvetica-Bold", 10)
         c.drawString(x, y - 16, value)
