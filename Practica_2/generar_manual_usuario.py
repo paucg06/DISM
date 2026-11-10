@@ -32,6 +32,7 @@ from reportlab.lib.enums import TA_CENTER, TA_LEFT, TA_RIGHT, TA_JUSTIFY
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.utils import ImageReader
 from reportlab.pdfgen import canvas
+from reportlab.pdfbase.pdfmetrics import stringWidth
 from reportlab.platypus import (
     BaseDocTemplate, PageTemplate, Frame, Paragraph, Spacer, Table, TableStyle,
     PageBreak, NextPageTemplate, KeepTogether, CondPageBreak, Flowable, HRFlowable
@@ -57,12 +58,9 @@ DOC_TITLE = "Manual de Usuario"
 AUTHOR = "Pau Cremades García"
 SUBJECT = "DISM — Dispositivos e Infraestructuras de Sistemas Multimedia"
 UNIVERSITY = "Universidad de Alicante (UA)"
-DEGREE = "3.er curso · Grado en Ingeniería Multimedia"
+CURSO = "2026-2027"
 VERSION = "1.0"
-MESES = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto",
-         "septiembre", "octubre", "noviembre", "diciembre"]
-_hoy = datetime.date.today()
-FECHA = f"{_hoy.day} de {MESES[_hoy.month - 1]} de {_hoy.year}"
+FECHA = "10/11/2026"
 
 PAGE_W, PAGE_H = A4
 MX = 40                      # margen horizontal
@@ -284,12 +282,18 @@ def on_body(c, doc):
     c.page_kind = "body"
 
 
-def _chip(c, x, y, w, text, fill):
+def _chip(c, x, y, text, fill, h=22):
+    font_name = "Helvetica-Bold"
+    font_size = 8
+    tw = stringWidth(text, font_name, font_size)
+    w = tw + 28
     c.setFillColor(fill)
-    c.roundRect(x, y, w, 20, 10, fill=1, stroke=0)
+    c.roundRect(x, y, w, h, h / 2.0, fill=1, stroke=0)
     c.setFillColor(colors.white)
-    c.setFont("Helvetica-Bold", 7.5)
-    c.drawCentredString(x + w / 2, y + 6.5, text)
+    c.setFont(font_name, font_size)
+    ty = y + (h / 2.0) - 2.8
+    c.drawCentredString(x + w / 2.0, ty, text)
+    return w
 
 
 def on_cover(c, doc):
@@ -332,8 +336,8 @@ def on_cover(c, doc):
                        textColor=colors.HexColor("#CBD5E1")))
     _, dh = desc.wrapOn(c, 285, 200)
     desc.drawOn(c, 48, 466 - dh)
-    _chip(c, 48, 372, 150, "PERFIL ADMINISTRADOR", C_GREEN)
-    _chip(c, 206, 372, 128, "PERFIL EMPLEADO", C_BLUE)
+    w1 = _chip(c, 48, 372, "PERFIL ADMINISTRADOR", C_GREEN)
+    _chip(c, 48 + w1 + 12, 372, "PERFIL EMPLEADO", C_BLUE)
 
     c.saveState()
     c.translate(447, 440)
@@ -356,7 +360,7 @@ def on_cover(c, doc):
     info(392, 136, "UNIVERSIDAD", "Universidad de Alicante")
     info(48, 86, "VERSIÓN", VERSION)
     info(230, 86, "FECHA", FECHA)
-    info(392, 86, "CURSO", "3.er curso · Ing. Multimedia")
+    info(392, 86, "CURSO", CURSO)
     c.restoreState()
 
 
@@ -1032,7 +1036,7 @@ def intro_flowables(S):
         ["<b>Conexión</b>", "Acceso a Internet: la aplicación se comunica con el servidor para validar y guardar los datos."],
         ["<b>Ubicación</b>", "Permiso de geolocalización del navegador para poder fichar la entrada."],
         ["<b>Credenciales</b>", "Usuario y contraseña facilitados por el administrador de su organización."]], [120, 395]))
-    out.append(P("Instalar la aplicación en su dispositivo (opcional)", S["h2"]))
+    out.append(P("Instalar la aplicación en su dispositivo", S["h2"]))
     out.append(P("Al ser una PWA, puede usarse directamente desde el navegador o instalarse en la pantalla de inicio "
                  "para abrirla como cualquier otra aplicación.", S["body"]))
     cards = [("Android (Chrome)", "Abra el menú del navegador (tres puntos) y elija «Instalar aplicación» o «Añadir a pantalla de inicio»."),
